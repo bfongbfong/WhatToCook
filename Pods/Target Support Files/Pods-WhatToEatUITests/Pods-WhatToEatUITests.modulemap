@@ -1,0 +1,6 @@
+framework module Pods_WhatToEatUITests {
+  umbrella header "Pods-WhatToEatUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}

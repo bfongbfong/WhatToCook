@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Gotham-Book.otf">
+            <string>Gotham-Book</string>
+        </array>
+        <array key="PoetsenOne-Regular.ttf">
+            <string>PoetsenOne-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="RecipeInstructionTableViewCell" id="aea-Ld-Wgi" customClass="RecipeInstructionTableViewCell" customModule="WhatToEat" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="aea-Ld-Wgi" id="Fu4-ZE-9wK">
+                <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xVB-4C-6Z3">
+                        <rect key="frame" x="0.0" y="8" width="27.5" height="27.5"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vbE-ed-6mD">
+                                <rect key="frame" x="9.5" y="0.0" width="9" height="27.5"/>
+                                <fontDescription key="fontDescription" name="PoetsenOne-Regular" family="Poetsen One" pointSize="23"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.5450980392" green="0.81960784310000001" blue="0.22352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="vbE-ed-6mD" firstAttribute="top" secondItem="xVB-4C-6Z3" secondAttribute="top" id="2Xa-sa-NYh"/>
+                            <constraint firstItem="vbE-ed-6mD" firstAttribute="centerY" secondItem="xVB-4C-6Z3" secondAttribute="centerY" id="BUy-7Z-sW9"/>
+                            <constraint firstAttribute="width" secondItem="xVB-4C-6Z3" secondAttribute="height" id="LSQ-vz-R9V"/>
+                            <constraint firstAttribute="bottom" secondItem="vbE-ed-6mD" secondAttribute="bottom" id="Py5-z8-34Y"/>
+                            <constraint firstItem="vbE-ed-6mD" firstAttribute="centerX" secondItem="xVB-4C-6Z3" secondAttribute="centerX" id="YfQ-u3-Dm3"/>
+                            <constraint firstAttribute="height" constant="27.5" id="wRH-sB-Eah"/>
+                        </constraints>
+                    </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QoA-6j-IHv">
+                        <rect key="frame" x="38.5" y="11.5" width="355.5" height="17"/>
+                        <fontDescription key="fontDescription" name="Gotham-Book" family="Gotham" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="QoA-6j-IHv" firstAttribute="leading" secondItem="xVB-4C-6Z3" secondAttribute="trailing" constant="11" id="KFi-Ma-PdU"/>
+                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="QoA-6j-IHv" secondAttribute="bottom" constant="11.5" id="NOo-90-oiE"/>
+                    <constraint firstItem="xVB-4C-6Z3" firstAttribute="leading" secondItem="Fu4-ZE-9wK" secondAttribute="leading" id="cCd-zb-tnk"/>
+                    <constraint firstItem="xVB-4C-6Z3" firstAttribute="top" secondItem="Fu4-ZE-9wK" secondAttribute="top" constant="8" id="fuY-bj-3dy"/>
+                    <constraint firstAttribute="trailing" secondItem="QoA-6j-IHv" secondAttribute="trailing" constant="20" id="irw-Lz-h0g"/>
+                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="xVB-4C-6Z3" secondAttribute="bottom" constant="8" id="th6-5C-o9r"/>
+                    <constraint firstItem="QoA-6j-IHv" firstAttribute="top" secondItem="Fu4-ZE-9wK" secondAttribute="top" constant="11.5" id="tjr-2Q-69N"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="greenCircle" destination="xVB-4C-6Z3" id="51n-3p-XZI"/>
+                <outlet property="instructionNumberLabel" destination="vbE-ed-6mD" id="WmY-wR-e3l"/>
+                <outlet property="recipeInstructionLabel" destination="QoA-6j-IHv" id="RDI-ra-nex"/>
+            </connections>
+            <point key="canvasLocation" x="247.82608695652175" y="121.875"/>
+        </tableViewCell>
+    </objects>
+</document>

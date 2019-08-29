@@ -1,0 +1,20 @@
+PODS:
+  - SwiftSoup (1.7.4)
+  - Unirest (1.1.4)
+
+DEPENDENCIES:
+  - SwiftSoup
+  - Unirest
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - SwiftSoup
+    - Unirest
+
+SPEC CHECKSUMS:
+  SwiftSoup: 92f5b348c131aed8af04f4326db1579ab19fa08c
+  Unirest: 5e4d93eaf32463bf619a4ecd3bbc8c32acf21eac
+
+PODFILE CHECKSUM: 9f124ceef933695f90e05700c677a399d04deb6c
+
+COCOAPODS: 1.6.1
