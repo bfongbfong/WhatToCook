@@ -261,6 +261,7 @@ class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UI
         if segue.identifier == "FromSearchByRecipesToRecipeDetailViewController" {
             if let selectedIndexPath = searchByRecipesTableView.indexPathForSelectedRow {
                 let recipeDetailVC = segue.destination as! RecipeDetailViewController
+                guard recipes.count > 0 else { return }
                 recipeDetailVC.recipe = recipes[selectedIndexPath.row]
             }
         }

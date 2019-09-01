@@ -21,7 +21,6 @@
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vBh-WE-dur">
                         <rect key="frame" x="20" y="6" width="374" height="30"/>
                         <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
-                        <state key="normal" title="Button"/>
                         <connections>
                             <action selector="toSource:" destination="1O6-7l-PjJ" eventType="touchUpInside" id="7a7-qD-odB"/>
                         </connections>

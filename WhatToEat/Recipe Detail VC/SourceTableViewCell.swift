@@ -18,7 +18,7 @@ class SourceTableViewCell: UITableViewCell {
     }
 
     @IBAction func toSource(_ sender: UIButton) {
-        
+        print("button has been pressed... but go to source hasn't necessarily been run")
     }
     
     

@@ -258,7 +258,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ingredient, Ingredient, Ingredient" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="5n9-7G-vup">
-                                                    <rect key="frame" x="112" y="35.5" width="297" height="13"/>
+                                                    <rect key="frame" x="112" y="35.5" width="251" height="13"/>
                                                     <fontDescription key="fontDescription" name="Gotham-Book" family="Gotham" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -287,10 +287,11 @@
                                                 <constraint firstAttribute="bottom" secondItem="hrH-8t-f1b" secondAttribute="bottom" constant="10" id="C5r-LO-V61"/>
                                                 <constraint firstItem="hrH-8t-f1b" firstAttribute="top" secondItem="1QR-V1-bbH" secondAttribute="top" constant="10" id="DHn-N1-YFV"/>
                                                 <constraint firstItem="UIu-QL-0za" firstAttribute="leading" secondItem="hrH-8t-f1b" secondAttribute="trailing" constant="12.5" id="FQa-Sx-IRH"/>
+                                                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="5n9-7G-vup" secondAttribute="bottom" constant="10" id="GDu-j3-qKJ"/>
                                                 <constraint firstItem="rKL-P0-lCv" firstAttribute="top" relation="lessThanOrEqual" secondItem="5n9-7G-vup" secondAttribute="bottom" constant="10" id="Hrf-Aq-hzU"/>
-                                                <constraint firstAttribute="trailing" secondItem="5n9-7G-vup" secondAttribute="trailing" constant="5" id="NQ1-EZ-pC1"/>
                                                 <constraint firstItem="rKL-P0-lCv" firstAttribute="top" secondItem="5n9-7G-vup" secondAttribute="bottom" priority="250" constant="10" id="aII-9j-Djg"/>
                                                 <constraint firstAttribute="trailing" secondItem="rKL-P0-lCv" secondAttribute="trailing" constant="10" id="dOL-Yo-eDK"/>
+                                                <constraint firstItem="rKL-P0-lCv" firstAttribute="leading" secondItem="5n9-7G-vup" secondAttribute="trailing" constant="10" id="hKM-Xj-kde"/>
                                                 <constraint firstItem="hrH-8t-f1b" firstAttribute="leading" secondItem="1QR-V1-bbH" secondAttribute="leading" constant="20" id="hxq-S5-Qje"/>
                                                 <constraint firstItem="5n9-7G-vup" firstAttribute="top" secondItem="UIu-QL-0za" secondAttribute="bottom" constant="7" id="ou8-YR-EBN"/>
                                                 <constraint firstItem="5n9-7G-vup" firstAttribute="leading" secondItem="hrH-8t-f1b" secondAttribute="trailing" constant="12.5" id="tV5-hN-Cu0"/>
@@ -405,7 +406,7 @@
                                                         <constraint firstAttribute="width" secondItem="39l-nU-TRo" secondAttribute="height" multiplier="1:1" id="rQW-yl-QD7"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ingredient, Ingredient, Ingredient" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="caz-pq-itT">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ingredient, Ingredient, Ingredient" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="caz-pq-itT">
                                                     <rect key="frame" x="112" y="35.5" width="251" height="13"/>
                                                     <fontDescription key="fontDescription" name="Gotham-Book" family="Gotham" pointSize="12"/>
                                                     <nil key="textColor"/>
@@ -546,7 +547,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ingredient, Ingredient, Ingredient" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="7Ar-BA-XcT">
-                                                    <rect key="frame" x="112" y="35.5" width="256" height="13"/>
+                                                    <rect key="frame" x="112" y="35.5" width="251" height="13"/>
                                                     <fontDescription key="fontDescription" name="Gotham-Book" family="Gotham" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -579,7 +580,7 @@
                                                 <constraint firstItem="7Ar-BA-XcT" firstAttribute="top" secondItem="xta-r9-xVB" secondAttribute="bottom" constant="7" id="JWx-gA-2by"/>
                                                 <constraint firstItem="sOf-Ns-baT" firstAttribute="top" secondItem="7Ar-BA-XcT" secondAttribute="bottom" priority="250" constant="10" id="Lra-PE-Bo5"/>
                                                 <constraint firstItem="xta-r9-xVB" firstAttribute="top" secondItem="JGo-3k-ccW" secondAttribute="top" constant="11.5" id="MmU-Ff-jc2"/>
-                                                <constraint firstItem="sOf-Ns-baT" firstAttribute="leading" secondItem="7Ar-BA-XcT" secondAttribute="trailing" constant="5" id="QmU-jY-a9J"/>
+                                                <constraint firstItem="sOf-Ns-baT" firstAttribute="leading" secondItem="7Ar-BA-XcT" secondAttribute="trailing" constant="10" id="QmU-jY-a9J"/>
                                                 <constraint firstItem="dye-iE-6Jh" firstAttribute="leading" secondItem="JGo-3k-ccW" secondAttribute="leading" constant="20" id="QwM-tP-smM"/>
                                                 <constraint firstItem="sOf-Ns-baT" firstAttribute="top" relation="lessThanOrEqual" secondItem="7Ar-BA-XcT" secondAttribute="bottom" constant="10" id="SCC-O9-RHl"/>
                                                 <constraint firstAttribute="bottom" secondItem="sOf-Ns-baT" secondAttribute="bottom" constant="10" id="Ti0-U2-Ihk"/>
@@ -668,6 +669,6 @@
         <image name="star_off" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="eSw-1m-Rjq"/>
+        <segue reference="aKU-qc-Z7Z"/>
     </inferredMetricsTieBreakers>
 </document>
