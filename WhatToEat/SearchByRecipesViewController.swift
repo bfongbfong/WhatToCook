@@ -40,40 +40,12 @@ class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UI
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        // i brought this code over from the saved recipes VC
-        // because there are times when something that's supposed to be unsaved, still has a star in it.
-        // specifically right after i unsave it from saved recipe VC and come back here to search by recipe vc.
-        // but the WEIRD THING is that some of them do get unsaved! but some of them do stay saved...
-//        if bookmarkedRecipeIDs.count > recipes.count {
-//            if recipes.count != 0 {
-//                let difference = bookmarkedRecipeIDs.count - recipes.count
-//                for i in 0..<difference {
-//                    getRecipeFromIntAndAddToSavedRecipesArray(id: bookmarkedRecipeIDs[savedRecipes.count + i])
-//                }
-//            } else {
-//                if recipes.count == 0 {
-//                    for recipeID in bookmarkedRecipeIDs {
-//                        getRecipeFromIntAndAddToSavedRecipesArray(id: recipeID)
-//                        print("SAVED RECIPE VC VIEW DID LOAD HAPPENED")
-//                    }
-//                }
-//            }
-//        } else if recipes.count > bookmarkedRecipeIDs.count {
-//            recipes = savedRecipes.filter({bookmarkedRecipeIDs.contains($0.id!)})
-//        }
+
         searchByRecipesTableView.reloadData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        
-//        let attributes = [
-//            NSAttributedString.Key.font : UIFont(name: "Gotham", size: 30)! // Note the !
-//        ]
-        
-//        searchTextField.attributedPlaceholder = NSAttributedString(string: "SEARCH RECIPES", attributes:attributes)
         
         // to make "SEARCH INGREDIENTS" placeholder text fit and cetner vertically
         for subview in searchTextField.subviews {
@@ -135,17 +107,11 @@ class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UI
     }
     
     @IBAction func textFieldEditingChanged(_ sender: Any) {
-//
-        // this stuff i moved above
+
         if searchTextField.text == "" || searchTextField.text == " " {
             recipes.removeAll()
             searchByRecipesTableView.reloadData()
         }
-//        } else {
-//            if let text = searchTextField.text {
-//                getRecipes(numberOfResults: 15, input: text)
-//            }
-//        }
     }
     
     func getRecipes(numberOfResults: Int, input: String) {
@@ -189,10 +155,6 @@ class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UI
                         }
                     }
                 }
-//
-//                DispatchQueue.main.async {
-//                    self.searchByRecipesTableView.reloadData()
-//                }
             })
     }
     

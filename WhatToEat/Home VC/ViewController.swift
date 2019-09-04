@@ -26,25 +26,20 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
         tableView.dataSource = self
         textField.delegate = self
         hideKeyboardWhenTappedAround()
-        
         tableView.keyboardDismissMode = .onDrag
-        greenCircleForSearchButton.layer.cornerRadius = greenCircleForSearchButton.frame.width/8
-        greenCircleForSearchButton.layer.masksToBounds = true
-        greenCircleForSearchButton.backgroundColor = UIColor.gray
-        tapSearchButton.isEnabled = false
-
+        setUpSearchButton()
+        
+        // align textField
         textField.contentVerticalAlignment = .center
         textField.layer.cornerRadius = 15
         textField.clipsToBounds = true
+        
+        // set up nav bar
         navigationController?.navigationBar.barTintColor = myGreen
         navigationController?.navigationBar.tintColor = UIColor.white
         navigationController?.navigationBar.titleTextAttributes =
             [NSAttributedString.Key.foregroundColor: UIColor.white,
              NSAttributedString.Key.font: UIFont(name: "PoetsenOne-Regular", size: 21)!]
-        
-//        self.tabBarItem.imageInsets = UIEdgeInsets(top: 5.5, left: 0, bottom: -5.5, right: 0)
-//        self.title = nil
-        
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -54,6 +49,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        // set up status bar
         navigationController?.navigationBar.barStyle = .black
         
         // to make "SEARCH INGREDIENTS" placeholder text fit and cetner vertically
@@ -73,6 +69,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
         textField.rightView = rightPaddingView
         textField.rightViewMode = .always
     }
+    
+    // MARK: - UI
+    
+    func setUpSearchButton() {
+        greenCircleForSearchButton.layer.cornerRadius = greenCircleForSearchButton.frame.width/8
+        greenCircleForSearchButton.layer.masksToBounds = true
+        greenCircleForSearchButton.backgroundColor = UIColor.gray
+        tapSearchButton.isEnabled = false
+    }
+    
     
     // MARK: - tableView data source methods
     
@@ -113,7 +119,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
         // empty text field
         textField.text = ""
         UIDevice.vibrate()
-        
     }
     
     @IBAction func textFieldEditingChanged(_ sender: Any) {
@@ -127,7 +132,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
             // populate table view with search results
             if let text = textField.text {
                 autocompleteIngredientSearch(input: text)
-                // https://spoonacular.com/cdn/ingredients_100x100/
             }
         }
     }
@@ -139,11 +143,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
         if input == "" || input == " " {
             return
         }
-        
-//        if input == "\'" {
-//            print("THERE'S AN APOSTROPHE")
-//            input = input.replacingOccurrences(of: "\'", with: "")
-//        }
         
         let inputAdjustedForSpecialCharacters = replaceSpecialCharacters(input: input)
         
@@ -158,42 +157,36 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
             
             }?.asJsonAsync({ (response, error) in
                 
-                let body: UNIJsonNode = response!.body
-                //                let rawBody: Data = response!.rawBody
-                //                print(String(data: rawBody, encoding: .utf8))
-                
                 if let errorThatHappened = error {
-                    print("ERROR HAPPENED")
-                    print("btw this is the error: \(errorThatHappened)")
+                    print("error: \(errorThatHappened)")
                 }
                 
-                if let bodyJsonArray = body.jsonArray() {
-                    print("JSON ARRAY ==================================================")
-                    print(bodyJsonArray)
-                    self.searchResults = []
-                    for jsonObject in bodyJsonArray {
-                        if let dictionary = jsonObject as? [String: Any] {
-                            
-                            let searchedIngredient = SearchedIngredient(name: dictionary["name"] as! String, imageName: dictionary["image"] as! String)
-                            var matchFound = false
-                            for savedIngredient in self.savedIngredients {
-                                if searchedIngredient == savedIngredient {
-                                    matchFound = true
+                if let response = response {
+                    if let body: UNIJsonNode = response.body {
+                        if let bodyJsonArray = body.jsonArray() {
+                            print("JSON ARRAY ==================================================")
+                            print(bodyJsonArray)
+                            self.searchResults = []
+                            for jsonObject in bodyJsonArray {
+                                if let dictionary = jsonObject as? [String: Any] {
+                                    
+                                    let searchedIngredient = SearchedIngredient(name: dictionary["name"] as! String, imageName: dictionary["image"] as! String)
+                                    var matchFound = false
+                                    for savedIngredient in self.savedIngredients {
+                                        if searchedIngredient == savedIngredient {
+                                            matchFound = true
+                                        }
+                                    }
+                                    if matchFound == false {
+                                        self.searchResults.append(searchedIngredient)
+                                    }
                                 }
                             }
-                            if matchFound == false {
-                                self.searchResults.append(searchedIngredient)
+                            DispatchQueue.main.async {
+                                self.tableView.reloadData()
                             }
                         }
                     }
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                    }
-                }
-                
-                if let bodyJsonObject = body.jsonObject() {
-                    print("JSON OBJECT ==================================================")
-                    print(bodyJsonObject)
                 }
             })
     }
@@ -252,11 +245,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
     
         if segue.identifier == "ToSearchResults" {
             if let destinationVC = segue.destination as? SearchResultsViewController {
-                
-                // temp solution to back button word showing up
-//                let backItem = UIBarButtonItem()
-//                backItem.title = ""
-//                navigationItem.backBarButtonItem = backItem
+        
                 
                 if savedIngredients.count == 0 {
                     
@@ -271,10 +260,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
         } else if segue.identifier == "ToSavedIngredients" {
             if let destinationVC = segue.destination as? SavedIngredientViewController {
                 destinationVC.savedIngredients = savedIngredients
-                // temp solution to back button word 
-//                let backItem = UIBarButtonItem()
-//                backItem.title = ""
-//                navigationItem.backBarButtonItem = backItem
             }
         }
     }

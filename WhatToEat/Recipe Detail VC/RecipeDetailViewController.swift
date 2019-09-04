@@ -14,8 +14,6 @@ class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UI
     @IBOutlet weak var scrollView: UIScrollView!
     
     var recipe: Recipe!
-    // difference is recipe detail has more properties
-//    var recipeDetail: RecipeDetail = RecipeDetail()
     var recipeDetailView: RecipeDetailView!
     
     let ingredientsCellHeight = 25
@@ -112,12 +110,21 @@ class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UI
         
             
         recipeDetailView.recipeTitleLabel.attributedText = attributedString
-        recipeDetailView.readyInMinutesLabel.text = "\(recipe.readyInMinutes!) MIN"
-        if recipe.servings! == 1 {
-            recipeDetailView.servingsLabel.text = "\(recipe.servings!) SERVING"
+        if let readyInMinutes = recipe.readyInMinutes {
+            recipeDetailView.readyInMinutesLabel.text = "\(readyInMinutes) MIN"
         } else {
-            recipeDetailView.servingsLabel.text = "\(recipe.servings!) SERVINGS"
+            recipeDetailView.readyInMinutesLabel.text = "N/A"
         }
+        if let servings = recipe.servings {
+            if servings == 1 {
+                recipeDetailView.servingsLabel.text = "\(servings) SERVING"
+            } else {
+                recipeDetailView.servingsLabel.text = "\(servings) SERVINGS"
+            }
+        } else {
+            recipeDetailView.servingsLabel.text = "N/A"
+        }
+        
 
         recipeDetailView.sourceButton.setTitle("Source: \(recipe.creditsText ?? "N/A")", for: .normal)
         // diets collection view
@@ -234,18 +241,8 @@ class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UI
                 
             
             let cell = recipeDetailView.instructionsTableView.dequeueReusableCell(withIdentifier: "RecipeInstructionTableViewCell") as! RecipeInstructionTableViewCell
-//            if recipe.instructions.count == 1 {
-//                // wait why is this here....
-//                // it's saying that if there is only one instruction... then don't do anything to the cell?
-//                // damnit i really should be making comments every time i do something weird....
-//                // okay before, it was if recipe.instructions.count == 1
-//                // and it just returned the cell without doing anythign to do with it.
-//                // ima change it to 0 and if any issue comes up, check here
                 
-                // oh maybe it has something to do with if there is more than one section of instructions 
-//
-//                return cell
-//            } else {
+                // here is where you would differentiate if there are more sections in instructions.
                 cell.instructionNumberLabel.text = "\(indexPath.row + 1)"
                 
                 // setting line height
@@ -258,7 +255,7 @@ class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UI
                 
                 cell.selectionStyle = .none
                 return cell
-//            }
+
             }
          }
     }

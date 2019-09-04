@@ -65,16 +65,6 @@ class SavedIngredientViewController: UIViewController, UITableViewDelegate, UITa
         // they need to be sorted in reverse order
         selectedRows = selectedRows?.sorted(by: >)
         if selectedRows != nil {
-            // there's a problem here that
-            // if you delete rows, say you select rows 1, 3, and 5
-            // it's gonna say selected rows = [1, 3, 5]
-            // it's gonna delete at index 1 first,
-            // then the array goes from a, b, c, d, e
-            // to b, c, d, e
-            // and next it tries to delete at index 3, which was SUPPOSED to delete "c" but now index 3 is "d"
-            // so it'll delete d, then the array becomes
-            // b, c, e
-            // now it's gonna try to delete at index 5, which doesn't exist, and you get an index out of bounds error
             for selectionIndex in selectedRows! {
                 tableView(savedIngredientTableView, commit: .delete, forRowAt: selectionIndex)
             }

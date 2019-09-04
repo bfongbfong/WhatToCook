@@ -89,10 +89,7 @@ class SavedRecipesViewController: UIViewController, UITableViewDelegate, UITable
         }
         
         savedRecipes = tempArray
-    
-//        savedRecipes[i].id = bookmarkedRecipeIDs[i]
-        // THE REASON WHY THIS DOESN'T WORK IS BECAUSE YOU'RE ONLY CHANGING THE ID YOU'RE NOT CHANGING THE REST OF THE INFORMATION
-        
+        // needed to do all this to ensure that the arrays were in the same order. 
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -139,56 +136,51 @@ class SavedRecipesViewController: UIViewController, UITableViewDelegate, UITable
             
             }?.asJsonAsync({ (response, error) in
                 
-                let body: UNIJsonNode = response!.body
-                
-                if let bodyJsonObject = body.jsonObject() {
-                    print("JSON OBJECT ==================================================")
-                    print(bodyJsonObject)
-                    
-                    returnRecipe.source = bodyJsonObject["sourceUrl"] as? String
-                    returnRecipe.imageName = bodyJsonObject["image"] as? String
-                    returnRecipe.servings = bodyJsonObject["servings"] as? Int
-                    returnRecipe.readyInMinutes = bodyJsonObject["readyInMinutes"] as? Int
-                    returnRecipe.diets = bodyJsonObject["diets"] as? [String]
-                    returnRecipe.title = bodyJsonObject["title"] as? String
-                    returnRecipe.creditsText = bodyJsonObject["creditsText"] as? String
-                    
-                    if let ingredientsArray = bodyJsonObject["extendedIngredients"] as? [[String:Any]] {
-                        for ingredient in ingredientsArray {
-                            let ingredientName = ingredient["name"] as? String
-                            let ingredientAmount = ingredient["amount"] as? Int
-                            let ingredientAisle = ingredient["aisle"] as? String
-                            let ingredientUnit = ingredient["unit"] as? String
-                            let ingredientId = ingredient["id"] as? Int
-                            let ingredientImage = ingredient["image"] as? String
-                            var ingredientUnitShort: String?
+                if let response = response {
+                    if let body: UNIJsonNode = response.body {
+                        if let bodyJsonObject = body.jsonObject() {
+                            print("JSON OBJECT ==================================================")
+                            print(bodyJsonObject)
                             
-                            if let measures = ingredient["measures"] as? [String: Any] {
-                                if let us = measures["us"] as? [String: Any] {
-                                    ingredientUnitShort = us["unitShort"] as? String
+                            returnRecipe.source = bodyJsonObject["sourceUrl"] as? String
+                            returnRecipe.imageName = bodyJsonObject["image"] as? String
+                            returnRecipe.servings = bodyJsonObject["servings"] as? Int
+                            returnRecipe.readyInMinutes = bodyJsonObject["readyInMinutes"] as? Int
+                            returnRecipe.diets = bodyJsonObject["diets"] as? [String]
+                            returnRecipe.title = bodyJsonObject["title"] as? String
+                            returnRecipe.creditsText = bodyJsonObject["creditsText"] as? String
+                            
+                            if let ingredientsArray = bodyJsonObject["extendedIngredients"] as? [[String:Any]] {
+                                for ingredient in ingredientsArray {
+                                    let ingredientName = ingredient["name"] as? String
+                                    let ingredientAmount = ingredient["amount"] as? Int
+                                    let ingredientAisle = ingredient["aisle"] as? String
+                                    let ingredientUnit = ingredient["unit"] as? String
+                                    let ingredientId = ingredient["id"] as? Int
+                                    let ingredientImage = ingredient["image"] as? String
+                                    var ingredientUnitShort: String?
+                                    
+                                    if let measures = ingredient["measures"] as? [String: Any] {
+                                        if let us = measures["us"] as? [String: Any] {
+                                            ingredientUnitShort = us["unitShort"] as? String
+                                        }
+                                    }
+                                    
+                                    let newIngredient = Ingredient(aisle: ingredientAisle, amount: ingredientAmount as NSNumber?, id: ingredientId, imageName: ingredientImage, name: ingredientName, unit: ingredientUnit, unitShort: ingredientUnitShort)
+                                    returnRecipe.ingredients.append(newIngredient)
                                 }
                             }
-                            
-                            let newIngredient = Ingredient(aisle: ingredientAisle, amount: ingredientAmount as NSNumber?, id: ingredientId, imageName: ingredientImage, name: ingredientName, unit: ingredientUnit, unitShort: ingredientUnitShort)
-                            returnRecipe.ingredients.append(newIngredient)
+                            returnRecipe.id = id
+                            self.savedRecipes.append(returnRecipe)
+                        }
+                        
+                        DispatchQueue.main.async {
+                            if self.savedRecipes.count > 1 && bookmarkedRecipeIDs.count == self.savedRecipes.count {
+                                self.reorderSavedRecipesArray()
+                            }
+                            self.savedRecipesTableView.reloadData()
                         }
                     }
-                    returnRecipe.id = id
-                    self.savedRecipes.append(returnRecipe)
-                    // ^^ i need to figure out how to make this add the recipes one by one. how not to add the recipes out of order.
-                    // sigh maybe i should make the savedRecipes a dictionary wait no.
-                    // maybe i should make idek LOL
-                    
-                    // i thought this might be a good fix to the problem of sometimes the recipe not being starred immediately after being added
-//                    returnRecipe.bookmarked = true
-                    // probably not a good solution...
-                }
-                
-                DispatchQueue.main.async {
-                    if self.savedRecipes.count > 1 && bookmarkedRecipeIDs.count == self.savedRecipes.count {
-                        self.reorderSavedRecipesArray()
-                    }
-                    self.savedRecipesTableView.reloadData()
                 }
             })
     }

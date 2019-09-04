@@ -25,12 +25,6 @@ class SavedIngredientTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-//    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-//        super.setHighlighted(highlighted, animated: animated)
-//        print("CELL HIGHLIGHTED")
-//
-//    }
-    
     func updateCell(with searchedIngredient: SearchedIngredient) {
         print("Autocomplete Search Cell gets updated here")
         savedIngredientLabel.text = searchedIngredient.name
