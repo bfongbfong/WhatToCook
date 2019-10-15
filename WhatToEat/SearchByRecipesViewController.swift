@@ -8,18 +8,21 @@
 
 import UIKit
 import Unirest
+import GoogleMobileAds
 
-class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
+class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, GADBannerViewDelegate, GADInterstitialDelegate {
 
     @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var searchByRecipesTableView: UITableView!
     
+    var bannerView: GADBannerView!
+    var interstitial: GADInterstitial!
     var recipes: [Recipe] = []
     var timer: Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         hideKeyboardWhenTappedAround()
         searchByRecipesTableView.dataSource = self
         searchByRecipesTableView.delegate = self
@@ -36,6 +39,55 @@ class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UI
             [NSAttributedString.Key.foregroundColor: UIColor.white,
              NSAttributedString.Key.font: UIFont(name: "PoetsenOne-Regular", size: 21)!]
         
+        // ads
+        bannerView = GADBannerView(adSize: kGADAdSizeBanner)
+        // real id
+        bannerView.adUnitID = adIDs.searchByRecipeNameVCBannerID
+        // test id
+//        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+        bannerView.rootViewController = self
+        bannerView.load(GADRequest())
+        bannerView.delegate = self
+        
+        interstitial = createAndLoadInterstitial()
+    }
+    
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+        // Add banner to view and add constraints as above.
+        addBannerViewToView(bannerView)
+    }
+    
+    func addBannerViewToView(_ bannerView: GADBannerView) {
+        bannerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(bannerView)
+        view.addConstraints(
+            [NSLayoutConstraint(item: bannerView,
+                                attribute: .bottom,
+                                relatedBy: .equal,
+                                toItem: bottomLayoutGuide,
+                                attribute: .top,
+                                multiplier: 1,
+                                constant: 0),
+             NSLayoutConstraint(item: bannerView,
+                                attribute: .centerX,
+                                relatedBy: .equal,
+                                toItem: view,
+                                attribute: .centerX,
+                                multiplier: 1,
+                                constant: 0)
+            ])
+    }
+    
+    func createAndLoadInterstitial() -> GADInterstitial {
+
+        let interstitial = GADInterstitial(adUnitID: adIDs.beforeInterstitialID)
+        interstitial.delegate = self
+        interstitial.load(GADRequest())
+        return interstitial
+    }
+    
+    func interstitialDidDismissScreen(_ ad: GADInterstitial) {
+        interstitial = createAndLoadInterstitial()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -225,6 +277,9 @@ class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UI
                 let recipeDetailVC = segue.destination as! RecipeDetailViewController
                 guard recipes.count > 0 else { return }
                 recipeDetailVC.recipe = recipes[selectedIndexPath.row]
+                if interstitial.isReady && RecipesViewed.notMultipleOfThree {
+                    interstitial.present(fromRootViewController: self)
+                }
             }
         }
     }

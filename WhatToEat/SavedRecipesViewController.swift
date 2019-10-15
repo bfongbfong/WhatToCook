@@ -8,11 +8,14 @@
 
 import UIKit
 import Unirest
+import GoogleMobileAds
 
-class SavedRecipesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class SavedRecipesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, GADBannerViewDelegate, GADInterstitialDelegate {
     
     @IBOutlet weak var savedRecipesTableView: UITableView!
     var savedRecipes: [Recipe] = []
+    var bannerView: GADBannerView!
+    var interstitial: GADInterstitial!
     
     // reason for these recently deleted things is to maintain the state of the UI after an element is deleted from the VC, until you come back to it later, then it's gone.
     var recipeRecentlyDeleted = false {
@@ -30,6 +33,42 @@ class SavedRecipesViewController: UIViewController, UITableViewDelegate, UITable
         setUpNavBar()
         savedRecipesTableView.delegate = self
         savedRecipesTableView.dataSource = self
+        
+        // ads
+        bannerView = GADBannerView(adSize: kGADAdSizeBanner)
+        // real id
+//      bannerView.adUnitID = "ca-app-pub-5775764210542302/4339264751"
+        // test id
+        bannerView.adUnitID = adIDs.savedRecipesVCBannerID
+        bannerView.rootViewController = self
+        bannerView.load(GADRequest())
+        bannerView.delegate = self
+    }
+    
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+        // Add banner to view and add constraints as above.
+        addBannerViewToView(bannerView)
+    }
+    
+    func addBannerViewToView(_ bannerView: GADBannerView) {
+        bannerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(bannerView)
+        view.addConstraints(
+            [NSLayoutConstraint(item: bannerView,
+                                attribute: .bottom,
+                                relatedBy: .equal,
+                                toItem: bottomLayoutGuide,
+                                attribute: .top,
+                                multiplier: 1,
+                                constant: 0),
+             NSLayoutConstraint(item: bannerView,
+                                attribute: .centerX,
+                                relatedBy: .equal,
+                                toItem: view,
+                                attribute: .centerX,
+                                multiplier: 1,
+                                constant: 0)
+            ])
     }
     
     func setUpNavBar() {
@@ -42,6 +81,8 @@ class SavedRecipesViewController: UIViewController, UITableViewDelegate, UITable
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        interstitial = createAndLoadInterstitial()
         
         recipeRecentlyDeleted = false
         
@@ -74,7 +115,20 @@ class SavedRecipesViewController: UIViewController, UITableViewDelegate, UITable
         }
         
         savedRecipesTableView.reloadData()
-        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+    }
+    
+    func createAndLoadInterstitial() -> GADInterstitial {
+        // interstitial ad
+//        interstitial = GADInterstitial(adUnitID: "ca-app-pub-3940256099942544/4411468910")
+
+        let interstitial = GADInterstitial(adUnitID: adIDs.beforeInterstitialID)
+        interstitial.delegate = self
+        interstitial.load(GADRequest())
+        return interstitial
     }
     
     func reorderSavedRecipesArray() {
@@ -194,6 +248,13 @@ class SavedRecipesViewController: UIViewController, UITableViewDelegate, UITable
         if segue.identifier == "FromSavedRecipesToRecipeDetailViewController" {
             if let selectedIndexPath = savedRecipesTableView.indexPathForSelectedRow {
                 let recipeDetailVC = segue.destination as! RecipeDetailViewController
+                // display interstitial ad
+                if interstitial.isReady && RecipesViewed.notMultipleOfThree {
+                    print("interstitial ad is ready")
+                    interstitial.present(fromRootViewController: self)
+                }
+                
+                //
                 if recipeRecentlyDeleted == false {
                     recipeDetailVC.recipe = savedRecipes[selectedIndexPath.row]
                 } else {

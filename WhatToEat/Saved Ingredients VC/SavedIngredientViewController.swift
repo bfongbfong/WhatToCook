@@ -25,12 +25,57 @@ class SavedIngredientViewController: UIViewController, UITableViewDelegate, UITa
         savedIngredientTableView.allowsMultipleSelectionDuringEditing = true
         
         //toolbar setup
-        self.navigationController?.setToolbarHidden(true, animated: false)
-        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)
+        // when i change the toolbar to hidden or not, it affects what it says teh y position is. when its hidden is 896, which is the same as the view's height. when it's not hidden its 681
+        self.navigationController?.setToolbarHidden(false, animated: false)
+        let flexible = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         let deleteButton: UIBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: #selector(didPressDelete))
+        let clearAllButton = UIBarButtonItem(title: "Clear All", style: .plain, target: self, action: #selector(clearAll))
         deleteButton.image = UIImage(named: "garbage")
-        self.toolbarItems = [flexible, deleteButton]
+        clearAllButton.setTitleTextAttributes([
+            NSAttributedString.Key.font: UIFont(name: "Gotham", size: 17)!, NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
+        
+        self.toolbarItems = [clearAllButton, flexible, deleteButton]
+        
+//        self.tabBarController?.setToolbarItems(toolbarItems, animated: true)
+//        self.tabBarController?.toolbarItems = [clearAllButton, flexible, deleteButton]
+        
+        
         self.navigationController?.toolbar.barTintColor = mySalmon
+        
+        
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+//        let window = UIApplication.shared.keyWindow
+//        let topPadding = window?.safeAreaInsets.top
+//        let bottomPadding = window?.safeAreaInsets.bottom
+//
+//        let toolBarBeginningPosition = navigationController?.toolbar.frame.origin.y
+//        print("toolbar y position: ", toolBarBeginningPosition)
+////        print("bottomPadding: ", bottomPadding)
+//        print("view height: ", self.view.frame.height)
+//
+////        print("tab bar max y:", tabBarController?.accessibilityFrame.maxY)
+//        let tabBarHeight = tabBarController?.accessibilityFrame.height
+//        print("tabbar accessibility frame height: ", tabBarHeight!)
+//
+//        let topOfTabBar = view.frame.height - tabBarHeight!
+//        print("topOfTabBar:", topOfTabBar)
+//
+//        let bottomOfTableView = savedIngredientTableView.frame.minY + savedIngredientTableView.frame.height
+//        print("bottomOfTableView = savedIngredientTableView.frame.minY: \(savedIngredientTableView.frame.minY) + savedIngredientTableView.frame.height: \(savedIngredientTableView.frame.height)")
+//        print("bottomOfTableView: ", bottomOfTableView)
+//
+//        let amountToTransformVertically = topOfTabBar - toolBarBeginningPosition!
+        
+
+        
+//        UIView.animate(withDuration: 0.01) {
+//            self.navigationController?.toolbar?.transform = CGAffineTransform(translationX: 0, y: amountToTransformVertically - self.navigationController!.toolbar.frame.height)
+//        }
+        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -82,15 +127,31 @@ class SavedIngredientViewController: UIViewController, UITableViewDelegate, UITa
         self.savedIngredientTableView.isEditing = !self.savedIngredientTableView.isEditing
 
         if savedIngredientTableView.isEditing {
-            self.navigationController?.setToolbarHidden(false, animated: true)
-            editButton.image = nil
-            editButton.title = "Done"
-            
+            enableEditing()
         } else {
-            self.navigationController?.setToolbarHidden(true, animated: true)
-            editButton.title = nil
-            editButton.image = UIImage(named: "edit")
+            disableEditing()
         }
+    }
+    
+    func disableEditing() {
+        self.navigationController?.setToolbarHidden(true, animated: true)
+        editButton.title = nil
+        editButton.image = UIImage(named: "edit")
+    }
+    
+    func enableEditing() {
+        self.navigationController?.setToolbarHidden(false, animated: true)
+        editButton.image = nil
+        editButton.title = "Done"
+        editButton.setTitleTextAttributes([
+        NSAttributedString.Key.font: UIFont(name: "Gotham", size: 17)!], for: .normal)
+    }
+    
+    
+    @objc func clearAll() {
+        savedIngredients.removeAll()
+        savedIngredientTableView.reloadData()
+        edit(editButton)
     }
     
     // MARK: - Navigation
@@ -105,18 +166,11 @@ class SavedIngredientViewController: UIViewController, UITableViewDelegate, UITa
 // update saved items in view controller
 extension SavedIngredientViewController: UINavigationControllerDelegate {
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+        disableEditing()
         if let homeViewController = (viewController as? ViewController) {
             homeViewController.savedIngredients = savedIngredients
 
-            // added this line to the do the actual label setting from this vc
-            homeViewController.fridgeBarButtonItem.badgeNumber = savedIngredients.count
-            if homeViewController.fridgeBarButtonItem.badgeNumber == 0 {
-                homeViewController.greenCircleForSearchButton.backgroundColor = UIColor.gray
-                homeViewController.tapSearchButton.isEnabled = false
-            } else {
-                homeViewController.greenCircleForSearchButton.backgroundColor = mySalmon
-                homeViewController.tapSearchButton.isEnabled = true
-            }
+            homeViewController.updateUI()
         }
         print("SEGUE IS GOING BACKWARDS FROM SAVED INGREDIENTS TO VIEW CONTROLLER")
         // Here you pass the to your original view controller

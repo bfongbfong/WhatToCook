@@ -33,9 +33,9 @@ class Recipe: Equatable {
     var creditsText: String?
     var bookmarked: Bool = false {
         didSet {
-            print("bookmarked did set called")
+//            print("bookmarked did set called")
             if bookmarked == true {
-                print("bookmarked was true")
+//                print("bookmarked was true")
                 // this next part is to prevent copies of the recipe to be saved
                 
                 // A FOR IN LOOP DOESN'T GET CALLED IF THE ARRAY IS EMPTY DUMMYYY
@@ -61,7 +61,7 @@ class Recipe: Equatable {
                 
 
             } else {
-                print("bookmarked was set to false")
+//                print("bookmarked was set to false")
                 let arrayWithoutTargetRecipe = bookmarkedRecipeIDs.filter {$0 != self.id}
                 bookmarkedRecipeIDs = arrayWithoutTargetRecipe
             }
@@ -189,79 +189,39 @@ func saveBookmarkedRecipes() {
     print("BOOKMARKED IDS SAVED")
 }
 
-func getRecipeInstructions(recipeID: Int) {
+// to persist the fridge. nah ima use coredata for that.
+
+//func persistSavedIngredient(ingredients: [SearchedIngredient]) {
+//    UserDefaults.standard.set(ingredients, forKey: "savedIngredients")
+//}
 //
-//    var returnRecipe = Recipe()
-//
-//    UNIRest.get { (request) in
-//
-//        let requestString = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/\(recipeID)/information"
-//
-//        if let unwrappedRequest = request {
-//            unwrappedRequest.url = requestString
-//            unwrappedRequest.headers = ["X-RapidAPI-Host": "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com", "X-RapidAPI-Key": "ba59075c47msh50cd1afad35f3adp1d65cdjsn4b0f3c045f70"]
-//        }
-//
-//        }?.asJsonAsync({ (response, error) in
-//
-//            let body: UNIJsonNode = response!.body
-//            //                let rawBody: Data = response!.rawBody
-//            //                print(String(data: rawBody, encoding: .utf8))
-//
-//            if let bodyJsonArray = body.jsonArray() {
-//                print("JSON ARRAY RECIPE INSTRUCTIONS ==================================================")
-//                print(bodyJsonArray)
-//            }
-//
-//            if let bodyJsonObject = body.jsonObject() {
-//                print("JSON OBJECT ==================================================")
-//                print(bodyJsonObject)
-//
-//                returnRecipe.source = bodyJsonObject["sourceUrl"] as? String
-//                self.recipe.servings = bodyJsonObject["servings"] as? Int
-//                self.recipe.readyInMinutes = bodyJsonObject["readyInMinutes"] as? Int
-//                self.recipe.diets = bodyJsonObject["diets"] as? [String]
-//                self.recipe.title = bodyJsonObject["title"] as? String
-//                self.recipe.creditsText = bodyJsonObject["creditsText"] as? String
-//
-//                if let ingredientsArray = bodyJsonObject["extendedIngredients"] as? [[String:Any]] {
-//                    for ingredient in ingredientsArray {
-//                        let ingredientName = ingredient["name"] as? String
-//                        let ingredientAmount = ingredient["amount"] as? Int
-//                        let ingredientAisle = ingredient["aisle"] as? String
-//                        let ingredientUnit = ingredient["unit"] as? String
-//                        let ingredientId = ingredient["id"] as? Int
-//                        let ingredientImage = ingredient["image"] as? String
-//                        var ingredientUnitShort: String?
-//
-//                        if let measures = ingredient["measures"] as? [String: Any] {
-//                            if let us = measures["us"] as? [String: Any] {
-//                                ingredientUnitShort = us["unitShort"] as? String
-//                            }
-//                        }
-//
-//                        let newIngredient = Ingredient(aisle: ingredientAisle, amount: ingredientAmount as NSNumber?, id: ingredientId, imageName: ingredientImage, name: ingredientName, unit: ingredientUnit, unitShort: ingredientUnitShort)
-//                        self.recipe.ingredients.append(newIngredient)
-//                    }
-//                }
-//
-//
-//
-//                let analyzedInstructions = bodyJsonObject["analyzedInstructions"] as! [NSDictionary]
-//                for (index, section) in analyzedInstructions.enumerated() {
-//                    if let sectionName = section["name"] as? String {
-//                        self.instructions.append([sectionName])
-//                        if let sectionInstructions = section["steps"] as? [ [String : Any] ] {
-//                            for instructionInfo in sectionInstructions {
-//                                if let singleStep = instructionInfo["step"] as? String {
-//                                    self.instructions[index].append(singleStep)
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//    })
+//func loadSavedIngredients() -> [SearchedIngredient] {
+//    (UserDefaults.standard.array(forKey: "savedIngredients") as? [SearchedIngredient])!
+//}
+
+class RecipesViewed {
+    static var counter: Int = 0
+    static var notMultipleOfThree: Bool {
+        get {
+            return counter % 3 == 0
+        }
+    }
 }
 
-
+class adIDs {
+    static var searchResultsVCBannerID: String {
+        return "ca-app-pub-5775764210542302/4339264751"
+    }
+    static var recipeDetailVCBannerID: String {
+        return "ca-app-pub-5775764210542302/9192273207"
+    }
+    static var searchByRecipeNameVCBannerID: String {
+        return "ca-app-pub-5775764210542302/7631779527"
+    }
+    static var savedRecipesVCBannerID: String {
+        return "ca-app-pub-5775764210542302/6262518225"
+    }
+    static var beforeInterstitialID: String {
+        return "ca-app-pub-5775764210542302/6785262409"
+    }
+}

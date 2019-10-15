@@ -16,12 +16,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
     @IBOutlet weak var greenCircleForSearchButton: UIView!
     @IBOutlet weak var fridgeBarButtonItem: BadgeBarButtonItem!
     @IBOutlet var tapSearchButton: UITapGestureRecognizer!
+    @IBOutlet weak var clearFridgeButton: UIBarButtonItem!
     
     var searchResults: [SearchedIngredient] = []
     var savedIngredients: [SearchedIngredient] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         tableView.delegate = self
         tableView.dataSource = self
         textField.delegate = self
@@ -40,6 +42,48 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
         navigationController?.navigationBar.titleTextAttributes =
             [NSAttributedString.Key.foregroundColor: UIColor.white,
              NSAttributedString.Key.font: UIFont(name: "PoetsenOne-Regular", size: 21)!]
+//        let leftButton = UIBarButtonItem(title: "thing", style: .plain, target: self, action: #selector(someFunc))
+//        self.navigationItem.leftBarButtonItem = leftButton
+//        let coder = NSCoder()
+//        let fridgeBarButtonItem = BadgeBarButtonItem(coder: coder)
+//        fridgeBarButtonItem?.image = UIImage(named: "fridge-2")
+//        let flexible = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+//        navigationController?.navigationBar.items = [flexible, fridgeBarButtonItem, flexible]
+        clearFridgeButton.setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: "Gotham", size: 15)!], for: .normal)
+        disableClearFridgeButton()
+    }
+    
+    @IBAction func clearFridgeTapped(_ sender: Any) {
+        savedIngredients.removeAll()
+        updateUI()
+    }
+    
+    
+    func enableClearFridgeButton() {
+        clearFridgeButton.isEnabled = true
+        clearFridgeButton.tintColor = UIColor.white.withAlphaComponent(1.0)
+    }
+    
+    func disableClearFridgeButton() {
+        clearFridgeButton.isEnabled = false
+        clearFridgeButton.tintColor = UIColor.white.withAlphaComponent(0)
+    }
+    
+    func updateUI() {
+        self.fridgeBarButtonItem.badgeNumber = self.savedIngredients.count
+        
+        if savedIngredients.count == 0 {
+            disableClearFridgeButton()
+            
+            greenCircleForSearchButton.backgroundColor = UIColor.gray
+            tapSearchButton.isEnabled = false
+            
+        } else {
+            self.enableClearFridgeButton()
+            
+            self.greenCircleForSearchButton.backgroundColor = mySalmon
+            self.tapSearchButton.isEnabled = true
+        }
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -232,10 +276,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
         }, completion: { _ in
             
             tempView.removeFromSuperview()
-            self.fridgeBarButtonItem.badgeNumber = self.savedIngredients.count
-            self.greenCircleForSearchButton.backgroundColor = mySalmon
-            self.tapSearchButton.isEnabled = true
-
+            self.updateUI()
         })
     }
 
@@ -277,8 +318,6 @@ func replaceSpecialCharacters(input: String) -> String {
     returnString = returnString.replacingOccurrences(of: "\\", with: "")
 
 // *********** STUCK ON WHY THE API REQUEST FAILS IF YOU TYPE A DOUBLE QUOTE
-
-    
 
 //    returnString = returnString.replacingOccurrences(of: "'", with: "")
 

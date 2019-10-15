@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "801550ED7C7EE782864014F3D3D8E4E4"
+               BlueprintIdentifier = "99AB9403C1085A375B630407ECCC04C5"
                BuildableName = "Unirest.framework"
                BlueprintName = "Unirest"
                ReferencedContainer = "container:Pods.xcodeproj">

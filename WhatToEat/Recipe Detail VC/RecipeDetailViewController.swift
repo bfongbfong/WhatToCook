@@ -8,10 +8,13 @@
 
 import UIKit
 import Unirest
+import GoogleMobileAds
 
-class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITableViewDelegate, UITableViewDataSource {
+class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITableViewDelegate, UITableViewDataSource, GADBannerViewDelegate {
     
     @IBOutlet weak var scrollView: UIScrollView!
+    
+    var bannerView: GADBannerView!
     
     var recipe: Recipe!
     var recipeDetailView: RecipeDetailView!
@@ -21,6 +24,8 @@ class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UI
     
     var loadingView: UIView!
     let activityIndicatoryView = UIActivityIndicatorView()
+    
+    var oneStep: Bool!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,6 +77,44 @@ class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UI
         loadingView.addSubview(activityIndicatoryView)
         
         setBookmarkStar()
+        
+        // ads
+        bannerView = GADBannerView(adSize: kGADAdSizeBanner)
+        // real id
+        bannerView.adUnitID = adIDs.recipeDetailVCBannerID
+        // test id
+//        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+        bannerView.rootViewController = self
+        bannerView.load(GADRequest())
+        bannerView.delegate = self
+        
+        RecipesViewed.counter += 1
+    }
+    
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+        // Add banner to view and add constraints as above.
+        addBannerViewToView(bannerView)
+    }
+    
+    func addBannerViewToView(_ bannerView: GADBannerView) {
+        bannerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(bannerView)
+        view.addConstraints(
+            [NSLayoutConstraint(item: bannerView,
+                                attribute: .bottom,
+                                relatedBy: .equal,
+                                toItem: bottomLayoutGuide,
+                                attribute: .top,
+                                multiplier: 1,
+                                constant: 0),
+             NSLayoutConstraint(item: bannerView,
+                                attribute: .centerX,
+                                relatedBy: .equal,
+                                toItem: view,
+                                attribute: .centerX,
+                                multiplier: 1,
+                                constant: 0)
+            ])
     }
 
     // arjun put thie here to try to solve scroll view issue
@@ -179,15 +222,84 @@ class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UI
     
     // MARK: - UITableView Data Source Methods
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        if tableView == self.recipeDetailView.ingredientsTableView {
+            return recipe.ingredients.count
+        } else if tableView == self.recipeDetailView.instructionsTableView {
+            return recipe.instructions.count
+        } else {
+            return 0
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView()
+        let label = UILabel()
+        if tableView == self.recipeDetailView.instructionsTableView {
+            if recipe.instructions.count == 0 {
+                return nil
+            } else {
+                if recipe.instructions[section].count == 0 {
+                    return nil
+                } else {
+                    label.text = recipe.instructions[section][0].uppercased()
+                    label.font = UIFont(name: "Gotham", size: 17)
+                    label.frame = CGRect(x: 0, y: 5, width: self.recipeDetailView.instructionsTableView.frame.width, height: 35)
+                    view.addSubview(label)
+                    return view
+                }
+            }
+        } else {
+            return nil
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if tableView == self.recipeDetailView.instructionsTableView {
+            if recipe.instructions.count == 0 {
+                return 0
+            } else {
+                if recipe.instructions[section].count == 0 {
+                    return 0
+                } else {
+                    if recipe.instructions[section][0] == "" {
+                        // for when the first step has no name
+                        return 0
+                    } else {
+                        return 45
+                    }
+                }
+            }
+        } else {
+            return 0
+        }
+    }
+
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if tableView == self.recipeDetailView.instructionsTableView {
+            if recipe.instructions.count == 0 {
+                return nil
+            } else {
+                if recipe.instructions[section].count == 0 {
+                    return nil
+                } else {
+                    return recipe.instructions[section][0]
+                }
+            }
+        } else {
+            return nil
+        }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == self.recipeDetailView.ingredientsTableView {
             return recipe.ingredients.count
         } else if tableView == self.recipeDetailView.instructionsTableView {
             // instructions table view
-            if recipe.instructions[0].count == 0 {
-                return 1
+            if recipe.instructions[section].count == 0 {
+                return 0
             } else {
-                return recipe.instructions[0].count
+                return recipe.instructions[section].count - 1
             }
         } else {
             return 0
@@ -245,8 +357,8 @@ class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UI
                 // here is where you would differentiate if there are more sections in instructions.
                 cell.instructionNumberLabel.text = "\(indexPath.row + 1)"
                 
-                // setting line height
-                let instructionText = recipe.instructions[0][indexPath.row]
+                // setting instruction text and line height
+                let instructionText = recipe.instructions[indexPath.section][indexPath.row + 1]
                 let instructionStyle = NSMutableParagraphStyle()
                 instructionStyle.lineSpacing = 5
                 let attributedString = NSMutableAttributedString(string: instructionText)
@@ -301,7 +413,10 @@ class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UI
         
         UNIRest.get { (request) in
             
-            let requestString = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/\(self.recipe.id!)/information"
+            guard let recipe = self.recipe else { return }
+            guard let id = recipe.id else { return }
+            
+            let requestString = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/\(id)/information"
             
             if let unwrappedRequest = request {
                 unwrappedRequest.url = requestString
@@ -326,8 +441,14 @@ class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UI
                             if let ingredientsArray = bodyJsonObject["extendedIngredients"] as? [[String:Any]] {
                                 // so ingredients don't get repeat added
                                 self.recipe.ingredients.removeAll()
+                                var ingredientNames: Set<String> = []
                                 for ingredient in ingredientsArray {
                                     let ingredientName = ingredient["name"] as? String
+                                    if ingredientName != nil && ingredientNames.contains(ingredientName!) {
+                                        continue
+                                    } else {
+                                        ingredientNames.insert(ingredientName!)
+                                    }
                                     let ingredientAmount = ingredient["amount"] as? Int
                                     let ingredientAisle = ingredient["aisle"] as? String
                                     let ingredientUnit = ingredient["unit"] as? String
@@ -350,7 +471,7 @@ class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UI
                             
                             let analyzedInstructions = bodyJsonObject["analyzedInstructions"] as! [NSDictionary]
                             // so instructions don't get repeat added
-                            self.recipe.instructions[0].removeAll()
+                            self.recipe.instructions.removeAll()
                             for (index, section) in analyzedInstructions.enumerated() {
                                 if let sectionName = section["name"] as? String {
                                     self.recipe.instructions.append([sectionName])
@@ -386,7 +507,16 @@ class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UI
                                 // resize the instruction height to the right one
                                 
                                 // this is the method that multiples the cell height
-                                self.recipeDetailView.instructionsTableViewHeightConstraint.constant = CGFloat(self.recipe.instructions[0].count * self.instructionsCellHeight)
+                                var numberOfCells = 0
+                                for i in 0..<self.recipe.instructions.count {
+                                    for _ in 1..<self.recipe.instructions[i].count {
+                                        // it starts with 1 because the first element is the title
+                                        numberOfCells += 1
+                                    }
+                                }
+                                numberOfCells += self.recipe.instructions.count - 1
+                                // add the number of section headers
+                                self.recipeDetailView.instructionsTableViewHeightConstraint.constant = CGFloat(numberOfCells * self.instructionsCellHeight)
                                 // commented out this 8/31 to see if i could fix source button issue
                                 //                        self.recipeDetailView.instructionsTableView.reloadData()
                                 self.recipeDetailView.instructionsTableView.layoutIfNeeded()
@@ -394,7 +524,6 @@ class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UI
                                 self.recipeDetailView.instructionsTableViewHeightConstraint.constant = self.recipeDetailView.instructionsTableView.contentSize.height
                                 
                                 self.recipeDetailView.layoutIfNeeded()
-                                
                                 
                                 self.scrollView.contentSize = CGSize(width: self.view.frame.width, height: self.recipeDetailView.contentView.frame.size.height)
                                 

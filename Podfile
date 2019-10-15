@@ -8,6 +8,7 @@ target 'WhatToEat' do
   # Pods for WhatToEat
 
 pod 'Unirest'
+pod 'Google-Mobile-Ads-SDK'
 
 pod 'SwiftSoup'
   target 'WhatToEatTests' do

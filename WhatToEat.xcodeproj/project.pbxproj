@@ -18,6 +18,10 @@
 		551C3325230CAE5600D0F9AF /* RecipeInstructionTableViewCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 551C3324230CAE5600D0F9AF /* RecipeInstructionTableViewCellView.xib */; };
 		5533965423131879009CE91F /* SavedRecipesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5533965323131879009CE91F /* SavedRecipesViewController.swift */; };
 		553A274022E4CB7E0063AD58 /* AutocompleteSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553A273F22E4CB7E0063AD58 /* AutocompleteSearchTableViewCell.swift */; };
+		553DEE972329B8A800268E8A /* GoogleAppMeasurement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553DEE942329B8A400268E8A /* GoogleAppMeasurement.framework */; };
+		553DEE982329B8A800268E8A /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553DEE952329B8A700268E8A /* GoogleMobileAds.framework */; };
+		553DEE992329B8A800268E8A /* GoogleUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553DEE962329B8A800268E8A /* GoogleUtilities.framework */; };
+		553DEE9B2329B8F500268E8A /* nanopb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553DEE9A2329B8F500268E8A /* nanopb.framework */; };
 		553FCCA222FB707E0016DC5C /* SavedIngredientViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553FCCA122FB707E0016DC5C /* SavedIngredientViewController.swift */; };
 		5566787723158DE200150909 /* SourceTableViewCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5566787623158DE100150909 /* SourceTableViewCellView.xib */; };
 		5566787923158E5C00150909 /* SourceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5566787823158E5C00150909 /* SourceTableViewCell.swift */; };
@@ -75,6 +79,10 @@
 		551C3324230CAE5600D0F9AF /* RecipeInstructionTableViewCellView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RecipeInstructionTableViewCellView.xib; sourceTree = "<group>"; };
 		5533965323131879009CE91F /* SavedRecipesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SavedRecipesViewController.swift; path = WhatToEat/SavedRecipesViewController.swift; sourceTree = SOURCE_ROOT; };
 		553A273F22E4CB7E0063AD58 /* AutocompleteSearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteSearchTableViewCell.swift; sourceTree = "<group>"; };
+		553DEE942329B8A400268E8A /* GoogleAppMeasurement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleAppMeasurement.framework; sourceTree = "<group>"; };
+		553DEE952329B8A700268E8A /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMobileAds.framework; sourceTree = "<group>"; };
+		553DEE962329B8A800268E8A /* GoogleUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleUtilities.framework; sourceTree = "<group>"; };
+		553DEE9A2329B8F500268E8A /* nanopb.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = nanopb.framework; sourceTree = "<group>"; };
 		553FCCA122FB707E0016DC5C /* SavedIngredientViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedIngredientViewController.swift; sourceTree = "<group>"; };
 		5566787623158DE100150909 /* SourceTableViewCellView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SourceTableViewCellView.xib; sourceTree = "<group>"; };
 		5566787823158E5C00150909 /* SourceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceTableViewCell.swift; sourceTree = "<group>"; };
@@ -120,6 +128,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				553DEE982329B8A800268E8A /* GoogleMobileAds.framework in Frameworks */,
+				553DEE972329B8A800268E8A /* GoogleAppMeasurement.framework in Frameworks */,
+				553DEE9B2329B8F500268E8A /* nanopb.framework in Frameworks */,
+				553DEE992329B8A800268E8A /* GoogleUtilities.framework in Frameworks */,
 				5646CAA85054A25195014BA7 /* Pods_WhatToEat.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -146,6 +158,10 @@
 		1C0E6911547928BEDD06E3FA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				553DEE9A2329B8F500268E8A /* nanopb.framework */,
+				553DEE942329B8A400268E8A /* GoogleAppMeasurement.framework */,
+				553DEE952329B8A700268E8A /* GoogleMobileAds.framework */,
+				553DEE962329B8A800268E8A /* GoogleUtilities.framework */,
 				8ABC20B6FDA4E609D710565B /* Pods_WhatToEat.framework */,
 				F69DADCCDD3A9A0CE433D422 /* Pods_WhatToEatTests.framework */,
 				7C295F04A70962B3CA277697 /* Pods_WhatToEatUITests.framework */,
@@ -178,8 +194,8 @@
 		551C3319230C734C00D0F9AF /* Saved Ingredients VC */ = {
 			isa = PBXGroup;
 			children = (
-				559F53E522F2145000EDCA31 /* SavedIngredientTableViewCell.swift */,
 				553FCCA122FB707E0016DC5C /* SavedIngredientViewController.swift */,
+				559F53E522F2145000EDCA31 /* SavedIngredientTableViewCell.swift */,
 			);
 			path = "Saved Ingredients VC";
 			sourceTree = "<group>";
@@ -463,15 +479,19 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-WhatToEat/Pods-WhatToEat-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftSoup/SwiftSoup.framework",
 				"${BUILT_PRODUCTS_DIR}/Unirest/Unirest.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftSoup.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Unirest.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -729,6 +749,11 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2RB8YD7NFS;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/WhatToEat",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = WhatToEat/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -749,6 +774,11 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2RB8YD7NFS;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/WhatToEat",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = WhatToEat/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
