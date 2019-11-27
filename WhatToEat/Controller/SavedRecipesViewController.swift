@@ -91,26 +91,26 @@ class SavedRecipesViewController: UIViewController, UITableViewDelegate, UITable
         
         
         // to save new items from bookmarkedRecipeIDs to savedRecipes without adding duplicates
-        if bookmarkedRecipeIDs.count > savedRecipes.count {
+        if PersistenceManager.bookmarkedRecipeIDs.count > savedRecipes.count {
             
             if savedRecipes.count != 0 {
-                let difference = bookmarkedRecipeIDs.count - savedRecipes.count
+                let difference = PersistenceManager.bookmarkedRecipeIDs.count - savedRecipes.count
                 for i in 0..<difference {
-                    getRecipeFromIntAndAddToSavedRecipesArray(id: bookmarkedRecipeIDs[savedRecipes.count + i])
+                    getRecipeFromIntAndAddToSavedRecipesArray(id: PersistenceManager.bookmarkedRecipeIDs[savedRecipes.count + i])
                 }
 
             } else {
                 if savedRecipes.count == 0 {
                     
-                    for recipeID in bookmarkedRecipeIDs {
+                    for recipeID in PersistenceManager.bookmarkedRecipeIDs {
                         
                         getRecipeFromIntAndAddToSavedRecipesArray(id: recipeID)
                         print("SAVED RECIPE VC VIEW DID LOAD HAPPENED")
                     }
                 }
             }
-        } else if savedRecipes.count > bookmarkedRecipeIDs.count {
-            savedRecipes = savedRecipes.filter({bookmarkedRecipeIDs.contains($0.id!)})
+        } else if savedRecipes.count > PersistenceManager.bookmarkedRecipeIDs.count {
+            savedRecipes = savedRecipes.filter({PersistenceManager.bookmarkedRecipeIDs.contains($0.id!)})
             savedRecipesTableView.reloadData()
         }
         
@@ -134,7 +134,7 @@ class SavedRecipesViewController: UIViewController, UITableViewDelegate, UITable
     func reorderSavedRecipesArray() {
         var tempArray: [Recipe] = []
         
-        for recipeID in bookmarkedRecipeIDs {
+        for recipeID in PersistenceManager.bookmarkedRecipeIDs {
             for recipe in savedRecipes {
                 if recipeID == recipe.id! {
                     tempArray.append(recipe)
@@ -169,7 +169,7 @@ class SavedRecipesViewController: UIViewController, UITableViewDelegate, UITable
     
     @objc func bookmarkButtonTapped(sender: UIButton) {
         recipeRecentlyDeleted = true
-        bookmarkedRecipeIDs.remove(at: sender.tag)
+        PersistenceManager.bookmarkedRecipeIDs.remove(at: sender.tag)
         savedRecipes.remove(at: sender.tag)
         sender.isHidden = true
         savedRecipesTableView.reloadData()
@@ -229,7 +229,7 @@ class SavedRecipesViewController: UIViewController, UITableViewDelegate, UITable
                         }
                         
                         DispatchQueue.main.async {
-                            if self.savedRecipes.count > 1 && bookmarkedRecipeIDs.count == self.savedRecipes.count {
+                            if self.savedRecipes.count > 1 && PersistenceManager.bookmarkedRecipeIDs.count == self.savedRecipes.count {
                                 self.reorderSavedRecipesArray()
                             }
                             self.savedRecipesTableView.reloadData()

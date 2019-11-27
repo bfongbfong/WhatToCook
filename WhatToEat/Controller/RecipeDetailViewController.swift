@@ -123,7 +123,7 @@ class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UI
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if checkIfBookmarkedFromGlobalArray() {
+        if PersistenceManager.bookmarkedRecipeIDs.contains(number: recipe.id!) {
             recipe.bookmarked = true
         } else {
             recipe.bookmarked = false
@@ -131,14 +131,14 @@ class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UI
         setBookmarkStar()
     }
     
-    func checkIfBookmarkedFromGlobalArray() -> Bool {
-        for recipeID in bookmarkedRecipeIDs {
-            if recipe.id == recipeID {
-                return true
-            }
-        }
-        return false
-    }
+//    func checkIfBookmarkedFromGlobalArray() -> Bool {
+//        for recipeID in PersistenceManager.bookmarkedRecipeIDs {
+//            if recipe.id == recipeID {
+//                return true
+//            }
+//        }
+//        return false
+//    }
     
     func setupUI() {
         let url = URL(string: recipe.imageName!)!

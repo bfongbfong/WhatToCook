@@ -39,7 +39,15 @@ class SearchResultTableViewCell: UITableViewCell {
     
     func handleBookmark(recipe: Recipe) {
         
-        if checkIfBookmarkedThroughGlobalArray(recipe: recipe) {
+//        if checkIfBookmarkedThroughGlobalArray(recipe: recipe) {
+//            recipe.bookmarked = true
+//            bookmarkStarButton.isHidden = false
+//        } else {
+//            recipe.bookmarked = false
+//            bookmarkStarButton.isHidden = true
+//        }
+        
+        if PersistenceManager.bookmarkedRecipeIDs.contains(recipe.id!) {
             recipe.bookmarked = true
             bookmarkStarButton.isHidden = false
         } else {
@@ -50,14 +58,14 @@ class SearchResultTableViewCell: UITableViewCell {
     
     
 
-    func checkIfBookmarkedThroughGlobalArray(recipe: Recipe) -> Bool {
-        for recipeID in bookmarkedRecipeIDs {
-            if recipe.id == recipeID {
-                return true
-            }
-        }
-        return false
-    }
+//    func checkIfBookmarkedThroughGlobalArray(recipe: Recipe) -> Bool {
+//        for recipeID in PersistenceManager.bookmarkedRecipeIDs {
+//            if recipe.id == recipeID {
+//                return true
+//            }
+//        }
+//        return false
+//    }
     
     func updateCellWithUsedIngredients(with recipe: Recipe) {
         handleBookmark(recipe: recipe)
