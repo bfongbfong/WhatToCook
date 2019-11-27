@@ -167,7 +167,7 @@ class SavedIngredientViewController: UIViewController, UITableViewDelegate, UITa
 extension SavedIngredientViewController: UINavigationControllerDelegate {
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         disableEditing()
-        if let homeViewController = (viewController as? ViewController) {
+        if let homeViewController = (viewController as? HomeViewController) {
             homeViewController.savedIngredients = savedIngredients
 
             homeViewController.updateUI()
