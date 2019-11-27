@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().backIndicatorTransitionMaskImage = backImage
         UIBarButtonItem.appearance().setBackButtonTitlePositionAdjustment(UIOffset(horizontal: 0, vertical: -5), for: .default)
         
-        UITabBar.appearance().barTintColor = myGreen
+        UITabBar.appearance().barTintColor = UIColor.myGreen
         
 //        UIApplication.shared.statusBarStyle = .lightContent
 

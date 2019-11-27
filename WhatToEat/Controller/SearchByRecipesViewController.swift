@@ -33,7 +33,7 @@ class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UI
         searchTextField.contentVerticalAlignment = .center
         searchTextField.layer.cornerRadius = 15
         searchTextField.clipsToBounds = true
-        navigationController?.navigationBar.barTintColor = myGreen
+        navigationController?.navigationBar.barTintColor = UIColor.myGreen
         navigationController?.navigationBar.tintColor = UIColor.white
         navigationController?.navigationBar.titleTextAttributes =
             [NSAttributedString.Key.foregroundColor: UIColor.white,

@@ -40,7 +40,7 @@ class SavedIngredientViewController: UIViewController, UITableViewDelegate, UITa
 //        self.tabBarController?.toolbarItems = [clearAllButton, flexible, deleteButton]
         
         
-        self.navigationController?.toolbar.barTintColor = mySalmon
+        self.navigationController?.toolbar.barTintColor = UIColor.mySalmon
         
         
     }

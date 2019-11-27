@@ -37,7 +37,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewData
         textField.clipsToBounds = true
         
         // set up nav bar
-        navigationController?.navigationBar.barTintColor = myGreen
+        navigationController?.navigationBar.barTintColor = UIColor.myGreen
         navigationController?.navigationBar.tintColor = UIColor.white
         navigationController?.navigationBar.titleTextAttributes =
             [NSAttributedString.Key.foregroundColor: UIColor.white,
@@ -81,7 +81,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewData
         } else {
             self.enableClearFridgeButton()
             
-            self.greenCircleForSearchButton.backgroundColor = mySalmon
+            self.greenCircleForSearchButton.backgroundColor = UIColor.mySalmon
             self.tapSearchButton.isEnabled = true
         }
     }
@@ -327,33 +327,7 @@ func replaceSpecialCharacters(input: String) -> String {
 }
 
 
-// hide keyboard
-extension UIViewController {
-    func hideKeyboardWhenTappedAround() {
-        let tapGesture = UITapGestureRecognizer(target: self,
-                                                action: #selector(hideKeyboard))
-        tapGesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(tapGesture)
-    }
 
-    @objc func hideKeyboard() {
-        view.endEditing(true)
-    }
-}
-
-// for use in add to cart animation
-extension UIView {
-    func animationZoom(scaleX: CGFloat, y: CGFloat) {
-        self.transform = CGAffineTransform(scaleX: scaleX, y: y)
-    }
-    
-    func animationRoted(angle : CGFloat) {
-        self.transform = self.transform.rotated(by: angle)
-    }
-}
-
-let myGreen = UIColor(red: 128/255, green: 202/255, blue: 50/255, alpha: 1.0)
-let mySalmon = UIColor(displayP3Red: 253/255, green: 156/255, blue: 136/255, alpha: 1)
 
 
 

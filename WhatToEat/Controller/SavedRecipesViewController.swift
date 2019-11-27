@@ -72,7 +72,7 @@ class SavedRecipesViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     func setUpNavBar() {
-        navigationController?.navigationBar.barTintColor = myGreen
+        navigationController?.navigationBar.barTintColor = UIColor.myGreen
         navigationController?.navigationBar.tintColor = UIColor.white
         navigationController?.navigationBar.titleTextAttributes =
             [NSAttributedString.Key.foregroundColor: UIColor.white,
