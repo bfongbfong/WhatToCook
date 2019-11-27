@@ -48,6 +48,8 @@
 		55EFB5AA238ED64200C6E010 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EFB5A9238ED64200C6E010 /* UIView+Extension.swift */; };
 		55EFB5AF238ED8F600C6E010 /* Ingredient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EFB5AE238ED8F600C6E010 /* Ingredient.swift */; };
 		55EFB5B1238ED95C00C6E010 /* SearchedIngredient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EFB5B0238ED95C00C6E010 /* SearchedIngredient.swift */; };
+		55EFB5B3238EDA4E00C6E010 /* adIDs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EFB5B2238EDA4E00C6E010 /* adIDs.swift */; };
+		55EFB5B5238EDA8900C6E010 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EFB5B4238EDA8900C6E010 /* PersistenceManager.swift */; };
 		5646CAA85054A25195014BA7 /* Pods_WhatToEat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8ABC20B6FDA4E609D710565B /* Pods_WhatToEat.framework */; };
 		8D6DF78878E1C5FA3DC0F1C2 /* Pods_WhatToEatUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C295F04A70962B3CA277697 /* Pods_WhatToEatUITests.framework */; };
 /* End PBXBuildFile section */
@@ -117,6 +119,8 @@
 		55EFB5A9238ED64200C6E010 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		55EFB5AE238ED8F600C6E010 /* Ingredient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ingredient.swift; sourceTree = "<group>"; };
 		55EFB5B0238ED95C00C6E010 /* SearchedIngredient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchedIngredient.swift; sourceTree = "<group>"; };
+		55EFB5B2238EDA4E00C6E010 /* adIDs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = adIDs.swift; sourceTree = "<group>"; };
+		55EFB5B4238EDA8900C6E010 /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 		7C295F04A70962B3CA277697 /* Pods_WhatToEatUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WhatToEatUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8ABC20B6FDA4E609D710565B /* Pods_WhatToEat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WhatToEat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB0F932205E036F56A8AB9D8 /* Pods-WhatToEatTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WhatToEatTests.release.xcconfig"; path = "Target Support Files/Pods-WhatToEatTests/Pods-WhatToEatTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -201,6 +205,7 @@
 				55C9F48922DEBE9E00CF3DD3 /* Recipe.swift */,
 				55EFB5AE238ED8F600C6E010 /* Ingredient.swift */,
 				55EFB5B0238ED95C00C6E010 /* SearchedIngredient.swift */,
+				55EFB5B2238EDA4E00C6E010 /* adIDs.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -305,13 +310,14 @@
 		55EFB5AD238ED82100C6E010 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				55EFB5AB238ED6A500C6E010 /* TabBar */,
 				55E7981322C9BE2200C79357 /* HomeViewController.swift */,
 				553FCCA122FB707E0016DC5C /* SavedIngredientViewController.swift */,
 				55C9F48B22DEE3A300CF3DD3 /* SearchResultsViewController.swift */,
 				550E986322F33A3500A135A3 /* RecipeDetailViewController.swift */,
 				5533965323131879009CE91F /* SavedRecipesViewController.swift */,
 				5566787A23159A5300150909 /* SearchByRecipesViewController.swift */,
+				55EFB5B4238EDA8900C6E010 /* PersistenceManager.swift */,
+				55EFB5AB238ED6A500C6E010 /* TabBar */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -560,11 +566,13 @@
 				551C331F230C741D00D0F9AF /* RecipeIngredientTableViewCell.swift in Sources */,
 				55B15DA522FCFCBB00B39B69 /* RecipeDetailView.swift in Sources */,
 				55EFB5AF238ED8F600C6E010 /* Ingredient.swift in Sources */,
+				55EFB5B5238EDA8900C6E010 /* PersistenceManager.swift in Sources */,
 				55E7981422C9BE2200C79357 /* HomeViewController.swift in Sources */,
 				551C3311230C4B8500D0F9AF /* DietCollectionViewCell.swift in Sources */,
 				553A274022E4CB7E0063AD58 /* AutocompleteSearchTableViewCell.swift in Sources */,
 				55E7981222C9BE2200C79357 /* AppDelegate.swift in Sources */,
 				5566787923158E5C00150909 /* SourceTableViewCell.swift in Sources */,
+				55EFB5B3238EDA4E00C6E010 /* adIDs.swift in Sources */,
 				559F53E622F2145000EDCA31 /* SavedIngredientTableViewCell.swift in Sources */,
 				55E7981A22C9BE2200C79357 /* WhatToEat.xcdatamodeld in Sources */,
 				55667883231774B100150909 /* CustomUITabBarController.swift in Sources */,

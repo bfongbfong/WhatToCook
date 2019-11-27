@@ -152,20 +152,3 @@ class RecipesViewed {
     }
 }
 
-class adIDs {
-    static var searchResultsVCBannerID: String {
-        return "ca-app-pub-5775764210542302/4339264751"
-    }
-    static var recipeDetailVCBannerID: String {
-        return "ca-app-pub-5775764210542302/9192273207"
-    }
-    static var searchByRecipeNameVCBannerID: String {
-        return "ca-app-pub-5775764210542302/7631779527"
-    }
-    static var savedRecipesVCBannerID: String {
-        return "ca-app-pub-5775764210542302/6262518225"
-    }
-    static var beforeInterstitialID: String {
-        return "ca-app-pub-5775764210542302/6785262409"
-    }
-}
