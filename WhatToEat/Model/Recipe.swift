@@ -33,9 +33,7 @@ class Recipe: Equatable {
     var creditsText: String?
     var bookmarked: Bool = false {
         didSet {
-//            print("bookmarked did set called")
             if bookmarked == true {
-//                print("bookmarked was true")
                 // this next part is to prevent copies of the recipe to be saved
                 // if bookmarkedRecipeIDs is empty, append.
                 if PersistenceManager.bookmarkedRecipeIDs.count == 0 {
@@ -46,15 +44,10 @@ class Recipe: Equatable {
                     }
                 }
             } else {
-//                print("bookmarked was set to false")
                 // removes bookmarked recipe from bookmarkedRecipeIDs
                 let arrayWithoutTargetRecipe = PersistenceManager.bookmarkedRecipeIDs.filter { $0 != self.id }
                 PersistenceManager.bookmarkedRecipeIDs = arrayWithoutTargetRecipe
             }
-            
-//            for recipeID in bookmarkedRecipeIDs {
-//                print(recipeID)
-//            }
         }
     }
     

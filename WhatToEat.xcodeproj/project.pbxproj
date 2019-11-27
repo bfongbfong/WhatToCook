@@ -298,16 +298,11 @@
 				553A273F22E4CB7E0063AD58 /* AutocompleteSearchTableViewCell.swift */,
 				559F53E522F2145000EDCA31 /* SavedIngredientTableViewCell.swift */,
 				55C9F49522DF843100CF3DD3 /* SearchResultTableViewCell.swift */,
-				55B15DA422FCFCBB00B39B69 /* RecipeDetailView.swift */,
-				55B15DA622FCFCC600B39B69 /* RecipeDetailView.xib */,
-				551C3310230C4B8500D0F9AF /* DietCollectionViewCell.swift */,
-				551C3314230C4CB900D0F9AF /* DietCollectionViewCellView.xib */,
-				551C331E230C741D00D0F9AF /* RecipeIngredientTableViewCell.swift */,
-				551C3320230C743600D0F9AF /* RecipeIngredientTableViewCellView.xib */,
-				551C3322230CAE4B00D0F9AF /* RecipeInstructionTableViewCell.swift */,
-				551C3324230CAE5600D0F9AF /* RecipeInstructionTableViewCellView.xib */,
-				5566787623158DE100150909 /* SourceTableViewCellView.xib */,
-				5566787823158E5C00150909 /* SourceTableViewCell.swift */,
+				55EFB5BA238F429000C6E010 /* RecipeDetailView */,
+				55EFB5BB238F429E00C6E010 /* DietCollectionViewCell */,
+				55EFB5BC238F42AB00C6E010 /* RecipeIngredientTableViewCell */,
+				55EFB5BD238F42BE00C6E010 /* RecipeInstructionTableViewCell */,
+				55EFB5BE238F42D500C6E010 /* SourceTableViewCell */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -326,6 +321,51 @@
 				55EFB5AB238ED6A500C6E010 /* TabBar */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		55EFB5BA238F429000C6E010 /* RecipeDetailView */ = {
+			isa = PBXGroup;
+			children = (
+				55B15DA422FCFCBB00B39B69 /* RecipeDetailView.swift */,
+				55B15DA622FCFCC600B39B69 /* RecipeDetailView.xib */,
+			);
+			path = RecipeDetailView;
+			sourceTree = "<group>";
+		};
+		55EFB5BB238F429E00C6E010 /* DietCollectionViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				551C3310230C4B8500D0F9AF /* DietCollectionViewCell.swift */,
+				551C3314230C4CB900D0F9AF /* DietCollectionViewCellView.xib */,
+			);
+			path = DietCollectionViewCell;
+			sourceTree = "<group>";
+		};
+		55EFB5BC238F42AB00C6E010 /* RecipeIngredientTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				551C331E230C741D00D0F9AF /* RecipeIngredientTableViewCell.swift */,
+				551C3320230C743600D0F9AF /* RecipeIngredientTableViewCellView.xib */,
+			);
+			path = RecipeIngredientTableViewCell;
+			sourceTree = "<group>";
+		};
+		55EFB5BD238F42BE00C6E010 /* RecipeInstructionTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				551C3322230CAE4B00D0F9AF /* RecipeInstructionTableViewCell.swift */,
+				551C3324230CAE5600D0F9AF /* RecipeInstructionTableViewCellView.xib */,
+			);
+			path = RecipeInstructionTableViewCell;
+			sourceTree = "<group>";
+		};
+		55EFB5BE238F42D500C6E010 /* SourceTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				5566787623158DE100150909 /* SourceTableViewCellView.xib */,
+				5566787823158E5C00150909 /* SourceTableViewCell.swift */,
+			);
+			path = SourceTableViewCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
