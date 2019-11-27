@@ -97,62 +97,6 @@ private func loopThrough(id: Int) -> Bool {
 }
 
 
-struct Ingredient {
-    var aisle: String?
-    var amount: NSNumber?
-    var id: Int?
-    var imageName: String?
-    var name: String?
-    var originalString: String?
-    var unit: String?
-    var unitShort: String?
-    
-    init(aisle: String, amount: NSNumber, id: Int, imageName: String, name: String, originalString: String, unit: String, unitShort: String) {
-        self.aisle = aisle
-        self.amount = amount
-        self.id = id
-        self.imageName = imageName
-        self.name = name
-        self.originalString = originalString
-        self.unit = unit
-        self.unitShort = unitShort
-    }
-    
-    init(aisle: String?, amount: NSNumber?, id: Int?, imageName: String?, name: String?, unit: String?, unitShort: String?) {
-        self.aisle = aisle
-        self.amount = amount
-        self.id = id
-        self.imageName = imageName
-        self.name = name
-        self.originalString = nil
-        self.unit = unit
-        self.unitShort = unitShort
-    }
-    
-    init(name: String, amount: NSNumber, id: Int, imageName: String, unitShort: String) {
-        self.name = name
-        self.amount = amount
-        self.id = id
-        self.imageName = imageName
-        self.unitShort = unitShort
-        self.aisle = ""
-    }
-}
-
-struct SearchedIngredient: Equatable {
-
-    var name: String
-    var imageName: String
-    
-    init(name: String, imageName: String) {
-        self.name = name
-        self.imageName = imageName
-    }
-    
-    static func == (lhs: SearchedIngredient, rhs: SearchedIngredient) -> Bool {
-        return lhs.name == rhs.name
-    }
-}
 
 
 //var bookmarkedRecipes: [Recipe] = []

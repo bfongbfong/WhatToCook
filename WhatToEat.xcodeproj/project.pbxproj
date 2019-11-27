@@ -46,6 +46,8 @@
 		55EFB5A6238ED5EE00C6E010 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EFB5A5238ED5EE00C6E010 /* UIColor+Extension.swift */; };
 		55EFB5A8238ED60F00C6E010 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EFB5A7238ED60F00C6E010 /* UIViewController+Extension.swift */; };
 		55EFB5AA238ED64200C6E010 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EFB5A9238ED64200C6E010 /* UIView+Extension.swift */; };
+		55EFB5AF238ED8F600C6E010 /* Ingredient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EFB5AE238ED8F600C6E010 /* Ingredient.swift */; };
+		55EFB5B1238ED95C00C6E010 /* SearchedIngredient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EFB5B0238ED95C00C6E010 /* SearchedIngredient.swift */; };
 		5646CAA85054A25195014BA7 /* Pods_WhatToEat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8ABC20B6FDA4E609D710565B /* Pods_WhatToEat.framework */; };
 		8D6DF78878E1C5FA3DC0F1C2 /* Pods_WhatToEatUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C295F04A70962B3CA277697 /* Pods_WhatToEatUITests.framework */; };
 /* End PBXBuildFile section */
@@ -113,6 +115,8 @@
 		55EFB5A5238ED5EE00C6E010 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		55EFB5A7238ED60F00C6E010 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		55EFB5A9238ED64200C6E010 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
+		55EFB5AE238ED8F600C6E010 /* Ingredient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ingredient.swift; sourceTree = "<group>"; };
+		55EFB5B0238ED95C00C6E010 /* SearchedIngredient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchedIngredient.swift; sourceTree = "<group>"; };
 		7C295F04A70962B3CA277697 /* Pods_WhatToEatUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WhatToEatUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8ABC20B6FDA4E609D710565B /* Pods_WhatToEat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WhatToEat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB0F932205E036F56A8AB9D8 /* Pods-WhatToEatTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WhatToEatTests.release.xcconfig"; path = "Target Support Files/Pods-WhatToEatTests/Pods-WhatToEatTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -195,6 +199,8 @@
 			isa = PBXGroup;
 			children = (
 				55C9F48922DEBE9E00CF3DD3 /* Recipe.swift */,
+				55EFB5AE238ED8F600C6E010 /* Ingredient.swift */,
+				55EFB5B0238ED95C00C6E010 /* SearchedIngredient.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -553,6 +559,7 @@
 				553FCCA222FB707E0016DC5C /* SavedIngredientViewController.swift in Sources */,
 				551C331F230C741D00D0F9AF /* RecipeIngredientTableViewCell.swift in Sources */,
 				55B15DA522FCFCBB00B39B69 /* RecipeDetailView.swift in Sources */,
+				55EFB5AF238ED8F600C6E010 /* Ingredient.swift in Sources */,
 				55E7981422C9BE2200C79357 /* HomeViewController.swift in Sources */,
 				551C3311230C4B8500D0F9AF /* DietCollectionViewCell.swift in Sources */,
 				553A274022E4CB7E0063AD58 /* AutocompleteSearchTableViewCell.swift in Sources */,
@@ -567,6 +574,7 @@
 				55C9F48A22DEBE9E00CF3DD3 /* Recipe.swift in Sources */,
 				55EFB5A6238ED5EE00C6E010 /* UIColor+Extension.swift in Sources */,
 				551C3323230CAE4B00D0F9AF /* RecipeInstructionTableViewCell.swift in Sources */,
+				55EFB5B1238ED95C00C6E010 /* SearchedIngredient.swift in Sources */,
 				5533965423131879009CE91F /* SavedRecipesViewController.swift in Sources */,
 				550E986422F33A3500A135A3 /* RecipeDetailViewController.swift in Sources */,
 				55C9F48C22DEE3A300CF3DD3 /* SearchResultsViewController.swift in Sources */,
