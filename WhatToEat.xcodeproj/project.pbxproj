@@ -50,6 +50,7 @@
 		55EFB5B1238ED95C00C6E010 /* SearchedIngredient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EFB5B0238ED95C00C6E010 /* SearchedIngredient.swift */; };
 		55EFB5B3238EDA4E00C6E010 /* adIDs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EFB5B2238EDA4E00C6E010 /* adIDs.swift */; };
 		55EFB5B5238EDA8900C6E010 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EFB5B4238EDA8900C6E010 /* PersistenceManager.swift */; };
+		55EFB5B7238F3EAC00C6E010 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EFB5B6238F3EAC00C6E010 /* Helpers.swift */; };
 		5646CAA85054A25195014BA7 /* Pods_WhatToEat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8ABC20B6FDA4E609D710565B /* Pods_WhatToEat.framework */; };
 		8D6DF78878E1C5FA3DC0F1C2 /* Pods_WhatToEatUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C295F04A70962B3CA277697 /* Pods_WhatToEatUITests.framework */; };
 /* End PBXBuildFile section */
@@ -121,6 +122,7 @@
 		55EFB5B0238ED95C00C6E010 /* SearchedIngredient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchedIngredient.swift; sourceTree = "<group>"; };
 		55EFB5B2238EDA4E00C6E010 /* adIDs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = adIDs.swift; sourceTree = "<group>"; };
 		55EFB5B4238EDA8900C6E010 /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
+		55EFB5B6238F3EAC00C6E010 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		7C295F04A70962B3CA277697 /* Pods_WhatToEatUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WhatToEatUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8ABC20B6FDA4E609D710565B /* Pods_WhatToEat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WhatToEat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB0F932205E036F56A8AB9D8 /* Pods-WhatToEatTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WhatToEatTests.release.xcconfig"; path = "Target Support Files/Pods-WhatToEatTests/Pods-WhatToEatTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -317,6 +319,7 @@
 				5533965323131879009CE91F /* SavedRecipesViewController.swift */,
 				5566787A23159A5300150909 /* SearchByRecipesViewController.swift */,
 				55EFB5B4238EDA8900C6E010 /* PersistenceManager.swift */,
+				55EFB5B6238F3EAC00C6E010 /* Helpers.swift */,
 				55EFB5AB238ED6A500C6E010 /* TabBar */,
 			);
 			path = Controller;
@@ -583,6 +586,7 @@
 				55EFB5A6238ED5EE00C6E010 /* UIColor+Extension.swift in Sources */,
 				551C3323230CAE4B00D0F9AF /* RecipeInstructionTableViewCell.swift in Sources */,
 				55EFB5B1238ED95C00C6E010 /* SearchedIngredient.swift in Sources */,
+				55EFB5B7238F3EAC00C6E010 /* Helpers.swift in Sources */,
 				5533965423131879009CE91F /* SavedRecipesViewController.swift in Sources */,
 				550E986422F33A3500A135A3 /* RecipeDetailViewController.swift in Sources */,
 				55C9F48C22DEE3A300CF3DD3 /* SearchResultsViewController.swift in Sources */,

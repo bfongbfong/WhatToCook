@@ -37,63 +37,41 @@ class Recipe: Equatable {
             if bookmarked == true {
 //                print("bookmarked was true")
                 // this next part is to prevent copies of the recipe to be saved
-                
-                // A FOR IN LOOP DOESN'T GET CALLED IF THE ARRAY IS EMPTY DUMMYYY
+                // if bookmarkedRecipeIDs is empty, append.
                 if bookmarkedRecipeIDs.count == 0 {
                     bookmarkedRecipeIDs.append(self.id!)
                 } else {
-                    // there error is that you are looping through everything in bookmarkedRecipeIDs and comparing every item to the newest item. if the item isn't the same, then you are adding it. but what if you're comparing something that has a match SOMEHERE in the array... you still add it to the array!
-                    // that's not right.
-                    // it should be: compare every value in your array with your target value. if you finish the entire array and it doesn't find a match, then append it. if not, return.
-//                    for bookmarkedRecipeID in bookmarkedRecipeIDs {
-//                        if bookmarkedRecipeID == self.id {
-//                            return
-//                        } else {
-//                            bookmarkedRecipeIDs.append(self.id!)
-//                        }
-//                    }
-                    
-                    if !loopThrough(id: self.id!) {
+                    if !bookmarkedRecipeIDs.contains(self.id!) {
                         bookmarkedRecipeIDs.append(self.id!)
                     }
                 }
-                
-                
-
             } else {
 //                print("bookmarked was set to false")
-                let arrayWithoutTargetRecipe = bookmarkedRecipeIDs.filter {$0 != self.id}
+                // removes bookmarked recipe from bookmarkedRecipeIDs
+                let arrayWithoutTargetRecipe = bookmarkedRecipeIDs.filter { $0 != self.id }
                 bookmarkedRecipeIDs = arrayWithoutTargetRecipe
             }
             
-            // print bookmarked recipes
-//            let bookmarkedRecipesToPrint = bookmarkedRecipeIDs.map { (recipe) -> Int in
-//                return recipe.id!
+//            for recipeID in bookmarkedRecipeIDs {
+//                print(recipeID)
 //            }
-//            print(bookmarkedRecipesToPrint)
-            
-
-            for recipeID in bookmarkedRecipeIDs {
-                print(recipeID)
-            }
         }
     }
-    // this was an idea i had to help keep local recipe arrays to be the same as bookmarkedRecipeIds but im not sure it's a good idea anymore
-    var orderInArray: Int?
     
     static func == (lhs: Recipe, rhs: Recipe) -> Bool {
         return lhs.id == rhs.id
     }
 }
 
-private func loopThrough(id: Int) -> Bool {
-    
-    for bookmarkedRecipeID in bookmarkedRecipeIDs {
-        if bookmarkedRecipeID == id {
-            return true
+
+extension Sequence where Iterator.Element == Int {
+    func contains(number: Int) -> Bool {
+        var set: Set<Int> = []
+        for element in self {
+            set.insert(element)
         }
+        return set.contains(number)
     }
-    return false
 }
 
 
@@ -143,12 +121,4 @@ func saveBookmarkedRecipes() {
 //    (UserDefaults.standard.array(forKey: "savedIngredients") as? [SearchedIngredient])!
 //}
 
-class RecipesViewed {
-    static var counter: Int = 0
-    static var notMultipleOfThree: Bool {
-        get {
-            return counter % 3 == 0
-        }
-    }
-}
 
