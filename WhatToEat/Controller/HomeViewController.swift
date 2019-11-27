@@ -11,16 +11,19 @@ import Unirest
 
 class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate {
     
+    // MARK: - Outlets
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var textField: UITextField!
-    @IBOutlet weak var greenCircleForSearchButton: UIView!
+    @IBOutlet weak var rectangleForSearchButton: UIView!
     @IBOutlet weak var fridgeBarButtonItem: BadgeBarButtonItem!
     @IBOutlet var tapSearchButton: UITapGestureRecognizer!
     @IBOutlet weak var clearFridgeButton: UIBarButtonItem!
     
+    // MARK: - Properties
     var searchResults: [SearchedIngredient] = []
     var savedIngredients: [SearchedIngredient] = []
     
+    // MARK: - View Controller Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -53,43 +56,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewData
         disableClearFridgeButton()
     }
     
-    @IBAction func clearFridgeTapped(_ sender: Any) {
-        savedIngredients.removeAll()
-        updateUI()
-    }
-    
-    
-    func enableClearFridgeButton() {
-        clearFridgeButton.isEnabled = true
-        clearFridgeButton.tintColor = UIColor.white.withAlphaComponent(1.0)
-    }
-    
-    func disableClearFridgeButton() {
-        clearFridgeButton.isEnabled = false
-        clearFridgeButton.tintColor = UIColor.white.withAlphaComponent(0)
-    }
-    
-    func updateUI() {
-        self.fridgeBarButtonItem.badgeNumber = self.savedIngredients.count
-        
-        if savedIngredients.count == 0 {
-            disableClearFridgeButton()
-            
-            greenCircleForSearchButton.backgroundColor = UIColor.gray
-            tapSearchButton.isEnabled = false
-            
-        } else {
-            self.enableClearFridgeButton()
-            
-            self.greenCircleForSearchButton.backgroundColor = UIColor.mySalmon
-            self.tapSearchButton.isEnabled = true
-        }
-    }
-    
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -114,12 +80,67 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewData
         textField.rightViewMode = .always
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
+    // MARK: - IBActions & Objc Functions
+    @IBAction func textFieldEditingChanged(_ sender: Any) {
+        print("EDITING CHANGED")
+        
+        // make sure if textfield is empty, empty table view
+        if textField.text == "" || textField.text == " " {
+            searchResults.removeAll()
+            tableView.reloadData()
+        } else {
+            // populate table view with search results
+            if let text = textField.text {
+                autocompleteIngredientSearch(input: text)
+            }
+        }
+    }
+    
+    
+    @IBAction func clearFridgeTapped(_ sender: Any) {
+        savedIngredients.removeAll()
+        updateUI()
+    }
+    
+    
+    func enableClearFridgeButton() {
+        clearFridgeButton.isEnabled = true
+        clearFridgeButton.tintColor = UIColor.white.withAlphaComponent(1.0)
+    }
+    
+    func disableClearFridgeButton() {
+        clearFridgeButton.isEnabled = false
+        clearFridgeButton.tintColor = UIColor.white.withAlphaComponent(0)
+    }
+    
+    func updateUI() {
+        self.fridgeBarButtonItem.badgeNumber = self.savedIngredients.count
+        
+        if savedIngredients.count == 0 {
+            disableClearFridgeButton()
+            
+            rectangleForSearchButton.backgroundColor = UIColor.gray
+            tapSearchButton.isEnabled = false
+            
+        } else {
+            self.enableClearFridgeButton()
+            
+            self.rectangleForSearchButton.backgroundColor = UIColor.mySalmon
+            self.tapSearchButton.isEnabled = true
+        }
+    }
+
+    
     // MARK: - UI
     
     func setUpSearchButton() {
-        greenCircleForSearchButton.layer.cornerRadius = greenCircleForSearchButton.frame.width/8
-        greenCircleForSearchButton.layer.masksToBounds = true
-        greenCircleForSearchButton.backgroundColor = UIColor.gray
+        rectangleForSearchButton.layer.cornerRadius = rectangleForSearchButton.frame.width/8
+        rectangleForSearchButton.layer.masksToBounds = true
+        rectangleForSearchButton.backgroundColor = UIColor.gray
         tapSearchButton.isEnabled = false
     }
     
@@ -163,21 +184,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewData
         // empty text field
         textField.text = ""
         UIDevice.vibrate()
-    }
-    
-    @IBAction func textFieldEditingChanged(_ sender: Any) {
-        print("EDITING CHANGED")
-        
-        // make sure if textfield is empty, empty table view
-        if textField.text == "" || textField.text == " " {
-            searchResults.removeAll()
-            tableView.reloadData()
-        } else {
-            // populate table view with search results
-            if let text = textField.text {
-                autocompleteIngredientSearch(input: text)
-            }
-        }
     }
     
 
