@@ -28,12 +28,10 @@ PODS:
     - nanopb/encode (= 0.3.901)
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
-  - SwiftSoup (1.7.4)
   - Unirest (1.1.4)
 
 DEPENDENCIES:
   - Google-Mobile-Ads-SDK
-  - SwiftSoup
   - Unirest
 
 SPEC REPOS:
@@ -42,7 +40,6 @@ SPEC REPOS:
     - GoogleAppMeasurement
     - GoogleUtilities
     - nanopb
-    - SwiftSoup
     - Unirest
 
 SPEC CHECKSUMS:
@@ -50,9 +47,8 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: 86a82f0e1f20b8eedf8e20326530138fd71409de
   GoogleUtilities: e7dc37039b19df7fe543479d3e4a02ac8d11bb69
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
-  SwiftSoup: 92f5b348c131aed8af04f4326db1579ab19fa08c
   Unirest: 5e4d93eaf32463bf619a4ecd3bbc8c32acf21eac
 
-PODFILE CHECKSUM: 533c18bab9010629f5e8501cbdde75fbef3f2b00
+PODFILE CHECKSUM: 6c401592142fdf2728fc354c3a6ebdddb8eff4ca
 
 COCOAPODS: 1.6.1

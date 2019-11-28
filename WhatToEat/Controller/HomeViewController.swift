@@ -32,8 +32,8 @@ class HomeViewController: UIViewController {
         textField.delegate = self
         hideKeyboardWhenTappedAround()
         tableView.keyboardDismissMode = .onDrag
-        setUpSearchButton()
         
+        setUpSearchButton()
         alignTextField()
         setUpNavBar()
         setUpClearFridgeButton()
@@ -42,25 +42,10 @@ class HomeViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        // set up status bar
-        navigationController?.navigationBar.barStyle = .black
+        setUpStatusBar()
         
-        // to make "SEARCH INGREDIENTS" placeholder text fit and center vertically
-        for subview in textField.subviews {
-            if let label = subview as? UILabel {
-                label.minimumScaleFactor = 0.3
-                label.adjustsFontSizeToFitWidth = true
-                label.baselineAdjustment = .alignCenters
-            }
-        }
-        
-        // add horizontal padding to "SEARCH INGREDIENTS" placeholder
-        let leftPaddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
-        let rightPaddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
-        textField.leftView = leftPaddingView
-        textField.leftViewMode = .always
-        textField.rightView = rightPaddingView
-        textField.rightViewMode = .always
+        alignTextFieldPlaceholderText()
+    
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -110,11 +95,35 @@ extension HomeViewController {
              NSAttributedString.Key.font: UIFont(name: "PoetsenOne-Regular", size: 21)!]
     }
     
+    func setUpStatusBar() {
+        // set up status bar
+        navigationController?.navigationBar.barStyle = .black
+    }
+    
     func alignTextField() {
         // align textField
         textField.contentVerticalAlignment = .center
         textField.layer.cornerRadius = 15
         textField.clipsToBounds = true
+    }
+    
+    func alignTextFieldPlaceholderText() {
+        // to make "SEARCH INGREDIENTS" placeholder text fit and center vertically
+        for subview in textField.subviews {
+            if let label = subview as? UILabel {
+                label.minimumScaleFactor = 0.3
+                label.adjustsFontSizeToFitWidth = true
+                label.baselineAdjustment = .alignCenters
+            }
+        }
+        
+        // add horizontal padding to "SEARCH INGREDIENTS" placeholder
+        let leftPaddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
+        let rightPaddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
+        textField.leftView = leftPaddingView
+        textField.leftViewMode = .always
+        textField.rightView = rightPaddingView
+        textField.rightViewMode = .always
     }
     
     func setUpClearFridgeButton() {
