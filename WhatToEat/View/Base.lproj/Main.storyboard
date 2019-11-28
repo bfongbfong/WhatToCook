@@ -184,13 +184,13 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle" translatesAutoresizingMaskIntoConstraints="NO" id="uBr-NI-IuU">
-                                                    <rect key="frame" x="30" y="8.5" width="41.500000000000227" height="41.000000000000227"/>
+                                                    <rect key="frame" x="30" y="8.5" width="41.5" height="41"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="uBr-NI-IuU" secondAttribute="height" id="uxq-Ty-f6d"/>
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vxa-ts-rXH">
-                                                    <rect key="frame" x="78.5" y="20.5" width="315.5" height="17"/>
+                                                    <rect key="frame" x="78.5" y="19" width="315.5" height="20"/>
                                                     <fontDescription key="fontDescription" name="Gotham-Book" family="Gotham" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>

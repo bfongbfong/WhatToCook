@@ -9,7 +9,7 @@
 import UIKit
 import Unirest
 
-class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate {
+class HomeViewController: UIViewController {
     
     // MARK: - Outlets
     @IBOutlet weak var tableView: UITableView!
@@ -45,15 +45,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewData
         navigationController?.navigationBar.titleTextAttributes =
             [NSAttributedString.Key.foregroundColor: UIColor.white,
              NSAttributedString.Key.font: UIFont(name: "PoetsenOne-Regular", size: 21)!]
-//        let leftButton = UIBarButtonItem(title: "thing", style: .plain, target: self, action: #selector(someFunc))
-//        self.navigationItem.leftBarButtonItem = leftButton
-//        let coder = NSCoder()
-//        let fridgeBarButtonItem = BadgeBarButtonItem(coder: coder)
-//        fridgeBarButtonItem?.image = UIImage(named: "fridge-2")
-//        let flexible = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-//        navigationController?.navigationBar.items = [flexible, fridgeBarButtonItem, flexible]
         clearFridgeButton.setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: "Gotham", size: 15)!], for: .normal)
-        disableClearFridgeButton()
+        setClearFridgeButton(enabled: false)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -84,7 +77,13 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewData
         return .lightContent
     }
     
-    // MARK: - IBActions & Objc Functions
+    
+}
+
+
+// MARK: - IBActions & Objc Functions
+extension HomeViewController: UITextFieldDelegate {
+    
     @IBAction func textFieldEditingChanged(_ sender: Any) {
         print("EDITING CHANGED")
         
@@ -106,36 +105,11 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewData
         updateUI()
     }
     
-    
-    func enableClearFridgeButton() {
-        clearFridgeButton.isEnabled = true
-        clearFridgeButton.tintColor = UIColor.white.withAlphaComponent(1.0)
-    }
-    
-    func disableClearFridgeButton() {
-        clearFridgeButton.isEnabled = false
-        clearFridgeButton.tintColor = UIColor.white.withAlphaComponent(0)
-    }
-    
-    func updateUI() {
-        self.fridgeBarButtonItem.badgeNumber = self.savedIngredients.count
-        
-        if savedIngredients.count == 0 {
-            disableClearFridgeButton()
-            
-            rectangleForSearchButton.backgroundColor = UIColor.gray
-            tapSearchButton.isEnabled = false
-            
-        } else {
-            self.enableClearFridgeButton()
-            
-            self.rectangleForSearchButton.backgroundColor = UIColor.mySalmon
-            self.tapSearchButton.isEnabled = true
-        }
-    }
+}
 
-    
-    // MARK: - UI
+
+// MARK: - UI Functions
+extension HomeViewController {
     
     func setUpSearchButton() {
         rectangleForSearchButton.layer.cornerRadius = rectangleForSearchButton.frame.width/8
@@ -144,9 +118,40 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewData
         tapSearchButton.isEnabled = false
     }
     
+    func updateUI() {
+        self.fridgeBarButtonItem.badgeNumber = self.savedIngredients.count
+        
+        if savedIngredients.count == 0 {
+            setClearFridgeButton(enabled: false)
+            
+            rectangleForSearchButton.backgroundColor = UIColor.gray
+            tapSearchButton.isEnabled = false
+            
+        } else {
+            self.setClearFridgeButton(enabled: true)
+            
+            self.rectangleForSearchButton.backgroundColor = UIColor.mySalmon
+            self.tapSearchButton.isEnabled = true
+        }
+    }
     
-    // MARK: - tableView data source methods
+    func setClearFridgeButton(enabled: Bool) {
+        if enabled {
+            clearFridgeButton.isEnabled = true
+            clearFridgeButton.tintColor = UIColor.white.withAlphaComponent(1.0)
+        } else {
+            clearFridgeButton.isEnabled = false
+            clearFridgeButton.tintColor = UIColor.white.withAlphaComponent(0)
+        }
+    }
     
+}
+
+
+// MARK: - UITableView Data Source & Delegate Methods
+extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    // MARK: Data Source
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == self.tableView {
             return searchResults.count
@@ -166,12 +171,12 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewData
     }
     
     
-    // MARK: - Tableview Delegate methods
+    // MARK: Delegate
     
     // save ingredients
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        jumpToCartAnimation(indexPath: indexPath)
+        addIngredientAnimation(indexPath: indexPath)
         
         // remove from tableView
         let ingredient = SearchedIngredient(name: searchResults[indexPath.row].name, imageName: searchResults[indexPath.row].imageName)
@@ -186,7 +191,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewData
         UIDevice.vibrate()
     }
     
+}
 
+extension HomeViewController {
+    
     // MARK: - API Requests
     func autocompleteIngredientSearch(input: String) {
         
@@ -253,9 +261,14 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewData
         return resultString
     }
     
-    // MARK: - animations
     
-    func jumpToCartAnimation(indexPath: IndexPath) {
+}
+
+
+// MARK: - Animations
+extension HomeViewController {
+    
+    func addIngredientAnimation(indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! AutocompleteSearchTableViewCell
         
         let imageViewPosition : CGPoint = cell.ingredientImage.convert(cell.ingredientImage.bounds.origin, to: self.view)
@@ -264,11 +277,11 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewData
         
         imgViewTemp.image = cell.ingredientImage.image
         
-        animation(tempView: imgViewTemp)
+        jumpToCartAnimation(tempView: imgViewTemp)
     }
     
     // second part of jump to cart
-    func animation(tempView : UIView)  {
+    func jumpToCartAnimation(tempView : UIView)  {
         self.view.addSubview(tempView)
 
         UIView.animate(withDuration: 0.5, animations: {
@@ -287,7 +300,12 @@ class HomeViewController: UIViewController, UITextFieldDelegate, UITableViewData
     }
 
     
-    // MARK: - Navigation
+}
+
+
+// MARK: - Navigation
+extension HomeViewController {
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     
         if segue.identifier == "ToSearchResults" {
