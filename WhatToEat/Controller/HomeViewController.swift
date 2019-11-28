@@ -224,7 +224,7 @@ extension HomeViewController {
             print(errorThatHappened.localizedDescription)
             return
         }
-        guard let json = jsonBody else { print("json was empty?"); return }
+        guard let json = jsonBody else { return }
         
         print("JSON ARRAY ==================================================")
         print(json)
