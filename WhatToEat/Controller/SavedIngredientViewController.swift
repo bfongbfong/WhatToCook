@@ -93,26 +93,25 @@ class SavedIngredientViewController: UIViewController, UITableViewDelegate, UITa
         self.savedIngredientTableView.isEditing = !self.savedIngredientTableView.isEditing
 
         if savedIngredientTableView.isEditing {
-            enableEditing()
+            setEditing(enabled: true)
         } else {
-            disableEditing()
+            setEditing(enabled: false)
         }
     }
     
-    func disableEditing() {
-        self.navigationController?.setToolbarHidden(true, animated: true)
-        editButton.title = nil
-        editButton.image = UIImage(named: "edit")
+    func setEditing(enabled: Bool) {
+        if enabled {
+            self.navigationController?.setToolbarHidden(false, animated: true)
+            editButton.image = nil
+            editButton.title = "Done"
+            editButton.setTitleTextAttributes([
+            NSAttributedString.Key.font: UIFont(name: "Gotham", size: 17)!], for: .normal)
+        } else {
+            self.navigationController?.setToolbarHidden(true, animated: true)
+            editButton.title = nil
+            editButton.image = UIImage(named: "edit")
+        }
     }
-    
-    func enableEditing() {
-        self.navigationController?.setToolbarHidden(false, animated: true)
-        editButton.image = nil
-        editButton.title = "Done"
-        editButton.setTitleTextAttributes([
-        NSAttributedString.Key.font: UIFont(name: "Gotham", size: 17)!], for: .normal)
-    }
-    
     
     @objc func clearAll() {
         savedIngredients.removeAll()
@@ -132,7 +131,7 @@ class SavedIngredientViewController: UIViewController, UITableViewDelegate, UITa
 // update saved items in view controller
 extension SavedIngredientViewController: UINavigationControllerDelegate {
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-        disableEditing()
+        setEditing(enabled: false)
         if let homeViewController = (viewController as? HomeViewController) {
             homeViewController.savedIngredients = savedIngredients
 
