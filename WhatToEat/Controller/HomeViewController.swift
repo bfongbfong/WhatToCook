@@ -35,13 +35,8 @@ class HomeViewController: UIViewController {
         setUpSearchButton()
         
         alignTextField()
+        setUpNavBar()
         
-        // set up nav bar
-        navigationController?.navigationBar.barTintColor = UIColor.myGreen
-        navigationController?.navigationBar.tintColor = UIColor.white
-        navigationController?.navigationBar.titleTextAttributes =
-            [NSAttributedString.Key.foregroundColor: UIColor.white,
-             NSAttributedString.Key.font: UIFont(name: "PoetsenOne-Regular", size: 21)!]
         clearFridgeButton.setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: "Gotham", size: 15)!], for: .normal)
         setClearFridgeButton(enabled: false)
     }
@@ -107,6 +102,15 @@ extension HomeViewController: UITextFieldDelegate {
 
 // MARK: - UI Functions
 extension HomeViewController {
+    
+    func setUpNavBar() {
+        // set up nav bar
+        navigationController?.navigationBar.barTintColor = UIColor.myGreen
+        navigationController?.navigationBar.tintColor = UIColor.white
+        navigationController?.navigationBar.titleTextAttributes =
+            [NSAttributedString.Key.foregroundColor: UIColor.white,
+             NSAttributedString.Key.font: UIFont(name: "PoetsenOne-Regular", size: 21)!]
+    }
     
     func alignTextField() {
         // align textField
