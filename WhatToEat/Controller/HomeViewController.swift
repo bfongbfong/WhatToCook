@@ -41,18 +41,13 @@ class HomeViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         setUpStatusBar()
-        
         alignTextFieldPlaceholderText()
-    
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
-    
-    
 }
 
 
@@ -69,7 +64,16 @@ extension HomeViewController: UITextFieldDelegate {
         } else {
             // populate table view with search results
             if let text = textField.text {
-                autocompleteIngredientSearch(input: text)
+                SpoonacularManager.autocompleteIngredientSearch(input: text) { (json, error) in
+                    if let thisError = error {
+                        print(thisError.localizedDescription)
+                    }
+                    self.parseJson(jsonBody: json, error: error) {
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
+                    }
+                }
             }
         }
     }
@@ -215,58 +219,32 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
 
 extension HomeViewController {
     
-    // MARK: - API Requests
-    func autocompleteIngredientSearch(input: String) {
-        
-        if input == "" || input == " " {
+    func parseJson(jsonBody: [Any]?, error: Error?, completion: @escaping(() -> Void)) {
+        if let errorThatHappened = error {
+            print(errorThatHappened.localizedDescription)
             return
         }
+        guard let json = jsonBody else { print("json was empty?"); return }
         
-        let inputAdjustedForSpecialCharacters = replaceSpecialCharacters(input: input)
-        
-        UNIRest.get { (request) in
-            
-            let requestString = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/food/ingredients/autocomplete?number=7&query=\(inputAdjustedForSpecialCharacters)"
-            
-            if let unwrappedRequest = request {
-                unwrappedRequest.url = requestString
-                unwrappedRequest.headers = ["X-RapidAPI-Host": "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com", "X-RapidAPI-Key": "ba59075c47msh50cd1afad35f3adp1d65cdjsn4b0f3c045f70"]
-            }
-            
-            }?.asJsonAsync({ (response, error) in
+        print("JSON ARRAY ==================================================")
+        print(json)
+        self.searchResults = []
+        for jsonObject in json {
+            if let dictionary = jsonObject as? [String: Any] {
                 
-                if let errorThatHappened = error {
-                    print("error: \(errorThatHappened)")
-                }
-                
-                if let response = response {
-                    if let body: UNIJsonNode = response.body {
-                        if let bodyJsonArray = body.jsonArray() {
-                            print("JSON ARRAY ==================================================")
-                            print(bodyJsonArray)
-                            self.searchResults = []
-                            for jsonObject in bodyJsonArray {
-                                if let dictionary = jsonObject as? [String: Any] {
-                                    
-                                    let searchedIngredient = SearchedIngredient(name: dictionary["name"] as! String, imageName: dictionary["image"] as! String)
-                                    var matchFound = false
-                                    for savedIngredient in self.savedIngredients {
-                                        if searchedIngredient == savedIngredient {
-                                            matchFound = true
-                                        }
-                                    }
-                                    if matchFound == false {
-                                        self.searchResults.append(searchedIngredient)
-                                    }
-                                }
-                            }
-                            DispatchQueue.main.async {
-                                self.tableView.reloadData()
-                            }
-                        }
+                let searchedIngredient = SearchedIngredient(name: dictionary["name"] as! String, imageName: dictionary["image"] as! String)
+                var matchFound = false
+                for savedIngredient in self.savedIngredients {
+                    if searchedIngredient == savedIngredient {
+                        matchFound = true
                     }
                 }
-            })
+                if matchFound == false {
+                    self.searchResults.append(searchedIngredient)
+                }
+            }
+        }
+        completion()
     }
     
     func getSavedItemsAsRequestString() -> String {
