@@ -10,11 +10,14 @@ import UIKit
 
 class SavedIngredientViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    var savedIngredients: [SearchedIngredient] = []
-
+    // MARK: - Outlets
     @IBOutlet weak var savedIngredientTableView: UITableView!
     @IBOutlet weak var editButton: UIBarButtonItem!
     
+    // MARK: - Properties
+    var savedIngredients: [SearchedIngredient] = []
+
+    // MARK: - View Controller Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -38,8 +41,6 @@ class SavedIngredientViewController: UIViewController, UITableViewDelegate, UITa
         
         
         self.navigationController?.toolbar.barTintColor = UIColor.mySalmon
-        
-        
     }
     
     
