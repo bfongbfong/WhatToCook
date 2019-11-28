@@ -297,7 +297,6 @@
 		55EFB5AC238ED6E700C6E010 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				55E7981522C9BE2200C79357 /* Main.storyboard */,
 				5583618522FCACD9004BA28D /* BadgeBarButtonItem.swift */,
 				553A273F22E4CB7E0063AD58 /* AutocompleteSearchTableViewCell.swift */,
 				559F53E522F2145000EDCA31 /* SavedIngredientTableViewCell.swift */,
@@ -314,6 +313,7 @@
 		55EFB5AD238ED82100C6E010 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				55E7981522C9BE2200C79357 /* Main.storyboard */,
 				55E7981322C9BE2200C79357 /* HomeViewController.swift */,
 				553FCCA122FB707E0016DC5C /* SavedIngredientViewController.swift */,
 				55C9F48B22DEE3A300CF3DD3 /* SearchResultsViewController.swift */,

@@ -36,47 +36,12 @@ class SavedIngredientViewController: UIViewController, UITableViewDelegate, UITa
         
         self.toolbarItems = [clearAllButton, flexible, deleteButton]
         
-//        self.tabBarController?.setToolbarItems(toolbarItems, animated: true)
-//        self.tabBarController?.toolbarItems = [clearAllButton, flexible, deleteButton]
-        
         
         self.navigationController?.toolbar.barTintColor = UIColor.mySalmon
         
         
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-//        let window = UIApplication.shared.keyWindow
-//        let topPadding = window?.safeAreaInsets.top
-//        let bottomPadding = window?.safeAreaInsets.bottom
-//
-//        let toolBarBeginningPosition = navigationController?.toolbar.frame.origin.y
-//        print("toolbar y position: ", toolBarBeginningPosition)
-////        print("bottomPadding: ", bottomPadding)
-//        print("view height: ", self.view.frame.height)
-//
-////        print("tab bar max y:", tabBarController?.accessibilityFrame.maxY)
-//        let tabBarHeight = tabBarController?.accessibilityFrame.height
-//        print("tabbar accessibility frame height: ", tabBarHeight!)
-//
-//        let topOfTabBar = view.frame.height - tabBarHeight!
-//        print("topOfTabBar:", topOfTabBar)
-//
-//        let bottomOfTableView = savedIngredientTableView.frame.minY + savedIngredientTableView.frame.height
-//        print("bottomOfTableView = savedIngredientTableView.frame.minY: \(savedIngredientTableView.frame.minY) + savedIngredientTableView.frame.height: \(savedIngredientTableView.frame.height)")
-//        print("bottomOfTableView: ", bottomOfTableView)
-//
-//        let amountToTransformVertically = topOfTabBar - toolBarBeginningPosition!
-        
-
-        
-//        UIView.animate(withDuration: 0.01) {
-//            self.navigationController?.toolbar?.transform = CGAffineTransform(translationX: 0, y: amountToTransformVertically - self.navigationController!.toolbar.frame.height)
-//        }
-        
-    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return savedIngredients.count

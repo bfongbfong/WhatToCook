@@ -34,10 +34,7 @@ class HomeViewController: UIViewController {
         tableView.keyboardDismissMode = .onDrag
         setUpSearchButton()
         
-        // align textField
-        textField.contentVerticalAlignment = .center
-        textField.layer.cornerRadius = 15
-        textField.clipsToBounds = true
+        alignTextField()
         
         // set up nav bar
         navigationController?.navigationBar.barTintColor = UIColor.myGreen
@@ -110,6 +107,13 @@ extension HomeViewController: UITextFieldDelegate {
 
 // MARK: - UI Functions
 extension HomeViewController {
+    
+    func alignTextField() {
+        // align textField
+        textField.contentVerticalAlignment = .center
+        textField.layer.cornerRadius = 15
+        textField.clipsToBounds = true
+    }
     
     func setUpSearchButton() {
         rectangleForSearchButton.layer.cornerRadius = rectangleForSearchButton.frame.width/8
