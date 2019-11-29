@@ -29,6 +29,7 @@ class SearchResultsViewController: UIViewController, UITableViewDelegate, UITabl
     var loadingView: UIView!
     let activityIndicatoryView = UIActivityIndicatorView()
     
+    // MARK: - View Controller Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -36,15 +37,7 @@ class SearchResultsViewController: UIViewController, UITableViewDelegate, UITabl
         tableView.dataSource = self
         getRecipes(ingredients: ingredientNames, numberOfResults: 30, ignorePantry: true)
         
-        loadingView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
-        loadingView.backgroundColor = .white
-        self.view.addSubview(loadingView)
-        view.bringSubviewToFront(loadingView)
-        
-        activityIndicatoryView.style = .gray
-        activityIndicatoryView.center = CGPoint(x: view.center.x, y: view.center.y)
-        activityIndicatoryView.startAnimating()
-        loadingView.addSubview(activityIndicatoryView)
+        setUpLoadingAnimation()
         
         // ads
         bannerView = GADBannerView(adSize: kGADAdSizeBanner)
@@ -57,6 +50,18 @@ class SearchResultsViewController: UIViewController, UITableViewDelegate, UITabl
         bannerView.delegate = self
         
         interstitial = createAndLoadInterstitial()
+    }
+    
+    func setUpLoadingAnimation() {
+        loadingView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
+        loadingView.backgroundColor = .white
+        self.view.addSubview(loadingView)
+        view.bringSubviewToFront(loadingView)
+        
+        activityIndicatoryView.style = .gray
+        activityIndicatoryView.center = CGPoint(x: view.center.x, y: view.center.y)
+        activityIndicatoryView.startAnimating()
+        loadingView.addSubview(activityIndicatoryView)
     }
     
     func adViewDidReceiveAd(_ bannerView: GADBannerView) {
