@@ -43,34 +43,12 @@ class SavedIngredientViewController: UIViewController, UITableViewDelegate, UITa
         self.toolbarItems = [clearAllButton, flexible, deleteButton]
         self.navigationController?.toolbar.barTintColor = UIColor.mySalmon
     }
-    
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return savedIngredients.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = savedIngredientTableView.dequeueReusableCell(withIdentifier: "SavedIngredientCell") as! SavedIngredientTableViewCell
-        cell.updateCell(with: savedIngredients[indexPath.row])
-        cell.selectionStyle = .gray
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    
-    
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            savedIngredients.remove(at: indexPath.row)
-            savedIngredientTableView.deleteRows(at: [indexPath], with: .fade)
-        }
-    }
+}
+
+
+
+// MARK: - IBActions & Objc Functions
+extension SavedIngredientViewController {
     
     @objc func didPressDelete() {
         var selectedRows = self.savedIngredientTableView.indexPathsForSelectedRows
@@ -100,6 +78,44 @@ class SavedIngredientViewController: UIViewController, UITableViewDelegate, UITa
         }
     }
     
+    @objc func clearAll() {
+        savedIngredients.removeAll()
+        savedIngredientTableView.reloadData()
+        edit(editButton)
+    }
+    
+}
+
+// MARK: - UI Functions
+extension SavedIngredientViewController {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return savedIngredients.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = savedIngredientTableView.dequeueReusableCell(withIdentifier: "SavedIngredientCell") as! SavedIngredientTableViewCell
+        cell.updateCell(with: savedIngredients[indexPath.row])
+        cell.selectionStyle = .gray
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            savedIngredients.remove(at: indexPath.row)
+            savedIngredientTableView.deleteRows(at: [indexPath], with: .fade)
+        }
+    }
+    
     func setEditing(enabled: Bool) {
         if enabled {
             self.navigationController?.setToolbarHidden(false, animated: true)
@@ -112,12 +128,6 @@ class SavedIngredientViewController: UIViewController, UITableViewDelegate, UITa
             editButton.title = nil
             editButton.image = UIImage(named: "edit")
         }
-    }
-    
-    @objc func clearAll() {
-        savedIngredients.removeAll()
-        savedIngredientTableView.reloadData()
-        edit(editButton)
     }
     
     // MARK: - Navigation
