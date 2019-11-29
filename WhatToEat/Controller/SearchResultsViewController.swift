@@ -12,6 +12,7 @@ import GoogleMobileAds
 
 class SearchResultsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SearchResultDelegate, GADBannerViewDelegate, GADInterstitialDelegate {
     
+    // MARK: - Outlets
     @IBOutlet weak var tableView: UITableView!
     var bannerView: GADBannerView!
     var interstitial: GADInterstitial!

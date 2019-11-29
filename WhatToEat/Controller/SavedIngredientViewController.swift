@@ -24,7 +24,6 @@ class SavedIngredientViewController: UIViewController, UITableViewDelegate, UITa
         savedIngredientTableView.delegate = self
         savedIngredientTableView.dataSource = self
         navigationController?.delegate = self
-        
         savedIngredientTableView.allowsMultipleSelectionDuringEditing = true
         
         setUpToolbar()
