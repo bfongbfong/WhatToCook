@@ -10,7 +10,7 @@ import UIKit
 import Unirest
 import GoogleMobileAds
 
-class SearchResultsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SearchResultDelegate, GADBannerViewDelegate, GADInterstitialDelegate {
+class SearchResultsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SearchResultDelegate {
     
     // MARK: - Outlets
     @IBOutlet weak var tableView: UITableView!
@@ -41,6 +41,15 @@ class SearchResultsViewController: UIViewController, UITableViewDelegate, UITabl
         setUpInterstitalAdFirstTime()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
+    }
+}
+
+// MARK: - UI Functions
+extension SearchResultsViewController {
+    
     func setUpLoadingAnimation() {
         loadingView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
         loadingView.backgroundColor = .white
@@ -52,6 +61,16 @@ class SearchResultsViewController: UIViewController, UITableViewDelegate, UITabl
         activityIndicatoryView.startAnimating()
         loadingView.addSubview(activityIndicatoryView)
     }
+    
+    func loadingFinished() {
+        self.loadingView.removeFromSuperview()
+        self.activityIndicatoryView.stopAnimating()
+        self.activityIndicatoryView.removeFromSuperview()
+    }
+}
+
+// MARK: - Admob Methods
+extension SearchResultsViewController: GADBannerViewDelegate, GADInterstitialDelegate {
     
     func setUpInterstitalAdFirstTime() {
         // ads
@@ -91,11 +110,6 @@ class SearchResultsViewController: UIViewController, UITableViewDelegate, UITabl
                                 multiplier: 1,
                                 constant: 0)
             ])
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        tableView.reloadData()
     }
     
     func createAndLoadInterstitial() -> GADInterstitial {
@@ -229,11 +243,7 @@ class SearchResultsViewController: UIViewController, UITableViewDelegate, UITabl
             })
     }
     
-    func loadingFinished() {
-        self.loadingView.removeFromSuperview()
-        self.activityIndicatoryView.stopAnimating()
-        self.activityIndicatoryView.removeFromSuperview()
-    }
+
     
     
      // MARK: - Navigation
