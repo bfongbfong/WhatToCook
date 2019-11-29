@@ -16,12 +16,16 @@ class SearchResultsViewController: UIViewController, UITableViewDelegate, UITabl
     @IBOutlet weak var tableView: UITableView!
     
     // MARK: - Properties
-    var bannerView: GADBannerView!
-    var interstitial: GADInterstitial!
     
+    // MARK: Data
     var ingredientNames: String = ""
     var recipes: [Recipe] = []
     
+    // MARK: Admob
+    var bannerView: GADBannerView!
+    var interstitial: GADInterstitial!
+    
+    // MARK: Activity Indicator
     var loadingView: UIView!
     let activityIndicatoryView = UIActivityIndicatorView()
     
