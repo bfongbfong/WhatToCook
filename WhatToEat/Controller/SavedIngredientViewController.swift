@@ -27,6 +27,10 @@ class SavedIngredientViewController: UIViewController, UITableViewDelegate, UITa
         
         savedIngredientTableView.allowsMultipleSelectionDuringEditing = true
         
+        setUpToolbar()
+    }
+    
+    func setUpToolbar() {
         //toolbar setup
         // when i change the toolbar to hidden or not, it affects what it says teh y position is. when its hidden is 896, which is the same as the view's height. when it's not hidden its 681
         self.navigationController?.setToolbarHidden(false, animated: false)
@@ -36,10 +40,7 @@ class SavedIngredientViewController: UIViewController, UITableViewDelegate, UITa
         deleteButton.image = UIImage(named: "garbage")
         clearAllButton.setTitleTextAttributes([
             NSAttributedString.Key.font: UIFont(name: "Gotham", size: 17)!, NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
-        
         self.toolbarItems = [clearAllButton, flexible, deleteButton]
-        
-        
         self.navigationController?.toolbar.barTintColor = UIColor.mySalmon
     }
     
