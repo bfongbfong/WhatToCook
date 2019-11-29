@@ -14,6 +14,8 @@ class SearchResultsViewController: UIViewController, UITableViewDelegate, UITabl
     
     // MARK: - Outlets
     @IBOutlet weak var tableView: UITableView!
+    
+    // MARK: - Properties
     var bannerView: GADBannerView!
     var interstitial: GADInterstitial!
     
