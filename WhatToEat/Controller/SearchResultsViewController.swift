@@ -38,18 +38,7 @@ class SearchResultsViewController: UIViewController, UITableViewDelegate, UITabl
         getRecipes(ingredients: ingredientNames, numberOfResults: 30, ignorePantry: true)
         
         setUpLoadingAnimation()
-        
-        // ads
-        bannerView = GADBannerView(adSize: kGADAdSizeBanner)
-        // real id
-        bannerView.adUnitID = adIDs.searchResultsVCBannerID
-        // test id
-//        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
-        bannerView.rootViewController = self
-        bannerView.load(GADRequest())
-        bannerView.delegate = self
-        
-        interstitial = createAndLoadInterstitial()
+        setUpInterstitalAdFirstTime()
     }
     
     func setUpLoadingAnimation() {
@@ -62,6 +51,20 @@ class SearchResultsViewController: UIViewController, UITableViewDelegate, UITabl
         activityIndicatoryView.center = CGPoint(x: view.center.x, y: view.center.y)
         activityIndicatoryView.startAnimating()
         loadingView.addSubview(activityIndicatoryView)
+    }
+    
+    func setUpInterstitalAdFirstTime() {
+        // ads
+        bannerView = GADBannerView(adSize: kGADAdSizeBanner)
+        // real id
+        bannerView.adUnitID = adIDs.searchResultsVCBannerID
+        // test id
+    //        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+        bannerView.rootViewController = self
+        bannerView.load(GADRequest())
+        bannerView.delegate = self
+        
+        interstitial = createAndLoadInterstitial()
     }
     
     func adViewDidReceiveAd(_ bannerView: GADBannerView) {
