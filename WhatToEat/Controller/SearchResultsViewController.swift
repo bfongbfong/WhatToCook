@@ -125,6 +125,8 @@ extension SearchResultsViewController: GADBannerViewDelegate, GADInterstitialDel
     }
 }
 
+
+// MARK: - UITableView Datasource & Delegate
 extension SearchResultsViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -138,6 +140,12 @@ extension SearchResultsViewController: UITableViewDataSource, UITableViewDelegat
         cell.delegate = self
         return cell
     }
+    
+}
+
+
+// MARK: - API Requests
+extension SearchResultsViewController {
 
     func getRecipes(ingredients: String, numberOfResults: Int, ignorePantry: Bool) {
         UNIRest.get { (request) in
