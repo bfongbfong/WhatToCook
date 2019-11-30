@@ -64,16 +64,7 @@ extension HomeViewController: UITextFieldDelegate {
         } else {
             // populate table view with search results
             if let text = textField.text {
-                SpoonacularManager.autocompleteIngredientSearch(input: text) { (json, error) in
-                    if let thisError = error {
-                        print(thisError.localizedDescription)
-                    }
-                    self.parseJson(jsonBody: json, error: error) {
-                        DispatchQueue.main.async {
-                            self.tableView.reloadData()
-                        }
-                    }
-                }
+                populateTableViewWithIngredients(text: text)
             }
         }
     }
@@ -169,6 +160,22 @@ extension HomeViewController {
         }
     }
     
+}
+
+// MARK: - Logic Functions
+extension HomeViewController {
+    func populateTableViewWithIngredients(text: String) {
+        SpoonacularManager.autocompleteIngredientSearch(input: text) { (json, error) in
+            if let thisError = error {
+                print(thisError.localizedDescription)
+            }
+            self.parseJson(jsonBody: json, error: error) {
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+        }
+    }
 }
 
 
