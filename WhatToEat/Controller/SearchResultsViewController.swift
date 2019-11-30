@@ -10,7 +10,7 @@ import UIKit
 import Unirest
 import GoogleMobileAds
 
-class SearchResultsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SearchResultDelegate {
+class SearchResultsViewController: UIViewController, SearchResultDelegate {
     
     // MARK: - Outlets
     @IBOutlet weak var tableView: UITableView!
@@ -123,7 +123,9 @@ extension SearchResultsViewController: GADBannerViewDelegate, GADInterstitialDel
     func interstitialDidDismissScreen(_ ad: GADInterstitial) {
         interstitial = createAndLoadInterstitial()
     }
+}
 
+extension SearchResultsViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return recipes.count
@@ -137,7 +139,6 @@ extension SearchResultsViewController: GADBannerViewDelegate, GADInterstitialDel
         return cell
     }
 
-    
     func getRecipes(ingredients: String, numberOfResults: Int, ignorePantry: Bool) {
         UNIRest.get { (request) in
             
