@@ -10,7 +10,7 @@ import UIKit
 import Unirest
 import GoogleMobileAds
 
-class SearchResultsViewController: UIViewController, SearchResultDelegate {
+class SearchResultsViewController: UIViewController {
     
     // MARK: - Outlets
     @IBOutlet weak var tableView: UITableView!
@@ -48,7 +48,7 @@ class SearchResultsViewController: UIViewController, SearchResultDelegate {
 }
 
 // MARK: - UI Functions
-extension SearchResultsViewController {
+extension SearchResultsViewController: SearchResultDelegate {
     
     func setUpLoadingAnimation() {
         loadingView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
