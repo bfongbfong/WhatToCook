@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SavedIngredientViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class SavedIngredientViewController: UIViewController {
     
     // MARK: - Outlets
     @IBOutlet weak var savedIngredientTableView: UITableView!
@@ -105,7 +105,7 @@ extension SavedIngredientViewController {
 }
 
 // MARK: - UITableView Data Source
-extension SavedIngredientViewController {
+extension SavedIngredientViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return savedIngredients.count
@@ -121,7 +121,7 @@ extension SavedIngredientViewController {
 }
 
 // MARK: - UITableView Delegate
-extension SavedIngredientViewController {
+extension SavedIngredientViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         return true
