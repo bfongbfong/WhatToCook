@@ -168,11 +168,10 @@ extension HomeViewController {
         SpoonacularManager.autocompleteIngredientSearch(input: text) { (json, error) in
             if let thisError = error {
                 print(thisError.localizedDescription)
+                return
             }
-            self.parseJson(jsonBody: json, error: error) {
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
+            self.parseJson(jsonBody: json) {
+                self.tableView.reloadData()
             }
         }
     }
@@ -226,11 +225,8 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
 
 extension HomeViewController {
     
-    func parseJson(jsonBody: [Any]?, error: Error?, completion: @escaping(() -> Void)) {
-        if let errorThatHappened = error {
-            print(errorThatHappened.localizedDescription)
-            return
-        }
+    func parseJson(jsonBody: [Any]?, completion: @escaping(() -> Void)) {
+        
         guard let json = jsonBody else { return }
         
         print("JSON ARRAY ==================================================")
@@ -252,6 +248,7 @@ extension HomeViewController {
             }
         }
         completion()
+        
     }
     
     func getSavedItemsAsRequestString() -> String {

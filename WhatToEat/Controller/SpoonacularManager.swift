@@ -13,10 +13,6 @@ class SpoonacularManager {
     
     static func autocompleteIngredientSearch(input: String, completion: @escaping(_ responseJSON: [Any]?, _ error: Error?) -> Void) {
         
-        if input == "" || input == " " {
-            return
-        }
-        
         let inputAdjustedForSpecialCharacters = replaceSpecialCharacters(input: input)
         
         UNIRest.get { (request) in
@@ -50,7 +46,9 @@ class SpoonacularManager {
                     return
                 }
                 
-                completion(bodyJsonArray, error)
+                DispatchQueue.main.async {
+                    completion(bodyJsonArray, error)
+                }
             })
     }
     
