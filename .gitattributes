@@ -1,1 +1,2 @@
-*.objc linguist-language=swift
+* linguist-vendored
+*.swift linguist-vendored=false
