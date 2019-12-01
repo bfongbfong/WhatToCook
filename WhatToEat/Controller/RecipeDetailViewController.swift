@@ -28,6 +28,7 @@ class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UI
     // Admob
     var bannerView: GADBannerView!
     
+    // MARK: - View Controller Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -116,11 +117,6 @@ class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UI
                                 multiplier: 1,
                                 constant: 0)
             ])
-    }
-
-    // arjun put thie here to try to solve scroll view issue
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
     }
     
     override func viewWillAppear(_ animated: Bool) {
