@@ -93,32 +93,6 @@ class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UI
         RecipesViewed.counter += 1
     }
     
-    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
-        // Add banner to view and add constraints as above.
-        addBannerViewToView(bannerView)
-    }
-    
-    func addBannerViewToView(_ bannerView: GADBannerView) {
-        bannerView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(bannerView)
-        view.addConstraints(
-            [NSLayoutConstraint(item: bannerView,
-                                attribute: .bottom,
-                                relatedBy: .equal,
-                                toItem: bottomLayoutGuide,
-                                attribute: .top,
-                                multiplier: 1,
-                                constant: 0),
-             NSLayoutConstraint(item: bannerView,
-                                attribute: .centerX,
-                                relatedBy: .equal,
-                                toItem: view,
-                                attribute: .centerX,
-                                multiplier: 1,
-                                constant: 0)
-            ])
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         if PersistenceManager.bookmarkedRecipeIDs.contains(number: recipe.id!) {
             recipe.bookmarked = true
@@ -127,15 +101,7 @@ class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UI
         }
         setBookmarkStar()
     }
-    
-//    func checkIfBookmarkedFromGlobalArray() -> Bool {
-//        for recipeID in PersistenceManager.bookmarkedRecipeIDs {
-//            if recipe.id == recipeID {
-//                return true
-//            }
-//        }
-//        return false
-//    }
+
     
     func setupUI() {
         let url = URL(string: recipe.imageName!)!
@@ -404,6 +370,32 @@ class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UI
                 self.recipeDetailView.recipeImageView.image = UIImage(data: data)
             }
         }
+    }
+    
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+        // Add banner to view and add constraints as above.
+        addBannerViewToView(bannerView)
+    }
+    
+    func addBannerViewToView(_ bannerView: GADBannerView) {
+        bannerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(bannerView)
+        view.addConstraints(
+            [NSLayoutConstraint(item: bannerView,
+                                attribute: .bottom,
+                                relatedBy: .equal,
+                                toItem: bottomLayoutGuide,
+                                attribute: .top,
+                                multiplier: 1,
+                                constant: 0),
+             NSLayoutConstraint(item: bannerView,
+                                attribute: .centerX,
+                                relatedBy: .equal,
+                                toItem: view,
+                                attribute: .centerX,
+                                multiplier: 1,
+                                constant: 0)
+            ])
     }
     
     func getRecipeInstructions() {
