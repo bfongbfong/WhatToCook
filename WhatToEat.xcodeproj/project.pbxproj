@@ -223,6 +223,7 @@
 		55E7980522C9BE2200C79357 = {
 			isa = PBXGroup;
 			children = (
+				55B293FB2394150300887BE8 /* .gitattributes */,
 				55E7981022C9BE2200C79357 /* WhatToEat */,
 				55E7982822C9BE2400C79357 /* WhatToEatTests */,
 				55E7983322C9BE2400C79357 /* WhatToEatUITests */,
@@ -320,7 +321,6 @@
 				553FCCA122FB707E0016DC5C /* SavedIngredientViewController.swift */,
 				55C9F48B22DEE3A300CF3DD3 /* SearchResultsViewController.swift */,
 				550E986322F33A3500A135A3 /* RecipeDetailViewController.swift */,
-				55B293FB2394150300887BE8 /* .gitattributes */,
 				5533965323131879009CE91F /* SavedRecipesViewController.swift */,
 				5566787A23159A5300150909 /* SearchByRecipesViewController.swift */,
 				55EFB5B4238EDA8900C6E010 /* PersistenceManager.swift */,
