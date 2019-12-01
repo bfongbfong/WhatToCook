@@ -12,10 +12,10 @@ import GoogleMobileAds
 
 class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITableViewDelegate, UITableViewDataSource, GADBannerViewDelegate {
     
+    // MARK: - Outlets
     @IBOutlet weak var scrollView: UIScrollView!
     
-    var bannerView: GADBannerView!
-    
+    // MARK: - Properties
     var recipe: Recipe!
     var recipeDetailView: RecipeDetailView!
     
@@ -25,7 +25,8 @@ class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UI
     var loadingView: UIView!
     let activityIndicatoryView = UIActivityIndicatorView()
     
-    var oneStep: Bool!
+    // Admob
+    var bannerView: GADBannerView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
