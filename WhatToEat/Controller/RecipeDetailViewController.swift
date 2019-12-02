@@ -102,43 +102,11 @@ class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UI
         setBookmarkStar()
     }
 
-    
-    func setupUI() {
-        let url = URL(string: recipe.imageName!)!
-        downloadImage(from: url)
-        
-        let titleText = recipe.title
-        let titleStyle = NSMutableParagraphStyle()
-        titleStyle.lineSpacing = 6
-        titleStyle.lineBreakMode = .byTruncatingTail
-        let attributedString = NSMutableAttributedString(string: titleText ?? "")
-        attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: titleStyle, range: NSMakeRange(0, attributedString.length))
-        
-            
-        recipeDetailView.recipeTitleLabel.attributedText = attributedString
-        if let readyInMinutes = recipe.readyInMinutes {
-            recipeDetailView.readyInMinutesLabel.text = "\(readyInMinutes) MIN"
-        } else {
-            recipeDetailView.readyInMinutesLabel.text = "N/A"
-        }
-        if let servings = recipe.servings {
-            if servings == 1 {
-                recipeDetailView.servingsLabel.text = "\(servings) SERVING"
-            } else {
-                recipeDetailView.servingsLabel.text = "\(servings) SERVINGS"
-            }
-        } else {
-            recipeDetailView.servingsLabel.text = "N/A"
-        }
-        
+}
 
-        recipeDetailView.sourceButton.setTitle("Source: \(recipe.creditsText ?? "N/A")", for: .normal)
-        // diets collection view
-  
-        recipeDetailView.sourceButton.addTarget(self, action: #selector(goToSource), for: .touchUpInside)
-        
-        recipeDetailView.bookmarkButton.addTarget(self, action: #selector(bookmark), for: .touchUpInside)
-    }
+
+// MARK: - IBActions & Objc Functions
+extension RecipeDetailViewController {
     
     @objc func goToSource() {
         print("go to source called")
@@ -153,6 +121,47 @@ class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UI
         setBookmarkStar()
     }
     
+}
+
+// MARK: - UI Functions
+extension RecipeDetailViewController {
+    
+      func setupUI() {
+          let url = URL(string: recipe.imageName!)!
+          downloadImage(from: url)
+          
+          let titleText = recipe.title
+          let titleStyle = NSMutableParagraphStyle()
+          titleStyle.lineSpacing = 6
+          titleStyle.lineBreakMode = .byTruncatingTail
+          let attributedString = NSMutableAttributedString(string: titleText ?? "")
+          attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: titleStyle, range: NSMakeRange(0, attributedString.length))
+          
+              
+          recipeDetailView.recipeTitleLabel.attributedText = attributedString
+          if let readyInMinutes = recipe.readyInMinutes {
+              recipeDetailView.readyInMinutesLabel.text = "\(readyInMinutes) MIN"
+          } else {
+              recipeDetailView.readyInMinutesLabel.text = "N/A"
+          }
+          if let servings = recipe.servings {
+              if servings == 1 {
+                  recipeDetailView.servingsLabel.text = "\(servings) SERVING"
+              } else {
+                  recipeDetailView.servingsLabel.text = "\(servings) SERVINGS"
+              }
+          } else {
+              recipeDetailView.servingsLabel.text = "N/A"
+          }
+          
+
+          recipeDetailView.sourceButton.setTitle("Source: \(recipe.creditsText ?? "N/A")", for: .normal)
+          // diets collection view
+    
+          recipeDetailView.sourceButton.addTarget(self, action: #selector(goToSource), for: .touchUpInside)
+          
+          recipeDetailView.bookmarkButton.addTarget(self, action: #selector(bookmark), for: .touchUpInside)
+      }
     
     func setBookmarkStar() {
 
