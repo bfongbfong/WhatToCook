@@ -10,7 +10,7 @@ import UIKit
 import Unirest
 import GoogleMobileAds
 
-class RecipeDetailViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITableViewDelegate, UITableViewDataSource, GADBannerViewDelegate {
+class RecipeDetailViewController: UIViewController {
     
     // MARK: - Outlets
     @IBOutlet weak var scrollView: UIScrollView!
@@ -175,8 +175,8 @@ extension RecipeDetailViewController {
 }
 
 
-// MARK: - UICollectionView Data Source Methods
-extension RecipeDetailViewController {
+// MARK: - UICollectionView Data Source, Delegate, DelegateFlowLayout Methods
+extension RecipeDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return recipe.diets?.count ?? 0
@@ -196,7 +196,7 @@ extension RecipeDetailViewController {
 
 
 // MARK: - UITableView Data Source Methods
-extension RecipeDetailViewController {
+extension RecipeDetailViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         if tableView == self.recipeDetailView.ingredientsTableView {
@@ -293,7 +293,7 @@ extension RecipeDetailViewController {
 
 
 // MARK: - UITableView Delegate Methods
-extension RecipeDetailViewController {
+extension RecipeDetailViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
@@ -373,7 +373,11 @@ extension RecipeDetailViewController {
 //            return UITableView.automaticDimension
         }
     }
+}
 
+
+// MARK: - Network Requests
+extension RecipeDetailViewController {
     
     func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
         URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
@@ -389,32 +393,6 @@ extension RecipeDetailViewController {
                 self.recipeDetailView.recipeImageView.image = UIImage(data: data)
             }
         }
-    }
-    
-    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
-        // Add banner to view and add constraints as above.
-        addBannerViewToView(bannerView)
-    }
-    
-    func addBannerViewToView(_ bannerView: GADBannerView) {
-        bannerView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(bannerView)
-        view.addConstraints(
-            [NSLayoutConstraint(item: bannerView,
-                                attribute: .bottom,
-                                relatedBy: .equal,
-                                toItem: bottomLayoutGuide,
-                                attribute: .top,
-                                multiplier: 1,
-                                constant: 0),
-             NSLayoutConstraint(item: bannerView,
-                                attribute: .centerX,
-                                relatedBy: .equal,
-                                toItem: view,
-                                attribute: .centerX,
-                                multiplier: 1,
-                                constant: 0)
-            ])
     }
     
     func getRecipeInstructions() {
@@ -551,20 +529,35 @@ extension RecipeDetailViewController {
                 }
             })
     }
-    
-    // API REQUEST FOR DESCRIPTIONS
-    // https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/4632/summary
+}
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+// MARK: - Admob Methods
+extension RecipeDetailViewController: GADBannerViewDelegate {
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+        // Add banner to view and add constraints as above.
+        addBannerViewToView(bannerView)
     }
-    */
-
+    
+    func addBannerViewToView(_ bannerView: GADBannerView) {
+        bannerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(bannerView)
+        view.addConstraints(
+            [NSLayoutConstraint(item: bannerView,
+                                attribute: .bottom,
+                                relatedBy: .equal,
+                                toItem: bottomLayoutGuide,
+                                attribute: .top,
+                                multiplier: 1,
+                                constant: 0),
+             NSLayoutConstraint(item: bannerView,
+                                attribute: .centerX,
+                                relatedBy: .equal,
+                                toItem: view,
+                                attribute: .centerX,
+                                multiplier: 1,
+                                constant: 0)
+            ])
+    }
 }
 
 
