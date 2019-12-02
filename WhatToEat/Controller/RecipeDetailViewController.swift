@@ -120,8 +120,8 @@ extension RecipeDetailViewController {
         recipe.bookmarked = !recipe.bookmarked
         setBookmarkStar()
     }
-    
 }
+
 
 // MARK: - UI Functions
 extension RecipeDetailViewController {
@@ -172,11 +172,13 @@ extension RecipeDetailViewController {
         }
         print(recipe.bookmarked)
     }
-    
-    // MARK: - UICollectionView Data Source Methods
+}
+
+
+// MARK: - UICollectionView Data Source Methods
+extension RecipeDetailViewController {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
         return recipe.diets?.count ?? 0
     }
     
@@ -190,9 +192,11 @@ extension RecipeDetailViewController {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width/4, height: view.frame.width/12)
     }
-    
-    
-    // MARK: - UITableView Data Source Methods
+}
+
+
+// MARK: - UITableView Data Source Methods
+extension RecipeDetailViewController {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         if tableView == self.recipeDetailView.ingredientsTableView {
@@ -201,65 +205,6 @@ extension RecipeDetailViewController {
             return recipe.instructions.count
         } else {
             return 0
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView()
-        let label = UILabel()
-        if tableView == self.recipeDetailView.instructionsTableView {
-            if recipe.instructions.count == 0 {
-                return nil
-            } else {
-                if recipe.instructions[section].count == 0 {
-                    return nil
-                } else {
-                    label.text = recipe.instructions[section][0].uppercased()
-                    label.font = UIFont(name: "Gotham", size: 17)
-                    label.frame = CGRect(x: 0, y: 5, width: self.recipeDetailView.instructionsTableView.frame.width, height: 35)
-                    view.addSubview(label)
-                    return view
-                }
-            }
-        } else {
-            return nil
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if tableView == self.recipeDetailView.instructionsTableView {
-            if recipe.instructions.count == 0 {
-                return 0
-            } else {
-                if recipe.instructions[section].count == 0 {
-                    return 0
-                } else {
-                    if recipe.instructions[section][0] == "" {
-                        // for when the first step has no name
-                        return 0
-                    } else {
-                        return 45
-                    }
-                }
-            }
-        } else {
-            return 0
-        }
-    }
-
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if tableView == self.recipeDetailView.instructionsTableView {
-            if recipe.instructions.count == 0 {
-                return nil
-            } else {
-                if recipe.instructions[section].count == 0 {
-                    return nil
-                } else {
-                    return recipe.instructions[section][0]
-                }
-            }
-        } else {
-            return nil
         }
     }
     
@@ -342,6 +287,71 @@ extension RecipeDetailViewController {
 
             }
          }
+    }
+}
+
+
+
+// MARK: - UITableView Delegate Methods
+extension RecipeDetailViewController {
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView()
+        let label = UILabel()
+        if tableView == self.recipeDetailView.instructionsTableView {
+            if recipe.instructions.count == 0 {
+                return nil
+            } else {
+                if recipe.instructions[section].count == 0 {
+                    return nil
+                } else {
+                    label.text = recipe.instructions[section][0].uppercased()
+                    label.font = UIFont(name: "Gotham", size: 17)
+                    label.frame = CGRect(x: 0, y: 5, width: self.recipeDetailView.instructionsTableView.frame.width, height: 35)
+                    view.addSubview(label)
+                    return view
+                }
+            }
+        } else {
+            return nil
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if tableView == self.recipeDetailView.instructionsTableView {
+            if recipe.instructions.count == 0 {
+                return 0
+            } else {
+                if recipe.instructions[section].count == 0 {
+                    return 0
+                } else {
+                    if recipe.instructions[section][0] == "" {
+                        // for when the first step has no name
+                        return 0
+                    } else {
+                        return 45
+                    }
+                }
+            }
+        } else {
+            return 0
+        }
+    }
+
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if tableView == self.recipeDetailView.instructionsTableView {
+            if recipe.instructions.count == 0 {
+                return nil
+            } else {
+                if recipe.instructions[section].count == 0 {
+                    return nil
+                } else {
+                    return recipe.instructions[section][0]
+                }
+            }
+        } else {
+            return nil
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
