@@ -30,30 +30,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIBarButtonItem.appearance().setBackButtonTitlePositionAdjustment(UIOffset(horizontal: 0, vertical: -5), for: .default)
         
         UITabBar.appearance().barTintColor = UIColor.myGreen
-        
-//        UIApplication.shared.statusBarStyle = .lightContent
-
-//        // create the button
-//        let suggestImage  = UIImage(named: "cuteFridge")!.withRenderingMode(.alwaysOriginal)
-//        let suggestButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
-//        suggestButton.setBackgroundImage(suggestImage, for: [])
-////        suggestButton.addTarget(self, action: Selector("suggesMovie:"), forControlEvents:.TouchUpInside)
-//
-//        // here where the magic happens, you can shift it where you like
-//        suggestButton.transform = CGAffineTransform(translationX: 10, y: 0)
-//        
-//        // add the button to a container, otherwise the transform will be ignored
-//        let suggestButtonContainer = UIView(frame: suggestButton.frame)
-//        suggestButtonContainer.addSubview(suggestButton)
-//        let suggestButtonItem = UIBarButtonItem(customView: suggestButtonContainer)
-//
-        
-        // Override point for customization after application launch.
-        // trying to change nav bar color 
-//        let navigationBarAppearance = UINavigationBar.appearance()
-//        let navController = UINavigationController()
-//        navController.navigationBar.barTintColor = UIColor(red: 139, green: 209, blue: 57, alpha: 1)
-//        navigationBarAppearance.backgroundColor = UIColor(red: 139, green: 209, blue: 57, alpha: 1)
 
         return true
     }

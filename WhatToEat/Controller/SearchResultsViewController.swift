@@ -26,8 +26,8 @@ class SearchResultsViewController: UIViewController {
     var interstitial: GADInterstitial!
     
     // MARK: Activity Indicator
-    var loadingView: UIView!
-    let activityIndicatoryView = UIActivityIndicatorView()
+    var loadingView = UIView()
+    let activityIndicatorView = UIActivityIndicatorView()
     
     // MARK: - View Controller Life Cycle
     override func viewDidLoad() {
@@ -38,7 +38,7 @@ class SearchResultsViewController: UIViewController {
 //        getRecipes(ingredients: ingredientNames, numberOfResults: 30, ignorePantry: true)
         getRecipes()
         
-        setUpLoadingAnimation()
+        view.playLoadingAnimation(loadingView: &loadingView, activityIndicatorView: activityIndicatorView)
         setUpInterstitalAdFirstTime()
     }
     
@@ -49,26 +49,14 @@ class SearchResultsViewController: UIViewController {
 }
 
 // MARK: - UI Functions
-extension SearchResultsViewController: SearchResultDelegate {
-    
-    func setUpLoadingAnimation() {
-        loadingView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
-        loadingView.backgroundColor = .white
-        self.view.addSubview(loadingView)
-        view.bringSubviewToFront(loadingView)
-        
-        activityIndicatoryView.style = .gray
-        activityIndicatoryView.center = CGPoint(x: view.center.x, y: view.center.y)
-        activityIndicatoryView.startAnimating()
-        loadingView.addSubview(activityIndicatoryView)
-    }
-    
-    func loadingFinished() {
-        self.loadingView.removeFromSuperview()
-        self.activityIndicatoryView.stopAnimating()
-        self.activityIndicatoryView.removeFromSuperview()
-    }
-}
+//extension SearchResultsViewController {
+//
+//    func loadingFinished() {
+//        self.loadingView.removeFromSuperview()
+//        self.activityIndicatorView.stopAnimating()
+//        self.activityIndicatorView.removeFromSuperview()
+//    }
+//}
 
 // MARK: - Admob Methods
 extension SearchResultsViewController: GADBannerViewDelegate, GADInterstitialDelegate {
@@ -138,7 +126,6 @@ extension SearchResultsViewController: UITableViewDataSource, UITableViewDelegat
         let cell = tableView.dequeueReusableCell(withIdentifier: "RecipeCell", for: indexPath) as! SearchResultTableViewCell
         cell.updateCellWithUsedIngredients(with: recipes[indexPath.row])
         cell.selectionStyle = .none
-        cell.delegate = self
         return cell
     }
     
@@ -158,6 +145,7 @@ extension SearchResultsViewController {
             }
             self.parseJson(jsonArray: json) {
                 DispatchQueue.main.async {
+                    self.view.stopLoadingAnimation(loadingView: &self.loadingView, activityIndicatorView: self.activityIndicatorView)
                     self.tableView.reloadData()
                 }
             }

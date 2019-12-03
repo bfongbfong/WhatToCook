@@ -14,9 +14,7 @@ class SearchResultTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var ingredientsLabel: UILabel!
     @IBOutlet weak var bookmarkStarButton: UIButton!
-    
-    weak var delegate: SearchResultDelegate?
-    
+        
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -129,15 +127,11 @@ class SearchResultTableViewCell: UITableViewCell {
             print("Download Finished")
             DispatchQueue.main.async() {
                 self.imageLabel.image = UIImage(data: data)
-                self.delegate?.loadingFinished()
             }
         }
     }
 
 }
 
-protocol SearchResultDelegate: class {
-    func loadingFinished()
-}
 
 
