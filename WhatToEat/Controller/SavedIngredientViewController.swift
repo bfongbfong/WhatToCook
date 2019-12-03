@@ -58,6 +58,7 @@ extension SavedIngredientViewController {
                 tableView(savedIngredientTableView, commit: .delete, forRowAt: selectionIndex)
             }
         }
+        PersistenceManager.persistSavedIngredients(savedIngredients: savedIngredients)
     }
     
     override func setEditing(_ editing: Bool, animated: Bool) {
@@ -81,6 +82,7 @@ extension SavedIngredientViewController {
         savedIngredients.removeAll()
         savedIngredientTableView.reloadData()
         edit(editButton)
+        PersistenceManager.persistSavedIngredients(savedIngredients: savedIngredients)
     }
     
 }
@@ -136,6 +138,7 @@ extension SavedIngredientViewController: UITableViewDelegate {
             savedIngredients.remove(at: indexPath.row)
             savedIngredientTableView.deleteRows(at: [indexPath], with: .fade)
         }
+        PersistenceManager.persistSavedIngredients(savedIngredients: savedIngredients)
     }
 }
 

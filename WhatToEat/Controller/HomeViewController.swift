@@ -26,6 +26,7 @@ class HomeViewController: UIViewController {
     // MARK: - View Controller Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        savedIngredients = PersistenceManager.loadSavedIngredients()
 
         tableView.delegate = self
         tableView.dataSource = self
@@ -37,6 +38,7 @@ class HomeViewController: UIViewController {
         alignTextField()
         setUpNavBar()
         setUpClearFridgeButton()
+        updateUI()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -72,6 +74,7 @@ extension HomeViewController: UITextFieldDelegate {
     
     @IBAction func clearFridgeTapped(_ sender: Any) {
         savedIngredients.removeAll()
+        PersistenceManager.persistSavedIngredients(savedIngredients: savedIngredients)
         updateUI()
     }
     
@@ -219,6 +222,8 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
         // empty text field
         textField.text = ""
         UIDevice.vibrate()
+        
+        PersistenceManager.persistSavedIngredients(savedIngredients: savedIngredients)
     }
     
 }

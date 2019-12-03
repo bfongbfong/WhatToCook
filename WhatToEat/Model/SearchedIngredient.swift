@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct SearchedIngredient: Equatable {
+struct SearchedIngredient: Equatable, Codable {
 
     var name: String
     var imageName: String
