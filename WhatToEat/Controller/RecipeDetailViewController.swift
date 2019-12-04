@@ -43,8 +43,7 @@ class RecipeDetailViewController: UIViewController {
         
         recipeDetailView.frame.size.height = recipeDetailView.contentView.frame.height
 
-        
-        getRecipeInstructions()
+        populateInstructions()
         recipeDetailView.dietsCollectionView.delegate = self
         recipeDetailView.dietsCollectionView.dataSource = self
         recipeDetailView.ingredientsTableView.delegate = self
@@ -169,6 +168,121 @@ extension RecipeDetailViewController {
             recipeDetailView.bookmarkButton.setImage(UIImage(named: "bookmark_01"), for: .normal)
         }
         print(recipe.bookmarked)
+    }
+}
+
+// MARK: - Setup
+extension RecipeDetailViewController {
+    
+    func populateInstructions() {
+        SpoonacularManager.getRecipeInstructions(recipe: self.recipe) { (data, error) in
+            if let errorThatHappened = error {
+                print(errorThatHappened.localizedDescription)
+                return
+            }
+            self.parseJson(json: data)
+            DispatchQueue.main.async {
+                
+                self.loadingView.removeFromSuperview()
+                self.activityIndicatoryView.stopAnimating()
+                self.activityIndicatoryView.removeFromSuperview()
+                
+                self.setupUI()
+                self.recipeDetailView.dietsCollectionView.reloadData()
+                self.recipeDetailView.ingredientsTableView.reloadData()
+                self.recipeDetailView.ingredientsTableViewHeightConstraint.constant = CGFloat(self.recipe.ingredients.count * self.ingredientsCellHeight)
+
+                
+                self.recipeDetailView.instructionsTableView.reloadData()
+                // resize the instruction height to the right one
+                
+                // this is the method that multiples the cell height
+                var numberOfCells = 0
+                for i in 0..<self.recipe.instructions.count {
+                    for _ in 1..<self.recipe.instructions[i].count {
+                        // it starts with 1 because the first element is the title
+                        numberOfCells += 1
+                    }
+                }
+                numberOfCells += self.recipe.instructions.count - 1
+                // add the number of section headers
+                self.recipeDetailView.instructionsTableViewHeightConstraint.constant = CGFloat(numberOfCells * self.instructionsCellHeight)
+                // commented out this 8/31 to see if i could fix source button issue
+                //                        self.recipeDetailView.instructionsTableView.reloadData()
+                self.recipeDetailView.instructionsTableView.layoutIfNeeded()
+                
+                self.recipeDetailView.instructionsTableViewHeightConstraint.constant = self.recipeDetailView.instructionsTableView.contentSize.height
+                
+                self.recipeDetailView.layoutIfNeeded()
+                
+                self.scrollView.contentSize = CGSize(width: self.view.frame.width, height: self.recipeDetailView.contentView.frame.size.height)
+                
+                self.recipeDetailView.dietCollectionViewHeightConstraint.constant = 25
+                self.recipeDetailView.dietsCollectionView.reloadData()
+                self.recipeDetailView.dietsCollectionView.layoutIfNeeded()
+                self.recipeDetailView.dietCollectionViewHeightConstraint.constant = self.recipeDetailView.dietsCollectionView.contentSize.height
+                
+                self.recipeDetailView.layoutIfNeeded()
+                
+                self.scrollView.contentSize = CGSize(width: self.view.frame.width, height: self.recipeDetailView.contentView.frame.size.height)
+            }
+        }
+    }
+    
+    func parseJson(json: [String: Any]?) {
+        guard let bodyJsonObject = json else { return }
+        
+        self.recipe.source = bodyJsonObject["sourceUrl"] as? String
+        self.recipe.servings = bodyJsonObject["servings"] as? Int
+        self.recipe.readyInMinutes = bodyJsonObject["readyInMinutes"] as? Int
+        self.recipe.diets = bodyJsonObject["diets"] as? [String]
+        self.recipe.title = bodyJsonObject["title"] as? String
+        self.recipe.creditsText = bodyJsonObject["creditsText"] as? String
+        
+        if let ingredientsArray = bodyJsonObject["extendedIngredients"] as? [[String:Any]] {
+            // so ingredients don't get repeat added
+            self.recipe.ingredients.removeAll()
+            var ingredientNames: Set<String> = []
+            for ingredient in ingredientsArray {
+                let ingredientName = ingredient["name"] as? String
+                if ingredientName != nil && ingredientNames.contains(ingredientName!) {
+                    continue
+                } else {
+                    ingredientNames.insert(ingredientName!)
+                }
+                let ingredientAmount = ingredient["amount"] as? Int
+                let ingredientAisle = ingredient["aisle"] as? String
+                let ingredientUnit = ingredient["unit"] as? String
+                let ingredientId = ingredient["id"] as? Int
+                let ingredientImage = ingredient["image"] as? String
+                var ingredientUnitShort: String?
+                
+                if let measures = ingredient["measures"] as? [String: Any] {
+                    if let us = measures["us"] as? [String: Any] {
+                        ingredientUnitShort = us["unitShort"] as? String
+                    }
+                }
+                
+                let newIngredient = Ingredient(aisle: ingredientAisle, amount: ingredientAmount as NSNumber?, id: ingredientId, imageName: ingredientImage, name: ingredientName, unit: ingredientUnit, unitShort: ingredientUnitShort)
+                self.recipe.ingredients.append(newIngredient)
+            }
+        }
+        
+        let analyzedInstructions = bodyJsonObject["analyzedInstructions"] as! [NSDictionary]
+        // so instructions don't get repeat added
+        self.recipe.instructions.removeAll()
+        for (index, section) in analyzedInstructions.enumerated() {
+            if let sectionName = section["name"] as? String {
+                self.recipe.instructions.append([sectionName])
+                if let sectionInstructions = section["steps"] as? [ [String : Any] ] {
+                    for instructionInfo in sectionInstructions {
+                        if let singleStep = instructionInfo["step"] as? String {
+                            self.recipe.instructions[index].append(singleStep)
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -391,145 +505,6 @@ extension RecipeDetailViewController {
                 self.recipeDetailView.recipeImageView.image = UIImage(data: data)
             }
         }
-    }
-    
-    func parseJson(json: [String: Any]?) {
-        
-    }
-    
-    func getRecipeInstructions() {
-        
-        UNIRest.get { (request) in
-            
-            guard let recipe = self.recipe else { return }
-            guard let id = recipe.id else { return }
-            
-            let requestString = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/\(id)/information"
-            
-            if let unwrappedRequest = request {
-                unwrappedRequest.url = requestString
-                unwrappedRequest.headers = ["X-RapidAPI-Host": "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com", "X-RapidAPI-Key": "ba59075c47msh50cd1afad35f3adp1d65cdjsn4b0f3c045f70"]
-            }
-            
-            }?.asJsonAsync({ (response, error) in
-                
-                if let response = response {
-                    if let body: UNIJsonNode = response.body {
-                        if let bodyJsonObject = body.jsonObject() {
-                            print("JSON OBJECT ==================================================")
-                            print(bodyJsonObject)
-                            
-                            self.recipe.source = bodyJsonObject["sourceUrl"] as? String
-                            self.recipe.servings = bodyJsonObject["servings"] as? Int
-                            self.recipe.readyInMinutes = bodyJsonObject["readyInMinutes"] as? Int
-                            self.recipe.diets = bodyJsonObject["diets"] as? [String]
-                            self.recipe.title = bodyJsonObject["title"] as? String
-                            self.recipe.creditsText = bodyJsonObject["creditsText"] as? String
-                            
-                            if let ingredientsArray = bodyJsonObject["extendedIngredients"] as? [[String:Any]] {
-                                // so ingredients don't get repeat added
-                                self.recipe.ingredients.removeAll()
-                                var ingredientNames: Set<String> = []
-                                for ingredient in ingredientsArray {
-                                    let ingredientName = ingredient["name"] as? String
-                                    if ingredientName != nil && ingredientNames.contains(ingredientName!) {
-                                        continue
-                                    } else {
-                                        ingredientNames.insert(ingredientName!)
-                                    }
-                                    let ingredientAmount = ingredient["amount"] as? Int
-                                    let ingredientAisle = ingredient["aisle"] as? String
-                                    let ingredientUnit = ingredient["unit"] as? String
-                                    let ingredientId = ingredient["id"] as? Int
-                                    let ingredientImage = ingredient["image"] as? String
-                                    var ingredientUnitShort: String?
-                                    
-                                    if let measures = ingredient["measures"] as? [String: Any] {
-                                        if let us = measures["us"] as? [String: Any] {
-                                            ingredientUnitShort = us["unitShort"] as? String
-                                        }
-                                    }
-                                    
-                                    let newIngredient = Ingredient(aisle: ingredientAisle, amount: ingredientAmount as NSNumber?, id: ingredientId, imageName: ingredientImage, name: ingredientName, unit: ingredientUnit, unitShort: ingredientUnitShort)
-                                    self.recipe.ingredients.append(newIngredient)
-                                }
-                            }
-                            
-                            
-                            
-                            let analyzedInstructions = bodyJsonObject["analyzedInstructions"] as! [NSDictionary]
-                            // so instructions don't get repeat added
-                            self.recipe.instructions.removeAll()
-                            for (index, section) in analyzedInstructions.enumerated() {
-                                if let sectionName = section["name"] as? String {
-                                    self.recipe.instructions.append([sectionName])
-                                    if let sectionInstructions = section["steps"] as? [ [String : Any] ] {
-                                        for instructionInfo in sectionInstructions {
-                                            if let singleStep = instructionInfo["step"] as? String {
-                                                self.recipe.instructions[index].append(singleStep)
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            
-                            print("ANALYZED INSTRUCTIONS = \(analyzedInstructions)")
-                            print("THE INSTRUCTIONS INSIDE THE APP == ")
-                            for instruction in self.recipe.instructions {
-                                print(instruction)
-                            }
-                            DispatchQueue.main.async {
-                                
-                                self.loadingView.removeFromSuperview()
-                                self.activityIndicatoryView.stopAnimating()
-                                self.activityIndicatoryView.removeFromSuperview()
-                                
-                                self.setupUI()
-                                self.recipeDetailView.dietsCollectionView.reloadData()
-                                self.recipeDetailView.ingredientsTableView.reloadData()
-                                self.recipeDetailView.ingredientsTableViewHeightConstraint.constant = CGFloat(self.recipe.ingredients.count * self.ingredientsCellHeight)
-                                // after changing height of recipeDetailView, update scrollView too
-                                //                        self.scrollView.contentSize = CGSize(width: self.view.frame.width, height: self.recipeDetailView.frame.size.height)
-                                
-                                self.recipeDetailView.instructionsTableView.reloadData()
-                                // resize the instruction height to the right one
-                                
-                                // this is the method that multiples the cell height
-                                var numberOfCells = 0
-                                for i in 0..<self.recipe.instructions.count {
-                                    for _ in 1..<self.recipe.instructions[i].count {
-                                        // it starts with 1 because the first element is the title
-                                        numberOfCells += 1
-                                    }
-                                }
-                                numberOfCells += self.recipe.instructions.count - 1
-                                // add the number of section headers
-                                self.recipeDetailView.instructionsTableViewHeightConstraint.constant = CGFloat(numberOfCells * self.instructionsCellHeight)
-                                // commented out this 8/31 to see if i could fix source button issue
-                                //                        self.recipeDetailView.instructionsTableView.reloadData()
-                                self.recipeDetailView.instructionsTableView.layoutIfNeeded()
-                                
-                                self.recipeDetailView.instructionsTableViewHeightConstraint.constant = self.recipeDetailView.instructionsTableView.contentSize.height
-                                
-                                self.recipeDetailView.layoutIfNeeded()
-                                
-                                self.scrollView.contentSize = CGSize(width: self.view.frame.width, height: self.recipeDetailView.contentView.frame.size.height)
-                                
-                                self.recipeDetailView.dietCollectionViewHeightConstraint.constant = 25
-                                self.recipeDetailView.dietsCollectionView.reloadData()
-                                self.recipeDetailView.dietsCollectionView.layoutIfNeeded()
-                                self.recipeDetailView.dietCollectionViewHeightConstraint.constant = self.recipeDetailView.dietsCollectionView.contentSize.height
-                                
-                                self.recipeDetailView.layoutIfNeeded()
-                                
-                                self.scrollView.contentSize = CGSize(width: self.view.frame.width, height: self.recipeDetailView.contentView.frame.size.height)
-                            }
-                            
-                        }
-
-                    }
-                }
-            })
     }
 }
 
