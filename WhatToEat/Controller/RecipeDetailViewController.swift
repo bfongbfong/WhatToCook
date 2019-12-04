@@ -123,42 +123,46 @@ extension RecipeDetailViewController {
 // MARK: - UI Functions
 extension RecipeDetailViewController {
     
-      func setupUI() {
-          let url = URL(string: recipe.imageName!)!
-          downloadImage(from: url)
-          
-          let titleText = recipe.title
-          let titleStyle = NSMutableParagraphStyle()
-          titleStyle.lineSpacing = 6
-          titleStyle.lineBreakMode = .byTruncatingTail
-          let attributedString = NSMutableAttributedString(string: titleText ?? "")
-          attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: titleStyle, range: NSMakeRange(0, attributedString.length))
-          
-              
-          recipeDetailView.recipeTitleLabel.attributedText = attributedString
-          if let readyInMinutes = recipe.readyInMinutes {
-              recipeDetailView.readyInMinutesLabel.text = "\(readyInMinutes) MIN"
-          } else {
-              recipeDetailView.readyInMinutesLabel.text = "N/A"
-          }
-          if let servings = recipe.servings {
-              if servings == 1 {
-                  recipeDetailView.servingsLabel.text = "\(servings) SERVING"
-              } else {
-                  recipeDetailView.servingsLabel.text = "\(servings) SERVINGS"
-              }
-          } else {
-              recipeDetailView.servingsLabel.text = "N/A"
-          }
-          
+    func setupUI() {
+        let url = URL(string: recipe.imageName!)!
+        NetworkRequests.downloadImage(from: url) { (data) in
+            DispatchQueue.main.async() {
+                self.recipeDetailView.recipeImageView.image = UIImage(data: data)
+            }
+        }
+        
+        let titleText = recipe.title
+        let titleStyle = NSMutableParagraphStyle()
+        titleStyle.lineSpacing = 6
+        titleStyle.lineBreakMode = .byTruncatingTail
+        let attributedString = NSMutableAttributedString(string: titleText ?? "")
+        attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: titleStyle, range: NSMakeRange(0, attributedString.length))
 
-          recipeDetailView.sourceButton.setTitle("Source: \(recipe.creditsText ?? "N/A")", for: .normal)
-          // diets collection view
-    
-          recipeDetailView.sourceButton.addTarget(self, action: #selector(goToSource), for: .touchUpInside)
           
-          recipeDetailView.bookmarkButton.addTarget(self, action: #selector(bookmark), for: .touchUpInside)
-      }
+        recipeDetailView.recipeTitleLabel.attributedText = attributedString
+        if let readyInMinutes = recipe.readyInMinutes {
+          recipeDetailView.readyInMinutesLabel.text = "\(readyInMinutes) MIN"
+        } else {
+          recipeDetailView.readyInMinutesLabel.text = "N/A"
+        }
+        if let servings = recipe.servings {
+          if servings == 1 {
+              recipeDetailView.servingsLabel.text = "\(servings) SERVING"
+          } else {
+              recipeDetailView.servingsLabel.text = "\(servings) SERVINGS"
+          }
+        } else {
+          recipeDetailView.servingsLabel.text = "N/A"
+        }
+
+
+        recipeDetailView.sourceButton.setTitle("Source: \(recipe.creditsText ?? "N/A")", for: .normal)
+        // diets collection view
+
+        recipeDetailView.sourceButton.addTarget(self, action: #selector(goToSource), for: .touchUpInside)
+
+        recipeDetailView.bookmarkButton.addTarget(self, action: #selector(bookmark), for: .touchUpInside)
+    }
     
     func setBookmarkStar() {
 
@@ -487,26 +491,6 @@ extension RecipeDetailViewController: UITableViewDelegate {
     }
 }
 
-
-// MARK: - Network Requests
-extension RecipeDetailViewController {
-    
-    func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
-        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
-    }
-    
-    func downloadImage(from url: URL) {
-        print("Download Started")
-        getData(from: url) { data, response, error in
-            guard let data = data, error == nil else { return }
-            print(response?.suggestedFilename ?? url.lastPathComponent)
-            print("Download Finished")
-            DispatchQueue.main.async() {
-                self.recipeDetailView.recipeImageView.image = UIImage(data: data)
-            }
-        }
-    }
-}
 
 // MARK: - Admob Methods
 extension RecipeDetailViewController: GADBannerViewDelegate {
