@@ -143,16 +143,16 @@ extension SearchResultsViewController {
                 print(errorThatHappened.localizedDescription)
                 return
             }
-            self.parseJson(jsonArray: json) {
-                DispatchQueue.main.async {
-                    self.view.stopLoadingAnimation(loadingView: &self.loadingView, activityIndicatorView: self.activityIndicatorView)
-                    self.tableView.reloadData()
-                }
+            self.parseJson(jsonArray: json)
+            DispatchQueue.main.async {
+                self.view.stopLoadingAnimation(loadingView: &self.loadingView, activityIndicatorView: self.activityIndicatorView)
+                self.tableView.reloadData()
             }
+            
         }
     }
     
-    func parseJson(jsonArray: [Any]?, completion: @escaping() -> Void) {
+    func parseJson(jsonArray: [Any]?) {
         
         guard let bodyJsonArray = jsonArray else { return }
         // to prevent duplicate recipes
@@ -228,8 +228,6 @@ extension SearchResultsViewController {
            
            self.recipes.append(recipe)
        }
-       
-        completion()
     }
 }
 
@@ -242,7 +240,7 @@ extension SearchResultsViewController {
         if segue.identifier == "ToRecipeDetailViewController" {
             if let selectedIndexPath = tableView.indexPathForSelectedRow {
                 let recipeDetailVC = segue.destination as! RecipeDetailViewController
-                if interstitial.isReady && RecipesViewed.notMultipleOfThree {
+                if interstitial.isReady && RecipesViewed.isMultipleOfThree {
                     interstitial.present(fromRootViewController: self)
                 }
                 recipeDetailVC.recipe = recipes[selectedIndexPath.row]

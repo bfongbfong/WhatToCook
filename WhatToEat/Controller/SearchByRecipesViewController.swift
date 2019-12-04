@@ -277,7 +277,7 @@ class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UI
                 let recipeDetailVC = segue.destination as! RecipeDetailViewController
                 guard recipes.count > 0 else { return }
                 recipeDetailVC.recipe = recipes[selectedIndexPath.row]
-                if interstitial.isReady && RecipesViewed.notMultipleOfThree {
+                if interstitial.isReady && RecipesViewed.isMultipleOfThree {
                     interstitial.present(fromRootViewController: self)
                 }
             }

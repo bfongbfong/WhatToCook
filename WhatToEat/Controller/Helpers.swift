@@ -9,12 +9,16 @@
 import Foundation
 
 class RecipesViewed {
-    static var counter: Int = 0
-    static var notMultipleOfThree: Bool {
+    static var counter: Int = 2
+    static var isMultipleOfThree: Bool {
         get {
             return counter % 3 == 0
         }
     }
+}
+
+class TestMode {
+    static var testMode = false
 }
 
 

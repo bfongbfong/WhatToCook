@@ -11,17 +11,20 @@ import Unirest
 
 class SpoonacularManager {
     
+    static var rapidAPIHost = "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com"
+    static var apiKey = "ba59075c47msh50cd1afad35f3adp1d65cdjsn4b0f3c045f70"
+    
     static func autocompleteIngredientSearch(input: String, completion: @escaping(_ responseJSON: [Any]?, _ error: Error?) -> Void) {
         
         let inputAdjustedForSpecialCharacters = replaceSpecialCharacters(input: input)
         
         UNIRest.get { (request) in
             
-            let requestString = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/food/ingredients/autocomplete?number=7&query=\(inputAdjustedForSpecialCharacters)"
+            let requestString = "https://\(rapidAPIHost)/food/ingredients/autocomplete?number=7&query=\(inputAdjustedForSpecialCharacters)"
             
             if let unwrappedRequest = request {
                 unwrappedRequest.url = requestString
-                unwrappedRequest.headers = ["X-RapidAPI-Host": "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com", "X-RapidAPI-Key": "ba59075c47msh50cd1afad35f3adp1d65cdjsn4b0f3c045f70"]
+                unwrappedRequest.headers = ["X-RapidAPI-Host": rapidAPIHost, "X-RapidAPI-Key": apiKey]
             }
             
             }?.asJsonAsync({ (response, error) in
@@ -57,16 +60,15 @@ class SpoonacularManager {
         
         UNIRest.get { (request) in
             
-            let requestString: String = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients?number=\(numberOfResults)&ranking=1&ignorePantry=\(String(ignorePantry))&ingredients=\(ingredients)"
+            let requestString = "https://\(rapidAPIHost)/recipes/findByIngredients?number=\(numberOfResults)&ranking=1&ignorePantry=\(String(ignorePantry))&ingredients=\(ingredients)"
             
-            print(requestString)
             print("==============================================================")
             print("RECIPES")
             
             guard let unwrappedRequest = request else { return }
             
             unwrappedRequest.url = requestString
-            unwrappedRequest.headers = ["X-RapidAPI-Host": "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com", "X-RapidAPI-Key": "ba59075c47msh50cd1afad35f3adp1d65cdjsn4b0f3c045f70"]
+            unwrappedRequest.headers = ["X-RapidAPI-Host": rapidAPIHost, "X-RapidAPI-Key": apiKey]
             
             }?.asJsonAsync({ (response, error) in
                 
@@ -91,6 +93,42 @@ class SpoonacularManager {
                 }
                 
                 completion(bodyJsonArray, error)
+            })
+    }
+    
+    static func getRecipeInstructions(recipe: Recipe?, completion: @escaping((_ response: [String: Any]?, _ error: Error?) -> Void)) {
+        
+        UNIRest.get { (request) in
+            
+            guard let recipe = recipe else { return }
+            guard let id = recipe.id else { return }
+            
+            let requestString = "https://\(rapidAPIHost)/recipes/\(id)/information"
+            
+            if let unwrappedRequest = request {
+                unwrappedRequest.url = requestString
+                unwrappedRequest.headers = ["X-RapidAPI-Host": rapidAPIHost, "X-RapidAPI-Key": apiKey]
+            }
+            
+            }?.asJsonAsync({ (response, error) in
+                
+                if let errorThatHappened = error {
+                    completion(nil, errorThatHappened)
+                    return
+                }
+                guard let responseReceived = response else {
+                    completion(nil, error)
+                    return
+                }
+                guard let body: UNIJsonNode = responseReceived.body else {
+                    completion(nil, error)
+                    return
+                }
+                guard let bodyJsonObject = body.jsonObject() as? [String: Any] else {
+                    completion(nil, error)
+                    return
+                }
+                completion(bodyJsonObject, error)
             })
     }
 }

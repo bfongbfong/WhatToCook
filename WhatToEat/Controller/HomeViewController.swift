@@ -173,7 +173,8 @@ extension HomeViewController {
                 print(thisError.localizedDescription)
                 return
             }
-            self.parseJson(jsonBody: json) {
+            self.parseJson(jsonBody: json)
+            DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
         }
@@ -230,7 +231,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
 
 extension HomeViewController {
     
-    func parseJson(jsonBody: [Any]?, completion: @escaping(() -> Void)) {
+    func parseJson(jsonBody: [Any]?) {
         
         guard let json = jsonBody else { return }
         
@@ -252,8 +253,6 @@ extension HomeViewController {
                 }
             }
         }
-        completion()
-        
     }
     
     func getSavedItemsAsRequestString() -> String {

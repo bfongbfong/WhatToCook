@@ -36,9 +36,8 @@ class SavedRecipesViewController: UIViewController, UITableViewDelegate, UITable
         
         // ads
         bannerView = GADBannerView(adSize: kGADAdSizeBanner)
-        // real id
-//      bannerView.adUnitID = "ca-app-pub-5775764210542302/4339264751"
         // test id
+//      bannerView.adUnitID = "ca-app-pub-5775764210542302/4339264751"
         bannerView.adUnitID = adIDs.savedRecipesVCBannerID
         bannerView.rootViewController = self
         bannerView.load(GADRequest())
@@ -249,7 +248,7 @@ class SavedRecipesViewController: UIViewController, UITableViewDelegate, UITable
             if let selectedIndexPath = savedRecipesTableView.indexPathForSelectedRow {
                 let recipeDetailVC = segue.destination as! RecipeDetailViewController
                 // display interstitial ad
-                if interstitial.isReady && RecipesViewed.notMultipleOfThree {
+                if interstitial.isReady && RecipesViewed.isMultipleOfThree {
                     print("interstitial ad is ready")
                     interstitial.present(fromRootViewController: self)
                 }

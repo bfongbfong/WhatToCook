@@ -39,8 +39,6 @@ class RecipeDetailViewController: UIViewController {
         recipeDetailView.layoutIfNeeded()
         
         scrollView.contentSize = CGSize(width: self.view.frame.width, height: recipeDetailView.frame.height)
-        
-
         scrollView.addSubview(recipeDetailView)
         
         recipeDetailView.frame.size.height = recipeDetailView.contentView.frame.height
@@ -393,6 +391,10 @@ extension RecipeDetailViewController {
                 self.recipeDetailView.recipeImageView.image = UIImage(data: data)
             }
         }
+    }
+    
+    func parseJson(json: [String: Any]?) {
+        
     }
     
     func getRecipeInstructions() {

@@ -8,21 +8,40 @@
 
 import Foundation
 
-
 class adIDs {
     static var searchResultsVCBannerID: String {
-        return "ca-app-pub-5775764210542302/4339264751"
+        if TestMode.testMode {
+            return "ca-app-pub-3940256099942544/2934735716"
+        } else {
+            return "ca-app-pub-5775764210542302/4339264751"
+        }
     }
     static var recipeDetailVCBannerID: String {
-        return "ca-app-pub-5775764210542302/9192273207"
+        if TestMode.testMode {
+            return "ca-app-pub-3940256099942544/2934735716"
+        } else {
+            return "ca-app-pub-5775764210542302/9192273207"
+        }
     }
     static var searchByRecipeNameVCBannerID: String {
-        return "ca-app-pub-5775764210542302/7631779527"
+        if TestMode.testMode {
+            return "ca-app-pub-3940256099942544/2934735716"
+        } else {
+            return "ca-app-pub-5775764210542302/7631779527"
+        }
     }
     static var savedRecipesVCBannerID: String {
-        return "ca-app-pub-5775764210542302/6262518225"
+        if TestMode.testMode {
+            return "ca-app-pub-3940256099942544/2934735716"
+        } else {
+            return "ca-app-pub-5775764210542302/6262518225"
+        }
     }
     static var beforeInterstitialID: String {
-        return "ca-app-pub-5775764210542302/6785262409"
+        if TestMode.testMode {
+            return "ca-app-pub-3940256099942544/4411468910"
+        } else {
+            return "ca-app-pub-5775764210542302/6785262409"
+        }
     }
 }
