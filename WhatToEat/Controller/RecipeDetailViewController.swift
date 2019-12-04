@@ -58,8 +58,8 @@ class RecipeDetailViewController: UIViewController {
         
         recipeDetailView.instructionsTableView.register(UINib(nibName: "SourceTableViewCellView", bundle: nil), forCellReuseIdentifier: "SourceTableViewCell")
         
-        recipeDetailView.recipeTitleLabel.numberOfLines = 2
         
+        recipeDetailView.recipeTitleLabel.numberOfLines = 2
         recipeDetailView.instructionsTableView.rowHeight = UITableView.automaticDimension
         recipeDetailView.instructionsTableView.estimatedRowHeight = CGFloat(instructionsCellHeight)
         
@@ -141,26 +141,24 @@ extension RecipeDetailViewController {
           
         recipeDetailView.recipeTitleLabel.attributedText = attributedString
         if let readyInMinutes = recipe.readyInMinutes {
-          recipeDetailView.readyInMinutesLabel.text = "\(readyInMinutes) MIN"
+            recipeDetailView.readyInMinutesLabel.text = "\(readyInMinutes) MIN"
         } else {
-          recipeDetailView.readyInMinutesLabel.text = "N/A"
+            recipeDetailView.readyInMinutesLabel.text = "N/A"
         }
         if let servings = recipe.servings {
-          if servings == 1 {
-              recipeDetailView.servingsLabel.text = "\(servings) SERVING"
-          } else {
-              recipeDetailView.servingsLabel.text = "\(servings) SERVINGS"
-          }
+            if servings == 1 {
+                recipeDetailView.servingsLabel.text = "\(servings) SERVING"
+            } else {
+                recipeDetailView.servingsLabel.text = "\(servings) SERVINGS"
+            }
         } else {
-          recipeDetailView.servingsLabel.text = "N/A"
+            recipeDetailView.servingsLabel.text = "N/A"
         }
-
 
         recipeDetailView.sourceButton.setTitle("Source: \(recipe.creditsText ?? "N/A")", for: .normal)
         // diets collection view
 
         recipeDetailView.sourceButton.addTarget(self, action: #selector(goToSource), for: .touchUpInside)
-
         recipeDetailView.bookmarkButton.addTarget(self, action: #selector(bookmark), for: .touchUpInside)
     }
     
