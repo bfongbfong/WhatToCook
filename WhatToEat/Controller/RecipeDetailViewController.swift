@@ -237,7 +237,8 @@ extension RecipeDetailViewController {
         }
     }
     
-    func parseJson(json: [String: Any]?) {
+    private func parseJson(json: [String: Any]?) {
+        
         guard let bodyJsonObject = json else { return }
         
         self.recipe.source = bodyJsonObject["sourceUrl"] as? String

@@ -231,7 +231,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
 
 extension HomeViewController {
     
-    func parseJson(jsonBody: [Any]?) {
+    private func parseJson(jsonBody: [Any]?) {
         
         guard let json = jsonBody else { return }
         

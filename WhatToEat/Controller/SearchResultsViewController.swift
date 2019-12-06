@@ -152,7 +152,7 @@ extension SearchResultsViewController {
         }
     }
     
-    func parseJson(jsonArray: [Any]?) {
+    private func parseJson(jsonArray: [Any]?) {
         
         guard let bodyJsonArray = jsonArray else { return }
         // to prevent duplicate recipes
