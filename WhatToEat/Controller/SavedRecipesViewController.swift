@@ -34,6 +34,9 @@ class SavedRecipesViewController: UIViewController {
     
     var queue = OperationQueue()
     
+    // MARK: Activity Indicator
+    var loadingView = UIView()
+    let activityIndicatorView = UIActivityIndicatorView()
     
     // MARK: - View Controller Life Cycle
     override func viewDidLoad() {
@@ -61,10 +64,11 @@ class SavedRecipesViewController: UIViewController {
         recipeRecentlyDeleted = false
         
         // if the API request isn't here, the tableView reload should be
-        
+        view.playLoadingAnimation(loadingView: &loadingView, activityIndicatorView: activityIndicatorView)
         loadRecipes() {
             DispatchQueue.main.async {
                 self.savedRecipesTableView.reloadData()
+                self.view.stopLoadingAnimation(loadingView: &self.loadingView, activityIndicatorView: self.activityIndicatorView)
             }
         }
     }
