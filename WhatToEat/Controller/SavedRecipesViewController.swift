@@ -58,10 +58,10 @@ class SavedRecipesViewController: UIViewController {
         
         recipeRecentlyDeleted = false
         
-        print("SAVED RECIPE VC VIEW WILL APPEAR HAPPENED")
         // if the API request isn't here, the tableView reload should be
         
         loadRecipes()
+        savedRecipesTableView.reloadData()
     }
 }
 
@@ -113,8 +113,6 @@ extension SavedRecipesViewController {
         } else if savedRecipes.count > PersistenceManager.bookmarkedRecipeIDs.count {
             savedRecipes = savedRecipes.filter({PersistenceManager.bookmarkedRecipeIDs.contains($0.id!)})
         }
-        
-        savedRecipesTableView.reloadData()
     }
     
     func reorderSavedRecipesArray() {
