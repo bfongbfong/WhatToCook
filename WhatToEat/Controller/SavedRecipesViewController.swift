@@ -10,7 +10,7 @@ import UIKit
 import Unirest
 import GoogleMobileAds
 
-class SavedRecipesViewController: UIViewController, GADBannerViewDelegate, GADInterstitialDelegate {
+class SavedRecipesViewController: UIViewController {
     
     // MARK: - Outlets
     @IBOutlet weak var savedRecipesTableView: UITableView!
@@ -222,8 +222,8 @@ extension SavedRecipesViewController: UITableViewDelegate, UITableViewDataSource
 }
 
 
-
-extension SavedRecipesViewController {
+// MARK: - AdMob
+extension SavedRecipesViewController: GADBannerViewDelegate, GADInterstitialDelegate {
     
     func adViewDidReceiveAd(_ bannerView: GADBannerView) {
         // Add banner to view and add constraints as above.
