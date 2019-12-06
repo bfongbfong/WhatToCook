@@ -138,7 +138,11 @@ extension SavedRecipesViewController {
             }
             
             DispatchQueue.main.async {
-                self.parseJson(json: json, id: id)
+                guard let newRecipe = self.convertJsonIntoRecipe(json: json, id: id) else {
+                    print("Json could not be parsed to a Recipe")
+                    return
+                }
+                self.savedRecipes.append(newRecipe)
                 
                 if self.savedRecipes.count > 1 && PersistenceManager.bookmarkedRecipeIDs.count == self.savedRecipes.count {
                     self.reorderSavedRecipesArray()
@@ -148,45 +152,44 @@ extension SavedRecipesViewController {
         }
     }
     
-    private func parseJson(json: [String: Any]?, id: Int) {
+    private func convertJsonIntoRecipe(json: [String: Any]?, id: Int) -> Recipe? {
         
         let returnRecipe = Recipe()
         
-        if let bodyJsonObject = json {
-            print("JSON OBJECT ==================================================")
-            print(bodyJsonObject)
-            
-            returnRecipe.source = bodyJsonObject["sourceUrl"] as? String
-            returnRecipe.imageName = bodyJsonObject["image"] as? String
-            returnRecipe.servings = bodyJsonObject["servings"] as? Int
-            returnRecipe.readyInMinutes = bodyJsonObject["readyInMinutes"] as? Int
-            returnRecipe.diets = bodyJsonObject["diets"] as? [String]
-            returnRecipe.title = bodyJsonObject["title"] as? String
-            returnRecipe.creditsText = bodyJsonObject["creditsText"] as? String
-            
-            if let ingredientsArray = bodyJsonObject["extendedIngredients"] as? [[String:Any]] {
-                for ingredient in ingredientsArray {
-                    let ingredientName = ingredient["name"] as? String
-                    let ingredientAmount = ingredient["amount"] as? Int
-                    let ingredientAisle = ingredient["aisle"] as? String
-                    let ingredientUnit = ingredient["unit"] as? String
-                    let ingredientId = ingredient["id"] as? Int
-                    let ingredientImage = ingredient["image"] as? String
-                    var ingredientUnitShort: String?
-                    
-                    if let measures = ingredient["measures"] as? [String: Any] {
-                        if let us = measures["us"] as? [String: Any] {
-                            ingredientUnitShort = us["unitShort"] as? String
-                        }
+        guard let bodyJsonObject = json else { return nil }
+        print("JSON OBJECT ==================================================")
+        print(bodyJsonObject)
+        
+        returnRecipe.source = bodyJsonObject["sourceUrl"] as? String
+        returnRecipe.imageName = bodyJsonObject["image"] as? String
+        returnRecipe.servings = bodyJsonObject["servings"] as? Int
+        returnRecipe.readyInMinutes = bodyJsonObject["readyInMinutes"] as? Int
+        returnRecipe.diets = bodyJsonObject["diets"] as? [String]
+        returnRecipe.title = bodyJsonObject["title"] as? String
+        returnRecipe.creditsText = bodyJsonObject["creditsText"] as? String
+        
+        if let ingredientsArray = bodyJsonObject["extendedIngredients"] as? [[String:Any]] {
+            for ingredient in ingredientsArray {
+                let ingredientName = ingredient["name"] as? String
+                let ingredientAmount = ingredient["amount"] as? Int
+                let ingredientAisle = ingredient["aisle"] as? String
+                let ingredientUnit = ingredient["unit"] as? String
+                let ingredientId = ingredient["id"] as? Int
+                let ingredientImage = ingredient["image"] as? String
+                var ingredientUnitShort: String?
+                
+                if let measures = ingredient["measures"] as? [String: Any] {
+                    if let us = measures["us"] as? [String: Any] {
+                        ingredientUnitShort = us["unitShort"] as? String
                     }
-                    
-                    let newIngredient = Ingredient(aisle: ingredientAisle, amount: ingredientAmount as NSNumber?, id: ingredientId, imageName: ingredientImage, name: ingredientName, unit: ingredientUnit, unitShort: ingredientUnitShort)
-                    returnRecipe.ingredients.append(newIngredient)
                 }
+                
+                let newIngredient = Ingredient(aisle: ingredientAisle, amount: ingredientAmount as NSNumber?, id: ingredientId, imageName: ingredientImage, name: ingredientName, unit: ingredientUnit, unitShort: ingredientUnitShort)
+                returnRecipe.ingredients.append(newIngredient)
             }
-            returnRecipe.id = id
-            self.savedRecipes.append(returnRecipe)
         }
+        returnRecipe.id = id
+        return returnRecipe
     }
 }
 
