@@ -117,6 +117,83 @@ extension SavedRecipesViewController {
     }
 }
 
+// MARK: - Logic Functions
+extension SavedRecipesViewController {
+    func reorderSavedRecipesArray() {
+        var tempArray: [Recipe] = []
+        
+        for recipeID in PersistenceManager.bookmarkedRecipeIDs {
+            for recipe in savedRecipes {
+                if recipeID == recipe.id! {
+                    tempArray.append(recipe)
+                }
+            }
+        }
+        
+        savedRecipes = tempArray
+        // needed to do all this to ensure that the arrays were in the same order.
+    }
+    
+    func populateRecipeData(id: Int) {
+        SpoonacularManager.getRecipeInformation(recipeId: id) { (json, error) in
+            if let errorThatHappened = error {
+                print(errorThatHappened.localizedDescription)
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self.parseJson(json: json, id: id)
+                
+                if self.savedRecipes.count > 1 && PersistenceManager.bookmarkedRecipeIDs.count == self.savedRecipes.count {
+                    self.reorderSavedRecipesArray()
+                }
+                self.savedRecipesTableView.reloadData()
+            }
+        }
+    }
+    
+    func parseJson(json: [String: Any]?, id: Int) {
+        
+        let returnRecipe = Recipe()
+        
+        if let bodyJsonObject = json {
+            print("JSON OBJECT ==================================================")
+            print(bodyJsonObject)
+            
+            returnRecipe.source = bodyJsonObject["sourceUrl"] as? String
+            returnRecipe.imageName = bodyJsonObject["image"] as? String
+            returnRecipe.servings = bodyJsonObject["servings"] as? Int
+            returnRecipe.readyInMinutes = bodyJsonObject["readyInMinutes"] as? Int
+            returnRecipe.diets = bodyJsonObject["diets"] as? [String]
+            returnRecipe.title = bodyJsonObject["title"] as? String
+            returnRecipe.creditsText = bodyJsonObject["creditsText"] as? String
+            
+            if let ingredientsArray = bodyJsonObject["extendedIngredients"] as? [[String:Any]] {
+                for ingredient in ingredientsArray {
+                    let ingredientName = ingredient["name"] as? String
+                    let ingredientAmount = ingredient["amount"] as? Int
+                    let ingredientAisle = ingredient["aisle"] as? String
+                    let ingredientUnit = ingredient["unit"] as? String
+                    let ingredientId = ingredient["id"] as? Int
+                    let ingredientImage = ingredient["image"] as? String
+                    var ingredientUnitShort: String?
+                    
+                    if let measures = ingredient["measures"] as? [String: Any] {
+                        if let us = measures["us"] as? [String: Any] {
+                            ingredientUnitShort = us["unitShort"] as? String
+                        }
+                    }
+                    
+                    let newIngredient = Ingredient(aisle: ingredientAisle, amount: ingredientAmount as NSNumber?, id: ingredientId, imageName: ingredientImage, name: ingredientName, unit: ingredientUnit, unitShort: ingredientUnitShort)
+                    returnRecipe.ingredients.append(newIngredient)
+                }
+            }
+            returnRecipe.id = id
+            self.savedRecipes.append(returnRecipe)
+        }
+    }
+}
+
 
 // MARK: - UITableView
 extension SavedRecipesViewController: UITableViewDelegate, UITableViewDataSource {
@@ -182,80 +259,6 @@ extension SavedRecipesViewController {
         interstitial.delegate = self
         interstitial.load(GADRequest())
         return interstitial
-    }
-    
-    func reorderSavedRecipesArray() {
-        var tempArray: [Recipe] = []
-        
-        for recipeID in PersistenceManager.bookmarkedRecipeIDs {
-            for recipe in savedRecipes {
-                if recipeID == recipe.id! {
-                    tempArray.append(recipe)
-                }
-            }
-        }
-        
-        savedRecipes = tempArray
-        // needed to do all this to ensure that the arrays were in the same order. 
-    }
-    
-    func populateRecipeData(id: Int) {
-        SpoonacularManager.getRecipeInformation(recipeId: id) { (json, error) in
-            if let errorThatHappened = error {
-                print(errorThatHappened.localizedDescription)
-                return
-            }
-            
-            DispatchQueue.main.async {
-                self.parseJson(json: json, id: id)
-                
-                if self.savedRecipes.count > 1 && PersistenceManager.bookmarkedRecipeIDs.count == self.savedRecipes.count {
-                    self.reorderSavedRecipesArray()
-                }
-                self.savedRecipesTableView.reloadData()
-            }
-        }
-    }
-    
-    func parseJson(json: [String: Any]?, id: Int) {
-        
-        let returnRecipe = Recipe()
-        
-        if let bodyJsonObject = json {
-            print("JSON OBJECT ==================================================")
-            print(bodyJsonObject)
-            
-            returnRecipe.source = bodyJsonObject["sourceUrl"] as? String
-            returnRecipe.imageName = bodyJsonObject["image"] as? String
-            returnRecipe.servings = bodyJsonObject["servings"] as? Int
-            returnRecipe.readyInMinutes = bodyJsonObject["readyInMinutes"] as? Int
-            returnRecipe.diets = bodyJsonObject["diets"] as? [String]
-            returnRecipe.title = bodyJsonObject["title"] as? String
-            returnRecipe.creditsText = bodyJsonObject["creditsText"] as? String
-            
-            if let ingredientsArray = bodyJsonObject["extendedIngredients"] as? [[String:Any]] {
-                for ingredient in ingredientsArray {
-                    let ingredientName = ingredient["name"] as? String
-                    let ingredientAmount = ingredient["amount"] as? Int
-                    let ingredientAisle = ingredient["aisle"] as? String
-                    let ingredientUnit = ingredient["unit"] as? String
-                    let ingredientId = ingredient["id"] as? Int
-                    let ingredientImage = ingredient["image"] as? String
-                    var ingredientUnitShort: String?
-                    
-                    if let measures = ingredient["measures"] as? [String: Any] {
-                        if let us = measures["us"] as? [String: Any] {
-                            ingredientUnitShort = us["unitShort"] as? String
-                        }
-                    }
-                    
-                    let newIngredient = Ingredient(aisle: ingredientAisle, amount: ingredientAmount as NSNumber?, id: ingredientId, imageName: ingredientImage, name: ingredientName, unit: ingredientUnit, unitShort: ingredientUnitShort)
-                    returnRecipe.ingredients.append(newIngredient)
-                }
-            }
-            returnRecipe.id = id
-            self.savedRecipes.append(returnRecipe)
-        }
     }
     
 
