@@ -12,10 +12,11 @@ import GoogleMobileAds
 
 class SavedRecipesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, GADBannerViewDelegate, GADInterstitialDelegate {
     
+    // MARK: - Outlets
     @IBOutlet weak var savedRecipesTableView: UITableView!
+    
+    // MARK: - Properties
     var savedRecipes: [Recipe] = []
-    var bannerView: GADBannerView!
-    var interstitial: GADInterstitial!
     
     // reason for these recently deleted things is to maintain the state of the UI after an element is deleted from the VC, until you come back to it later, then it's gone.
     var recipeRecentlyDeleted = false {
@@ -26,6 +27,10 @@ class SavedRecipesViewController: UIViewController, UITableViewDelegate, UITable
         }
     }
     var oldRecipesIncludedDeletedOnes: [Recipe] = []
+    
+    // Admob
+    var bannerView: GADBannerView!
+    var interstitial: GADInterstitial!
     
     override func viewDidLoad() {
         super.viewDidLoad()
