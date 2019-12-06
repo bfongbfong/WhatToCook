@@ -11,7 +11,7 @@ import Foundation
 class PersistenceManager {
 
     static var bookmarkedRecipeIDs: [Int] = []
-    static var dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("SavedIngredients.plist")
+    static var savedIngredientsdataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("SavedIngredients.plist")
     
     static func loadBookmarkedRecipes() {
         guard let retrievedData = UserDefaults.standard.array(forKey: "BookmarkedRecipeIDs") else { return }
@@ -31,7 +31,7 @@ class PersistenceManager {
         let encoder = PropertyListEncoder()
         do {
             let data = try encoder.encode(savedIngredients)
-            try data.write(to: self.dataFilePath!)
+            try data.write(to: self.savedIngredientsdataFilePath!)
         } catch {
             print("Saved ingredients couldn't be encoded. Error: \(error)")
         }
@@ -40,7 +40,7 @@ class PersistenceManager {
     static func loadSavedIngredients() -> [SearchedIngredient] {
         var returnArray = [SearchedIngredient]()
         
-        guard let data = try? Data(contentsOf: self.dataFilePath!) else { return returnArray }
+        guard let data = try? Data(contentsOf: self.savedIngredientsdataFilePath!) else { return returnArray }
         
         let decoder = PropertyListDecoder()
         do {

@@ -37,6 +37,7 @@ class SavedRecipesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         setUpNavBar()
         savedRecipesTableView.delegate = self
         savedRecipesTableView.dataSource = self

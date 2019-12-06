@@ -22,7 +22,7 @@ class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         hideKeyboardWhenTappedAround()
         searchByRecipesTableView.dataSource = self
         searchByRecipesTableView.delegate = self
