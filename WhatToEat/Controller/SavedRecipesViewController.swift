@@ -32,6 +32,7 @@ class SavedRecipesViewController: UIViewController, UITableViewDelegate, UITable
     var bannerView: GADBannerView!
     var interstitial: GADInterstitial!
     
+    
     // MARK: - View Controller Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -90,6 +91,19 @@ class SavedRecipesViewController: UIViewController, UITableViewDelegate, UITable
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
     }
+    
+}
+
+// MARK: - IBActions and Objc Functions
+extension SavedRecipesViewController {
+    @objc func bookmarkButtonTapped(sender: UIButton) {
+        recipeRecentlyDeleted = true
+        PersistenceManager.bookmarkedRecipeIDs.remove(at: sender.tag)
+        savedRecipes.remove(at: sender.tag)
+        sender.isHidden = true
+        savedRecipesTableView.reloadData()
+    }
+    
     
     func adViewDidReceiveAd(_ bannerView: GADBannerView) {
         // Add banner to view and add constraints as above.
@@ -169,14 +183,6 @@ class SavedRecipesViewController: UIViewController, UITableViewDelegate, UITable
         }
         cell.selectionStyle = .none
         return cell
-    }
-    
-    @objc func bookmarkButtonTapped(sender: UIButton) {
-        recipeRecentlyDeleted = true
-        PersistenceManager.bookmarkedRecipeIDs.remove(at: sender.tag)
-        savedRecipes.remove(at: sender.tag)
-        sender.isHidden = true
-        savedRecipesTableView.reloadData()
     }
     
     func populateRecipeData(id: Int) {
