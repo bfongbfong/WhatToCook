@@ -152,7 +152,7 @@ extension SavedRecipesViewController {
         }
     }
     
-    func parseJson(json: [String: Any]?, id: Int) {
+    private func parseJson(json: [String: Any]?, id: Int) {
         
         let returnRecipe = Recipe()
         
