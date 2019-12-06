@@ -37,7 +37,6 @@ class SavedRecipesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         setUpNavBar()
         savedRecipesTableView.delegate = self
         savedRecipesTableView.dataSource = self
@@ -62,37 +61,8 @@ class SavedRecipesViewController: UIViewController {
         print("SAVED RECIPE VC VIEW WILL APPEAR HAPPENED")
         // if the API request isn't here, the tableView reload should be
         
-        
-        // to save new items from bookmarkedRecipeIDs to savedRecipes without adding duplicates
-        if PersistenceManager.bookmarkedRecipeIDs.count > savedRecipes.count {
-            
-            if savedRecipes.count != 0 {
-                let difference = PersistenceManager.bookmarkedRecipeIDs.count - savedRecipes.count
-                for i in 0..<difference {
-                    populateRecipeData(id: PersistenceManager.bookmarkedRecipeIDs[savedRecipes.count + i])
-                }
-
-            } else {
-                if savedRecipes.count == 0 {
-                    
-                    for recipeID in PersistenceManager.bookmarkedRecipeIDs {
-                        populateRecipeData(id: recipeID)
-                        print("SAVED RECIPE VC VIEW DID LOAD HAPPENED")
-                    }
-                }
-            }
-        } else if savedRecipes.count > PersistenceManager.bookmarkedRecipeIDs.count {
-            savedRecipes = savedRecipes.filter({PersistenceManager.bookmarkedRecipeIDs.contains($0.id!)})
-            savedRecipesTableView.reloadData()
-        }
-        
-        savedRecipesTableView.reloadData()
+        loadRecipes()
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
-    }
-    
 }
 
 // MARK: - IBActions and Objc Functions
@@ -120,6 +90,33 @@ extension SavedRecipesViewController {
 
 // MARK: - Logic Functions
 extension SavedRecipesViewController {
+    
+    func loadRecipes() {
+        // to save new items from bookmarkedRecipeIDs to savedRecipes without adding duplicates
+        if PersistenceManager.bookmarkedRecipeIDs.count > savedRecipes.count {
+            
+            if savedRecipes.count != 0 {
+                let difference = PersistenceManager.bookmarkedRecipeIDs.count - savedRecipes.count
+                for i in 0..<difference {
+                    populateRecipeData(id: PersistenceManager.bookmarkedRecipeIDs[savedRecipes.count + i])
+                }
+
+            } else {
+                if savedRecipes.count == 0 {
+                    
+                    for recipeID in PersistenceManager.bookmarkedRecipeIDs {
+                        populateRecipeData(id: recipeID)
+                        print("SAVED RECIPE VC VIEW DID LOAD HAPPENED")
+                    }
+                }
+            }
+        } else if savedRecipes.count > PersistenceManager.bookmarkedRecipeIDs.count {
+            savedRecipes = savedRecipes.filter({PersistenceManager.bookmarkedRecipeIDs.contains($0.id!)})
+        }
+        
+        savedRecipesTableView.reloadData()
+    }
+    
     func reorderSavedRecipesArray() {
         var tempArray: [Recipe] = []
         
