@@ -32,6 +32,8 @@ class SavedRecipesViewController: UIViewController {
     var bannerView: GADBannerView!
     var interstitial: GADInterstitial!
     
+    var queue = OperationQueue()
+    
     
     // MARK: - View Controller Life Cycle
     override func viewDidLoad() {
@@ -60,8 +62,11 @@ class SavedRecipesViewController: UIViewController {
         
         // if the API request isn't here, the tableView reload should be
         
-        loadRecipes()
-        savedRecipesTableView.reloadData()
+        loadRecipes() {
+            DispatchQueue.main.async {
+                self.savedRecipesTableView.reloadData()
+            }
+        }
     }
 }
 
@@ -91,28 +96,50 @@ extension SavedRecipesViewController {
 // MARK: - Logic Functions
 extension SavedRecipesViewController {
     
-    func loadRecipes() {
-        // to save new items from bookmarkedRecipeIDs to savedRecipes without adding duplicates
-        if PersistenceManager.bookmarkedRecipeIDs.count > savedRecipes.count {
-            
-            if savedRecipes.count != 0 {
-                let difference = PersistenceManager.bookmarkedRecipeIDs.count - savedRecipes.count
-                for i in 0..<difference {
-                    populateRecipeData(id: PersistenceManager.bookmarkedRecipeIDs[savedRecipes.count + i])
-                }
+    func loadRecipes(completion: @escaping(() -> Void)) {
+        let group = DispatchGroup()
+        
+        let operation1 = BlockOperation {
+            // to save new items from bookmarkedRecipeIDs to savedRecipes without adding duplicates
+            if PersistenceManager.bookmarkedRecipeIDs.count > self.savedRecipes.count {
+                
+                if self.savedRecipes.count != 0 {
+                    let difference = PersistenceManager.bookmarkedRecipeIDs.count - self.savedRecipes.count
+                    for i in 0..<difference {
+                        print("reloading recipes")
+                        group.enter()
+                        self.populateRecipeData(id: PersistenceManager.bookmarkedRecipeIDs[self.savedRecipes.count + i]) {
+                            group.leave()
+                        }
+                    }
 
-            } else {
-                if savedRecipes.count == 0 {
-                    
-                    for recipeID in PersistenceManager.bookmarkedRecipeIDs {
-                        populateRecipeData(id: recipeID)
-                        print("SAVED RECIPE VC VIEW DID LOAD HAPPENED")
+                } else {
+                    if self.savedRecipes.count == 0 {
+                        for recipeID in PersistenceManager.bookmarkedRecipeIDs {
+                            print("first time loading recipes")
+                            group.enter()
+                            self.populateRecipeData(id: recipeID) {
+                                group.leave()
+                            }
+                        }
                     }
                 }
+            } else if self.savedRecipes.count > PersistenceManager.bookmarkedRecipeIDs.count {
+                // recipes were deleted
+                print("recipes were deleted")
+                self.savedRecipes = self.savedRecipes.filter({PersistenceManager.bookmarkedRecipeIDs.contains($0.id!)})
             }
-        } else if savedRecipes.count > PersistenceManager.bookmarkedRecipeIDs.count {
-            savedRecipes = savedRecipes.filter({PersistenceManager.bookmarkedRecipeIDs.contains($0.id!)})
+            group.wait()
         }
+        
+        let apiCallsComplete = BlockOperation {
+            print("API calls complete")
+            completion()
+        }
+        
+        apiCallsComplete.addDependency(operation1)
+        queue.addOperation(operation1)
+        queue.addOperation(apiCallsComplete)
     }
     
     func reorderSavedRecipesArray() {
@@ -130,26 +157,39 @@ extension SavedRecipesViewController {
         // needed to do all this to ensure that the arrays were in the same order.
     }
     
-    func populateRecipeData(id: Int) {
+    func populateRecipeData(id: Int, completion: @escaping(() -> Void)) {
         SpoonacularManager.getRecipeInformation(recipeId: id) { (json, error) in
             if let errorThatHappened = error {
                 print(errorThatHappened.localizedDescription)
                 return
             }
             
-            DispatchQueue.main.async {
-                guard let newRecipe = self.convertJsonIntoRecipe(json: json, id: id) else {
-                    print("Json could not be parsed to a Recipe")
+            guard let newRecipe = self.convertJsonIntoRecipe(json: json, id: id) else {
+                print("Json could not be parsed to a Recipe")
+                return
+            }
+            self.savedRecipes.append(newRecipe)
+            
+            if self.savedRecipes.count > 1 && PersistenceManager.bookmarkedRecipeIDs.count == self.savedRecipes.count {
+                self.reorderSavedRecipesArray()
+            }
+//                self.savedRecipesTableView.reloadData()
+            print("populate recipe data done")
+            completion()
+        }
+    }
+    
+    static func getRecipes(recipeIds: [Int]) -> [Recipe]? {
+        var returnArray = [Recipe]()
+        for id in recipeIds {
+            SpoonacularManager.getRecipeInformation(recipeId: id) { (json, error) in
+                if let errorThatHappened = error {
+                    print(errorThatHappened.localizedDescription)
                     return
                 }
-                self.savedRecipes.append(newRecipe)
-                
-                if self.savedRecipes.count > 1 && PersistenceManager.bookmarkedRecipeIDs.count == self.savedRecipes.count {
-                    self.reorderSavedRecipesArray()
-                }
-                self.savedRecipesTableView.reloadData()
             }
         }
+        return returnArray
     }
     
     private func convertJsonIntoRecipe(json: [String: Any]?, id: Int) -> Recipe? {
@@ -157,8 +197,8 @@ extension SavedRecipesViewController {
         let returnRecipe = Recipe()
         
         guard let bodyJsonObject = json else { return nil }
-        print("JSON OBJECT ==================================================")
-        print(bodyJsonObject)
+        print("JSON OBJECT RECEIVED ==================================================")
+//        print(bodyJsonObject)
         
         returnRecipe.source = bodyJsonObject["sourceUrl"] as? String
         returnRecipe.imageName = bodyJsonObject["image"] as? String
