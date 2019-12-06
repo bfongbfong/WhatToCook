@@ -10,7 +10,7 @@ import UIKit
 import Unirest
 import GoogleMobileAds
 
-class SavedRecipesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, GADBannerViewDelegate, GADInterstitialDelegate {
+class SavedRecipesViewController: UIViewController, GADBannerViewDelegate, GADInterstitialDelegate {
     
     // MARK: - Outlets
     @IBOutlet weak var savedRecipesTableView: UITableView!
@@ -118,9 +118,35 @@ extension SavedRecipesViewController {
 }
 
 
+// MARK: - UITableView
+extension SavedRecipesViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if recipeRecentlyDeleted == true {
+            return oldRecipesIncludedDeletedOnes.count
+        }
+        return savedRecipes.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = savedRecipesTableView.dequeueReusableCell(withIdentifier: "RecipeCell") as! SearchResultTableViewCell
+        
+        cell.bookmarkStarButton.tag = indexPath.row
+        cell.bookmarkStarButton.addTarget(self, action: #selector(bookmarkButtonTapped), for: UIControl.Event.touchUpInside)
+        if recipeRecentlyDeleted == false {
+            cell.updateCell(with: savedRecipes[indexPath.row])
+        } else {
+            cell.updateCell(with: oldRecipesIncludedDeletedOnes[indexPath.row])
+        }
+        cell.selectionStyle = .none
+        return cell
+    }
+    
+}
+
+
 
 extension SavedRecipesViewController {
-    
     
     func adViewDidReceiveAd(_ bannerView: GADBannerView) {
         // Add banner to view and add constraints as above.
@@ -171,27 +197,6 @@ extension SavedRecipesViewController {
         
         savedRecipes = tempArray
         // needed to do all this to ensure that the arrays were in the same order. 
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if recipeRecentlyDeleted == true {
-            return oldRecipesIncludedDeletedOnes.count
-        }
-        return savedRecipes.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = savedRecipesTableView.dequeueReusableCell(withIdentifier: "RecipeCell") as! SearchResultTableViewCell
-        
-        cell.bookmarkStarButton.tag = indexPath.row
-        cell.bookmarkStarButton.addTarget(self, action: #selector(bookmarkButtonTapped), for: UIControl.Event.touchUpInside)
-        if recipeRecentlyDeleted == false {
-            cell.updateCell(with: savedRecipes[indexPath.row])
-        } else {
-            cell.updateCell(with: oldRecipesIncludedDeletedOnes[indexPath.row])
-        }
-        cell.selectionStyle = .none
-        return cell
     }
     
     func populateRecipeData(id: Int) {
