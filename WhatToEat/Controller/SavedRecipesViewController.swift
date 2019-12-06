@@ -32,6 +32,7 @@ class SavedRecipesViewController: UIViewController, UITableViewDelegate, UITable
     var bannerView: GADBannerView!
     var interstitial: GADInterstitial!
     
+    // MARK: - View Controller Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -47,40 +48,6 @@ class SavedRecipesViewController: UIViewController, UITableViewDelegate, UITable
         bannerView.rootViewController = self
         bannerView.load(GADRequest())
         bannerView.delegate = self
-    }
-    
-    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
-        // Add banner to view and add constraints as above.
-        addBannerViewToView(bannerView)
-    }
-    
-    func addBannerViewToView(_ bannerView: GADBannerView) {
-        bannerView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(bannerView)
-        view.addConstraints(
-            [NSLayoutConstraint(item: bannerView,
-                                attribute: .bottom,
-                                relatedBy: .equal,
-                                toItem: bottomLayoutGuide,
-                                attribute: .top,
-                                multiplier: 1,
-                                constant: 0),
-             NSLayoutConstraint(item: bannerView,
-                                attribute: .centerX,
-                                relatedBy: .equal,
-                                toItem: view,
-                                attribute: .centerX,
-                                multiplier: 1,
-                                constant: 0)
-            ])
-    }
-    
-    func setUpNavBar() {
-        navigationController?.navigationBar.barTintColor = UIColor.myGreen
-        navigationController?.navigationBar.tintColor = UIColor.white
-        navigationController?.navigationBar.titleTextAttributes =
-            [NSAttributedString.Key.foregroundColor: UIColor.white,
-             NSAttributedString.Key.font: UIFont(name: "PoetsenOne-Regular", size: 21)!]
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -122,6 +89,40 @@ class SavedRecipesViewController: UIViewController, UITableViewDelegate, UITable
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
+    }
+    
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+        // Add banner to view and add constraints as above.
+        addBannerViewToView(bannerView)
+    }
+    
+    func addBannerViewToView(_ bannerView: GADBannerView) {
+        bannerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(bannerView)
+        view.addConstraints(
+            [NSLayoutConstraint(item: bannerView,
+                                attribute: .bottom,
+                                relatedBy: .equal,
+                                toItem: bottomLayoutGuide,
+                                attribute: .top,
+                                multiplier: 1,
+                                constant: 0),
+             NSLayoutConstraint(item: bannerView,
+                                attribute: .centerX,
+                                relatedBy: .equal,
+                                toItem: view,
+                                attribute: .centerX,
+                                multiplier: 1,
+                                constant: 0)
+            ])
+    }
+    
+    func setUpNavBar() {
+        navigationController?.navigationBar.barTintColor = UIColor.myGreen
+        navigationController?.navigationBar.tintColor = UIColor.white
+        navigationController?.navigationBar.titleTextAttributes =
+            [NSAttributedString.Key.foregroundColor: UIColor.white,
+             NSAttributedString.Key.font: UIFont(name: "PoetsenOne-Regular", size: 21)!]
     }
     
     func createAndLoadInterstitial() -> GADInterstitial {
