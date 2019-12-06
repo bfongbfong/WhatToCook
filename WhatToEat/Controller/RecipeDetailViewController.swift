@@ -173,16 +173,22 @@ extension RecipeDetailViewController {
     }
 }
 
-// MARK: - Setup
+// MARK: - Logic Functions
 extension RecipeDetailViewController {
     
     func populateInstructions() {
-        SpoonacularManager.getRecipeInstructions(recipe: self.recipe) { (data, error) in
+        
+        guard let recipeId = self.recipe.id else { return }
+        
+        SpoonacularManager.getRecipeInformation(recipeId: recipeId) { (data, error) in
+            
             if let errorThatHappened = error {
                 print(errorThatHappened.localizedDescription)
                 return
             }
+            
             self.parseJson(json: data)
+            
             DispatchQueue.main.async {
                 
                 self.loadingView.removeFromSuperview()
