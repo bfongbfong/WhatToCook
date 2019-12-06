@@ -103,6 +103,23 @@ extension SavedRecipesViewController {
         sender.isHidden = true
         savedRecipesTableView.reloadData()
     }
+}
+
+// MARK: - UI Functions
+extension SavedRecipesViewController {
+    
+    func setUpNavBar() {
+        navigationController?.navigationBar.barTintColor = UIColor.myGreen
+        navigationController?.navigationBar.tintColor = UIColor.white
+        navigationController?.navigationBar.titleTextAttributes =
+            [NSAttributedString.Key.foregroundColor: UIColor.white,
+             NSAttributedString.Key.font: UIFont(name: "PoetsenOne-Regular", size: 21)!]
+    }
+}
+
+
+
+extension SavedRecipesViewController {
     
     
     func adViewDidReceiveAd(_ bannerView: GADBannerView) {
@@ -129,14 +146,6 @@ extension SavedRecipesViewController {
                                 multiplier: 1,
                                 constant: 0)
             ])
-    }
-    
-    func setUpNavBar() {
-        navigationController?.navigationBar.barTintColor = UIColor.myGreen
-        navigationController?.navigationBar.tintColor = UIColor.white
-        navigationController?.navigationBar.titleTextAttributes =
-            [NSAttributedString.Key.foregroundColor: UIColor.white,
-             NSAttributedString.Key.font: UIFont(name: "PoetsenOne-Regular", size: 21)!]
     }
     
     func createAndLoadInterstitial() -> GADInterstitial {
