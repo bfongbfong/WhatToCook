@@ -146,6 +146,28 @@ extension SavedRecipesViewController {
         queue.addOperation(apiCallsComplete)
     }
     
+    func downloadImage(recipe: Recipe?, completion: @escaping((_ image: UIImage?) -> Void)) {
+        guard let recipe = recipe else {
+            print("unable to download image")
+            return
+        }
+        
+        guard let imageName = recipe.imageName else {
+            print("unable to download image")
+            return
+        }
+        
+        guard let url = URL(string: imageName) else {
+            print("unable to download image")
+            return
+        }
+        
+        NetworkRequests.downloadImage(from: url) { (data) in
+            let image = UIImage(data: data)
+            completion(image)
+        }
+    }
+    
     func reorderSavedRecipesArray() {
         var tempArray: [Recipe] = []
         
@@ -172,14 +194,24 @@ extension SavedRecipesViewController {
                 print("Json could not be parsed to a Recipe")
                 return
             }
-            self.savedRecipes.append(newRecipe)
             
-            if self.savedRecipes.count > 1 && PersistenceManager.bookmarkedRecipeIDs.count == self.savedRecipes.count {
-                self.reorderSavedRecipesArray()
+            self.downloadImage(recipe: newRecipe) { (image) in
+                guard let image = image else {
+                    completion()
+                    return
+                }
+                
+                newRecipe.image = image
+                
+                self.savedRecipes.append(newRecipe)
+                
+                if self.savedRecipes.count > 1 && PersistenceManager.bookmarkedRecipeIDs.count == self.savedRecipes.count {
+                    self.reorderSavedRecipesArray()
+                }
+                print("populate recipe data done")
+                
+                completion()
             }
-//                self.savedRecipesTableView.reloadData()
-            print("populate recipe data done")
-            completion()
         }
     }
     

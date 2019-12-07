@@ -90,8 +90,9 @@ class SearchResultTableViewCell: UITableViewCell {
     func updateCell(with recipe: Recipe) {
         handleBookmark(recipe: recipe)
         titleLabel.text = recipe.title
-        addImage(recipe: recipe)
-        
+//        addImage(recipe: recipe)
+        self.imageLabel.image = recipe.image
+
         var ingredientsString = ""
         
         for (index, ingredient) in recipe.ingredients.enumerated() {
@@ -108,7 +109,7 @@ class SearchResultTableViewCell: UITableViewCell {
     
     
     func addImage(recipe: Recipe) {
-        if let unwrappedRecipeImageName = recipe.imageName{
+        if let unwrappedRecipeImageName = recipe.imageName {
             if let url = URL(string: unwrappedRecipeImageName) {
                 NetworkRequests.downloadImage(from: url) { (data) in
                     DispatchQueue.main.async() {

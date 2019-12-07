@@ -49,14 +49,8 @@ class SearchResultsViewController: UIViewController {
 }
 
 // MARK: - UI Functions
-//extension SearchResultsViewController {
-//
-//    func loadingFinished() {
-//        self.loadingView.removeFromSuperview()
-//        self.activityIndicatorView.stopAnimating()
-//        self.activityIndicatorView.removeFromSuperview()
-//    }
-//}
+
+
 
 // MARK: - Admob Methods
 extension SearchResultsViewController: GADBannerViewDelegate, GADInterstitialDelegate {
