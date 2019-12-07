@@ -24,6 +24,7 @@ class SearchResultsViewController: UIViewController {
     // MARK: Admob
     var bannerView: GADBannerView!
     var interstitial: GADInterstitial!
+    var isShowingBannerAd = false
     
     // MARK: Activity Indicator
     var loadingView = UIView()
@@ -93,6 +94,8 @@ extension SearchResultsViewController: GADBannerViewDelegate, GADInterstitialDel
                                 multiplier: 1,
                                 constant: 0)
             ])
+        isShowingBannerAd = true
+        tableView.reloadData()
     }
     
     func createAndLoadInterstitial() -> GADInterstitial {
@@ -112,11 +115,33 @@ extension SearchResultsViewController: GADBannerViewDelegate, GADInterstitialDel
 // MARK: - UITableView Datasource & Delegate
 extension SearchResultsViewController: UITableViewDataSource, UITableViewDelegate {
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if isShowingBannerAd && recipes.count > 0 && recipes.count == indexPath.row {
+            return bannerView.frame.height
+        } else {
+            return 100
+        }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return recipes.count
+        print("num of rows called")
+        var bannerAddition = 0
+        if isShowingBannerAd {
+            bannerAddition = 1
+        }
+        
+        return recipes.count + bannerAddition
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        print("cell for row at called")
+        // last cell, banner space
+        if isShowingBannerAd && recipes.count > 0 && recipes.count == indexPath.row {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "BannerSpaceCell") as! BannerSpaceTableViewCell
+            return cell
+        }
+        
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "RecipeCell", for: indexPath) as! SearchResultTableViewCell
         cell.updateCellWithUsedIngredients(with: recipes[indexPath.row])
         cell.selectionStyle = .none

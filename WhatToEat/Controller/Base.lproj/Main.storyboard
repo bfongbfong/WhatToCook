@@ -264,13 +264,13 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ingredient, Ingredient, Ingredient" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="5n9-7G-vup">
-                                                    <rect key="frame" x="112" y="38.5" width="251" height="14"/>
+                                                    <rect key="frame" x="112" y="35.5" width="251" height="13.5"/>
                                                     <fontDescription key="fontDescription" name="Gotham-Book" family="Gotham" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="UIu-QL-0za">
-                                                    <rect key="frame" x="112" y="11.5" width="297" height="20"/>
+                                                    <rect key="frame" x="112" y="11.5" width="297" height="17"/>
                                                     <fontDescription key="fontDescription" name="Gotham-Book" family="Gotham" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -312,6 +312,14 @@
                                             <outlet property="titleLabel" destination="UIu-QL-0za" id="UK0-LQ-pcn"/>
                                             <segue destination="Xg4-oR-I3N" kind="show" identifier="ToRecipeDetailViewController" id="aKU-qc-Z7Z"/>
                                         </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="BannerSpaceCell" rowHeight="100" id="dEh-A0-Yk8" customClass="BannerSpaceTableViewCell" customModule="WhatToEat" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="128" width="414" height="100"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="dEh-A0-Yk8" id="tEy-Hz-Fb8">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -679,6 +687,6 @@
         <image name="star_off" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="hAV-dL-W8Q"/>
+        <segue reference="aKU-qc-Z7Z"/>
     </inferredMetricsTieBreakers>
 </document>
