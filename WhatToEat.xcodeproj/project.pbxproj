@@ -23,6 +23,8 @@
 		553DEE9B2329B8F500268E8A /* nanopb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553DEE9A2329B8F500268E8A /* nanopb.framework */; };
 		553FCCA222FB707E0016DC5C /* SavedIngredientViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553FCCA122FB707E0016DC5C /* SavedIngredientViewController.swift */; };
 		55501A54239B667B0066910B /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55501A53239B667B0066910B /* CoreDataManager.swift */; };
+		55501A56239B67480066910B /* UIDevice+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55501A55239B67480066910B /* UIDevice+Extensions.swift */; };
+		55501A58239B678A0066910B /* UINavigationItem+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55501A57239B678A0066910B /* UINavigationItem+Extensions.swift */; };
 		5554D7582397728600EFB601 /* NetworkRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5554D7572397728600EFB601 /* NetworkRequests.swift */; };
 		5566787723158DE200150909 /* SourceTableViewCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5566787623158DE100150909 /* SourceTableViewCellView.xib */; };
 		5566787923158E5C00150909 /* SourceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5566787823158E5C00150909 /* SourceTableViewCell.swift */; };
@@ -94,6 +96,8 @@
 		553DEE9A2329B8F500268E8A /* nanopb.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = nanopb.framework; sourceTree = "<group>"; };
 		553FCCA122FB707E0016DC5C /* SavedIngredientViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedIngredientViewController.swift; sourceTree = "<group>"; };
 		55501A53239B667B0066910B /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		55501A55239B67480066910B /* UIDevice+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extensions.swift"; sourceTree = "<group>"; };
+		55501A57239B678A0066910B /* UINavigationItem+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationItem+Extensions.swift"; sourceTree = "<group>"; };
 		5554D7572397728600EFB601 /* NetworkRequests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequests.swift; sourceTree = "<group>"; };
 		5566787623158DE100150909 /* SourceTableViewCellView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SourceTableViewCellView.xib; sourceTree = "<group>"; };
 		5566787823158E5C00150909 /* SourceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceTableViewCell.swift; sourceTree = "<group>"; };
@@ -287,6 +291,8 @@
 				55EFB5A7238ED60F00C6E010 /* UIViewController+Extension.swift */,
 				55EFB5A9238ED64200C6E010 /* UIView+Extension.swift */,
 				55EFB5B8238F3F6600C6E010 /* Array<Int>+Extension.swift */,
+				55501A55239B67480066910B /* UIDevice+Extensions.swift */,
+				55501A57239B678A0066910B /* UINavigationItem+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -642,11 +648,13 @@
 				55EFB5A6238ED5EE00C6E010 /* UIColor+Extension.swift in Sources */,
 				551C3323230CAE4B00D0F9AF /* RecipeInstructionTableViewCell.swift in Sources */,
 				55EFB5B1238ED95C00C6E010 /* SearchedIngredient.swift in Sources */,
+				55501A58239B678A0066910B /* UINavigationItem+Extensions.swift in Sources */,
 				55EFB5B7238F3EAC00C6E010 /* Helpers.swift in Sources */,
 				55EFB5C0238F485600C6E010 /* SpoonacularManager.swift in Sources */,
 				5533965423131879009CE91F /* SavedRecipesViewController.swift in Sources */,
 				5554D7582397728600EFB601 /* NetworkRequests.swift in Sources */,
 				550E986422F33A3500A135A3 /* RecipeDetailViewController.swift in Sources */,
+				55501A56239B67480066910B /* UIDevice+Extensions.swift in Sources */,
 				55C9F48C22DEE3A300CF3DD3 /* SearchResultsViewController.swift in Sources */,
 				55EFB5AA238ED64200C6E010 /* UIView+Extension.swift in Sources */,
 			);

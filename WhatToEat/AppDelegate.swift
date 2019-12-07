@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import CoreData
-import AVFoundation
 import GoogleMobileAds
 
 @UIApplicationMain
@@ -59,23 +57,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Saves changes in the application's managed object context before the application terminates.
         CoreDataManager.saveContext()
     }
-
 }
 
-extension UIDevice {
-    static func vibrate() {
-        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-    }
-}
-
-extension UINavigationItem {
-
-    override open func awakeFromNib() {
-        super.awakeFromNib()
-        
-        let backItem = UIBarButtonItem()
-        backItem.title = ""
-        self.backBarButtonItem = backItem
-    }
-
-}
