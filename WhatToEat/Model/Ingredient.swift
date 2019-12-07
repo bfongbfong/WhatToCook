@@ -14,17 +14,15 @@ struct Ingredient {
     var id: Int?
     var imageName: String?
     var name: String?
-    var originalString: String?
     var unit: String?
     var unitShort: String?
     
-    init(aisle: String, amount: NSNumber, id: Int, imageName: String, name: String, originalString: String, unit: String, unitShort: String) {
+    init(aisle: String, amount: NSNumber, id: Int, imageName: String, name: String, unit: String, unitShort: String) {
         self.aisle = aisle
         self.amount = amount
         self.id = id
         self.imageName = imageName
         self.name = name
-        self.originalString = originalString
         self.unit = unit
         self.unitShort = unitShort
     }
@@ -35,7 +33,6 @@ struct Ingredient {
         self.id = id
         self.imageName = imageName
         self.name = name
-        self.originalString = nil
         self.unit = unit
         self.unitShort = unitShort
     }

@@ -15,16 +15,10 @@ class Recipe: Equatable {
     var id: Int?
     var imageName: String?
     var image: UIImage?
-    var missedIngredientCount: Int?
-    var missedIngredients: [Ingredient] = []
-    var unusedIngredients: [Ingredient] = []
-    var unusedIngredientCount: Int?
-    var usedIngredientCount: Int?
     var usedIngredients: [Ingredient] = []
     
     // properties to be used at recipe detail
     var url: URL?
-    var summary: String?
     var ingredients: [Ingredient] = []
     var instructions: [[String]] = [[]]
     var source: String?
