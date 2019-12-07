@@ -371,6 +371,7 @@ extension RecipeDetailViewController: UITableViewDataSource {
         } else {
             // instructions table view
             
+            // if there are no instructions
             if recipe.instructions[0].count == 0 {
                 let cell = recipeDetailView.instructionsTableView.dequeueReusableCell(withIdentifier: "SourceTableViewCell") as! SourceTableViewCell
                 cell.selectionStyle = .none
@@ -378,8 +379,6 @@ extension RecipeDetailViewController: UITableViewDataSource {
                     cell.sourceButton.setTitle("See full recipe at \(sourceText) >>", for: .normal)
                     cell.sourceButton.titleLabel?.font = UIFont(name: "Gotham", size: 17)
                     cell.sourceButton.addTarget(self, action: #selector(goToSource), for: .touchUpInside)
-                    // if you need to change it to the blue tint
-//                    cell.sourceButton.setTitleColor(self.view.tintColor, for: .normal)
                 } else if recipe.source != nil {
                     cell.sourceButton.setTitle("See full recipe here >>", for: .normal)
                     cell.sourceButton.titleLabel?.font = UIFont(name: "Gotham", size: 17)
@@ -388,6 +387,7 @@ extension RecipeDetailViewController: UITableViewDataSource {
                 
                 return cell
             } else {
+                // there are instructions
                 
             
             let cell = recipeDetailView.instructionsTableView.dequeueReusableCell(withIdentifier: "RecipeInstructionTableViewCell") as! RecipeInstructionTableViewCell

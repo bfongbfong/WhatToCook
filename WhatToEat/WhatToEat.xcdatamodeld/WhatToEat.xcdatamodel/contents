@@ -17,6 +17,7 @@
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="image" optional="YES" attributeType="Binary"/>
         <attribute name="imageName" optional="YES" attributeType="String"/>
+        <attribute name="instructions" optional="YES" attributeType="Transformable"/>
         <attribute name="readyInMinutes" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="servings" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="source" optional="YES" attributeType="String"/>
@@ -25,7 +26,7 @@
         <relationship name="ingredients" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDIngredient" inverseName="parentRecipe" inverseEntity="CDIngredient"/>
     </entity>
     <elements>
-        <element name="CDRecipe" positionX="-66.78515625" positionY="-136.69140625" width="128" height="223"/>
+        <element name="CDRecipe" positionX="-66.78515625" positionY="-136.69140625" width="128" height="238"/>
         <element name="CDIngredient" positionX="109.83203125" positionY="56.05078125" width="128" height="163"/>
     </elements>
 </model>
