@@ -14,6 +14,7 @@ class Recipe: Equatable {
     var title: String?
     var id: Int?
     var imageName: String?
+    var imageData: Data?
     var image: UIImage?
     var usedIngredients: [Ingredient] = []
     

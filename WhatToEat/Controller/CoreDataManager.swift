@@ -56,10 +56,39 @@ class CoreDataManager {
    }
     
     static func convertToCDType(recipe: Recipe) -> CDRecipe {
-        var newRecipe = CDRecipe(context: context)
+        let newRecipe = CDRecipe(context: context)
         newRecipe.title = recipe.title
-        newRecipe.imageName = recipe.imageName
         newRecipe.id = Int64(recipe.id!)
+        newRecipe.imageName = recipe.imageName
+        newRecipe.imageData = recipe.imageData
+        newRecipe.url = recipe.url
+        newRecipe.source = recipe.source
+        newRecipe.readyInMinutes = Int64(recipe.readyInMinutes!)
+        newRecipe.servings = Int64(recipe.servings!)
+        newRecipe.diets = recipe.diets as NSObject?
+        newRecipe.creditsText = recipe.creditsText
+        newRecipe.bookmarked = recipe.bookmarked
+        
+        var cdIngredientArray = [CDIngredient]()
+        for ingredient in recipe.ingredients {
+            let newIngredient = convertToCDType(ingredient: ingredient)
+            cdIngredientArray.append(newIngredient)
+        }
+        
+        newRecipe.ingredients = NSSet(object: cdIngredientArray)
+        
         return newRecipe
+    }
+    
+    static func convertToCDType(ingredient: Ingredient) -> CDIngredient {
+        let newIngredient = CDIngredient(context: context)
+        newIngredient.aisle = ingredient.aisle
+        newIngredient.amount = Int64(ingredient.amount!)
+        newIngredient.id = Int64(ingredient.id!)
+        newIngredient.imageName = ingredient.imageName
+        newIngredient.name = ingredient.name
+        newIngredient.unit = ingredient.unit
+        newIngredient.unitShort = ingredient.unitShort
+        return newIngredient
     }
 }

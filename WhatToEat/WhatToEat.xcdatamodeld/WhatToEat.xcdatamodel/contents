@@ -15,7 +15,7 @@
         <attribute name="creditsText" optional="YES" attributeType="String"/>
         <attribute name="diets" optional="YES" attributeType="Transformable"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="image" optional="YES" attributeType="Binary"/>
+        <attribute name="imageData" optional="YES" attributeType="Binary"/>
         <attribute name="imageName" optional="YES" attributeType="String"/>
         <attribute name="instructions" optional="YES" attributeType="Transformable"/>
         <attribute name="readyInMinutes" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
@@ -23,7 +23,7 @@
         <attribute name="source" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="url" optional="YES" attributeType="URI"/>
-        <relationship name="ingredients" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDIngredient" inverseName="parentRecipe" inverseEntity="CDIngredient"/>
+        <relationship name="ingredients" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDIngredient" inverseName="parentRecipe" inverseEntity="CDIngredient"/>
     </entity>
     <elements>
         <element name="CDRecipe" positionX="-66.78515625" positionY="-136.69140625" width="128" height="238"/>

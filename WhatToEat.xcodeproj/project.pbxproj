@@ -37,6 +37,7 @@
 		55B15DA522FCFCBB00B39B69 /* RecipeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B15DA422FCFCBB00B39B69 /* RecipeDetailView.swift */; };
 		55B15DA722FCFCC600B39B69 /* RecipeDetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55B15DA622FCFCC600B39B69 /* RecipeDetailView.xib */; };
 		55B293FC2394150300887BE8 /* .gitattributes in Resources */ = {isa = PBXBuildFile; fileRef = 55B293FB2394150300887BE8 /* .gitattributes */; };
+		55C75CFB239C341C00208520 /* BannerSpaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C75CFA239C341C00208520 /* BannerSpaceTableViewCell.swift */; };
 		55C9F48A22DEBE9E00CF3DD3 /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9F48922DEBE9E00CF3DD3 /* Recipe.swift */; };
 		55C9F48C22DEE3A300CF3DD3 /* SearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9F48B22DEE3A300CF3DD3 /* SearchResultsViewController.swift */; };
 		55C9F49622DF843100CF3DD3 /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9F49522DF843100CF3DD3 /* SearchResultTableViewCell.swift */; };
@@ -110,6 +111,7 @@
 		55B15DA422FCFCBB00B39B69 /* RecipeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailView.swift; sourceTree = "<group>"; };
 		55B15DA622FCFCC600B39B69 /* RecipeDetailView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RecipeDetailView.xib; sourceTree = "<group>"; };
 		55B293FB2394150300887BE8 /* .gitattributes */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitattributes; sourceTree = "<group>"; };
+		55C75CFA239C341C00208520 /* BannerSpaceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerSpaceTableViewCell.swift; sourceTree = "<group>"; };
 		55C9F48922DEBE9E00CF3DD3 /* Recipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
 		55C9F48B22DEE3A300CF3DD3 /* SearchResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
 		55C9F49522DF843100CF3DD3 /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
@@ -312,6 +314,7 @@
 				553A273F22E4CB7E0063AD58 /* AutocompleteSearchTableViewCell.swift */,
 				559F53E522F2145000EDCA31 /* SavedIngredientTableViewCell.swift */,
 				55C9F49522DF843100CF3DD3 /* SearchResultTableViewCell.swift */,
+				55C75CFA239C341C00208520 /* BannerSpaceTableViewCell.swift */,
 				55EFB5BA238F429000C6E010 /* RecipeDetailView */,
 				55EFB5BB238F429E00C6E010 /* DietCollectionViewCell */,
 				55EFB5BC238F42AB00C6E010 /* RecipeIngredientTableViewCell */,
@@ -642,6 +645,7 @@
 				55E7981A22C9BE2200C79357 /* WhatToEat.xcdatamodeld in Sources */,
 				55667883231774B100150909 /* CustomUITabBarController.swift in Sources */,
 				55EFB5A8238ED60F00C6E010 /* UIViewController+Extension.swift in Sources */,
+				55C75CFB239C341C00208520 /* BannerSpaceTableViewCell.swift in Sources */,
 				5566787B23159A5300150909 /* SearchByRecipesViewController.swift in Sources */,
 				5583618622FCACD9004BA28D /* BadgeBarButtonItem.swift in Sources */,
 				55C9F48A22DEBE9E00CF3DD3 /* Recipe.swift in Sources */,

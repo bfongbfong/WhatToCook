@@ -31,6 +31,7 @@ class SavedRecipesViewController: UIViewController {
     // Admob
     var bannerView: GADBannerView!
     var interstitial: GADInterstitial!
+    var isShowingBannerAd = false
     
     var queue = OperationQueue()
     
@@ -48,6 +49,8 @@ class SavedRecipesViewController: UIViewController {
         
         // ads
         bannerView = GADBannerView(adSize: kGADAdSizeBanner)
+        print("bannerView height: ", bannerView.frame.height)
+
         // test id
 //      bannerView.adUnitID = "ca-app-pub-5775764210542302/4339264751"
         bannerView.adUnitID = adIDs.savedRecipesVCBannerID
@@ -146,7 +149,7 @@ extension SavedRecipesViewController {
         queue.addOperation(apiCallsComplete)
     }
     
-    func downloadImage(recipe: Recipe?, completion: @escaping((_ image: UIImage?) -> Void)) {
+    func downloadImage(recipe: Recipe?, completion: @escaping((_ imageData: Data?) -> Void)) {
         guard let recipe = recipe else {
             print("unable to download image")
             return
@@ -163,8 +166,8 @@ extension SavedRecipesViewController {
         }
         
         NetworkRequests.downloadImage(from: url) { (data) in
-            let image = UIImage(data: data)
-            completion(image)
+            
+            completion(data)
         }
     }
     
@@ -195,11 +198,14 @@ extension SavedRecipesViewController {
                 return
             }
             
-            self.downloadImage(recipe: newRecipe) { (image) in
-                guard let image = image else {
+            self.downloadImage(recipe: newRecipe) { (data) in
+                guard let data = data else {
                     completion()
                     return
                 }
+                newRecipe.imageData = data
+                
+                let image = UIImage(data: data)
                 
                 newRecipe.image = image
                 
@@ -273,14 +279,34 @@ extension SavedRecipesViewController {
 // MARK: - UITableView
 extension SavedRecipesViewController: UITableViewDelegate, UITableViewDataSource {
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if recipeRecentlyDeleted == true {
-            return oldRecipesIncludedDeletedOnes.count
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if isShowingBannerAd && (savedRecipes.count > 0 && (indexPath.row == savedRecipes.count)) {
+            // banner cell
+            return bannerView.frame.height
+        } else {
+            return 100
         }
-        return savedRecipes.count
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        var bannerAddition = 0
+        if isShowingBannerAd {
+            bannerAddition = 1
+        }
+        
+        if recipeRecentlyDeleted == true {
+            return oldRecipesIncludedDeletedOnes.count + bannerAddition
+        }
+        return savedRecipes.count + bannerAddition
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if isShowingBannerAd && (savedRecipes.count > 0) && (indexPath.row == savedRecipes.count) {
+            // banner table view cell
+            let cell = savedRecipesTableView.dequeueReusableCell(withIdentifier: "BannerSpaceCell") as! BannerSpaceTableViewCell
+            return cell
+        }
+        
         let cell = savedRecipesTableView.dequeueReusableCell(withIdentifier: "RecipeCell") as! SearchResultTableViewCell
         
         cell.bookmarkStarButton.tag = indexPath.row
@@ -324,6 +350,9 @@ extension SavedRecipesViewController: GADBannerViewDelegate, GADInterstitialDele
                                 multiplier: 1,
                                 constant: 0)
             ])
+//        make savedRecipesTableView go up by height of bannerView
+        print("bannerView height: ", bannerView.frame.height)
+        isShowingBannerAd = true
     }
     
     func createAndLoadInterstitial() -> GADInterstitial {
