@@ -11,7 +11,9 @@ import CoreData
 
 class CoreDataManager {
     
-   static var persistentContainer: NSPersistentContainer = {
+    static var context = persistentContainer.viewContext
+    
+    static var persistentContainer: NSPersistentContainer = {
        /*
         The persistent container for the application. This implementation
         creates and returns a container, having loaded the store for the
@@ -36,12 +38,11 @@ class CoreDataManager {
            }
        })
        return container
-   }()
+    }()
 
    // MARK: - Core Data Saving support
 
    static func saveContext () {
-       let context = persistentContainer.viewContext
        if context.hasChanges {
            do {
                try context.save()
@@ -53,4 +54,12 @@ class CoreDataManager {
            }
        }
    }
+    
+    static func convertToCDType(recipe: Recipe) -> CDRecipe {
+        var newRecipe = CDRecipe(context: context)
+        newRecipe.title = recipe.title
+        newRecipe.imageName = recipe.imageName
+        newRecipe.id = Int64(recipe.id!)
+        return newRecipe
+    }
 }
