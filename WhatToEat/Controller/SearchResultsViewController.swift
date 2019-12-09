@@ -43,7 +43,7 @@ class SearchResultsViewController: UIViewController {
         getRecipes()
         
         view.playLoadingAnimation(loadingView: &loadingView, activityIndicatorView: activityIndicatorView)
-        setUpInterstitalAdFirstTime()
+        setupInterstitalAdFirstTime()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,7 +59,7 @@ class SearchResultsViewController: UIViewController {
 // MARK: - Admob Methods
 extension SearchResultsViewController: GADBannerViewDelegate, GADInterstitialDelegate {
     
-    func setUpInterstitalAdFirstTime() {
+    func setupInterstitalAdFirstTime() {
         // ads
         bannerView = GADBannerView(adSize: kGADAdSizeBanner)
         // real id

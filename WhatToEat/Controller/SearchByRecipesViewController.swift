@@ -30,17 +30,11 @@ class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UI
         searchByRecipesTableView.dataSource = self
         searchByRecipesTableView.delegate = self
         searchTextField.delegate = self
-        
+
         searchByRecipesTableView.keyboardDismissMode = .onDrag
         
-        searchTextField.contentVerticalAlignment = .center
-        searchTextField.layer.cornerRadius = 15
-        searchTextField.clipsToBounds = true
-        navigationController?.navigationBar.barTintColor = UIColor.myGreen
-        navigationController?.navigationBar.tintColor = UIColor.white
-        navigationController?.navigationBar.titleTextAttributes =
-            [NSAttributedString.Key.foregroundColor: UIColor.white,
-             NSAttributedString.Key.font: UIFont(name: "PoetsenOne-Regular", size: 21)!]
+        setupTextFieldOnLoad()
+        setupNavigationController()
         
         // ads
         bannerView = GADBannerView(adSize: kGADAdSizeBanner)
@@ -83,7 +77,23 @@ class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UI
         searchTextField.rightView = rightPaddingView
         searchTextField.rightViewMode = .always
     }
+}
+
+// MARK: - UI Setup
+extension SearchByRecipesViewController {
+    private func setupTextFieldOnLoad() {
+        searchTextField.contentVerticalAlignment = .center
+        searchTextField.layer.cornerRadius = 15
+        searchTextField.clipsToBounds = true
+    }
     
+    private func setupNavigationController() {
+        navigationController?.navigationBar.barTintColor = UIColor.myGreen
+        navigationController?.navigationBar.tintColor = UIColor.white
+        navigationController?.navigationBar.titleTextAttributes =
+            [NSAttributedString.Key.foregroundColor: UIColor.white,
+             NSAttributedString.Key.font: UIFont(name: "PoetsenOne-Regular", size: 21)!]
+    }
 }
 
 // MARK: - IBActions & Objc Functions

@@ -43,7 +43,7 @@ class SavedRecipesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setUpNavBar()
+        setupNavBar()
         savedRecipesTableView.delegate = self
         savedRecipesTableView.dataSource = self
         
@@ -91,7 +91,7 @@ extension SavedRecipesViewController {
 // MARK: - UI Functions
 extension SavedRecipesViewController {
     
-    func setUpNavBar() {
+    func setupNavBar() {
         navigationController?.navigationBar.barTintColor = UIColor.myGreen
         navigationController?.navigationBar.tintColor = UIColor.white
         navigationController?.navigationBar.titleTextAttributes =

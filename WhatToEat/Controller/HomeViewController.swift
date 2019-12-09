@@ -34,16 +34,16 @@ class HomeViewController: UIViewController {
         hideKeyboardWhenTappedAround()
         tableView.keyboardDismissMode = .onDrag
         
-        setUpSearchButton()
+        setupSearchButton()
         alignTextField()
-        setUpNavBar()
-        setUpClearFridgeButton()
+        setupNavBar()
+        setupClearFridgeButton()
         updateUI()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        setUpStatusBar()
+        setupStatusBar()
         alignTextFieldPlaceholderText()
     }
     
@@ -90,7 +90,7 @@ extension HomeViewController: UITextFieldDelegate {
 // MARK: - UI Functions
 extension HomeViewController {
     
-    func setUpNavBar() {
+    func setupNavBar() {
         // set up nav bar
         navigationController?.navigationBar.barTintColor = UIColor.myGreen
         navigationController?.navigationBar.tintColor = UIColor.white
@@ -99,7 +99,7 @@ extension HomeViewController {
              NSAttributedString.Key.font: UIFont(name: "PoetsenOne-Regular", size: 21)!]
     }
     
-    func setUpStatusBar() {
+    func setupStatusBar() {
         // set up status bar
         navigationController?.navigationBar.barStyle = .black
     }
@@ -130,12 +130,12 @@ extension HomeViewController {
         textField.rightViewMode = .always
     }
     
-    func setUpClearFridgeButton() {
+    func setupClearFridgeButton() {
         clearFridgeButton.setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: "Gotham", size: 15)!], for: .normal)
         setClearFridgeButton(enabled: false)
     }
     
-    func setUpSearchButton() {
+    func setupSearchButton() {
         rectangleForSearchButton.layer.cornerRadius = rectangleForSearchButton.frame.width/8
         rectangleForSearchButton.layer.masksToBounds = true
         rectangleForSearchButton.backgroundColor = UIColor.gray

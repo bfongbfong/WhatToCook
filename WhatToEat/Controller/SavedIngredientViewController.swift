@@ -26,10 +26,10 @@ class SavedIngredientViewController: UIViewController {
         navigationController?.delegate = self
         savedIngredientTableView.allowsMultipleSelectionDuringEditing = true
         
-        setUpToolbar()
+        setupToolbar()
     }
     
-    func setUpToolbar() {
+    func setupToolbar() {
         //toolbar setup
         // when i change the toolbar to hidden or not, it affects what it says teh y position is. when its hidden is 896, which is the same as the view's height. when it's not hidden its 681
         self.navigationController?.setToolbarHidden(false, animated: false)
