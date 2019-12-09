@@ -151,10 +151,25 @@ class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UI
     }
     
     @objc func getAutocomplete() {
-
-        if let text = searchTextField.text {
-            getRecipes(numberOfResults: 15, input: text)
+        guard let text = searchTextField.text else {
+            print("textfield.text was nil")
+            return
         }
+        
+//        guard let firstLetter = Array(text).first else {
+//            return
+//        }
+//
+//        guard text != "" || firstLetter != " " else {
+//            return
+//        }
+        
+        guard text != "" || text != " " else {
+            return
+        }
+            
+        getRecipes(numberOfResults: 15, input: text)
+        
         
     }
     

@@ -59,16 +59,22 @@ extension HomeViewController: UITextFieldDelegate {
     @IBAction func textFieldEditingChanged(_ sender: Any) {
         print("EDITING CHANGED")
         
-        // make sure if textfield is empty, empty table view
-        if textField.text == "" || textField.text == " " {
+        guard let text = textField.text else {
+            print("textfield.text was nil")
+            return
+        }
+        
+        guard let firstLetter = Array(text).first else {
+            return
+        }
+
+        guard text != "" && firstLetter != " " else {
             searchResults.removeAll()
             tableView.reloadData()
-        } else {
-            // populate table view with search results
-            if let text = textField.text {
-                populateTableViewWithIngredients(text: text)
-            }
+            return
         }
+        
+        populateTableViewWithIngredients(text: text)
     }
     
     

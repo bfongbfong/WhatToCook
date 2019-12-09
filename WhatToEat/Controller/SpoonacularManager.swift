@@ -24,7 +24,8 @@ class SpoonacularManager {
             
             if let unwrappedRequest = request {
                 unwrappedRequest.url = requestString
-                unwrappedRequest.headers = ["X-RapidAPI-Host": rapidAPIHost, "X-RapidAPI-Key": apiKey]
+                unwrappedRequest.headers = ["X-RapidAPI-Host": rapidAPIHost,
+                                            "X-RapidAPI-Key": apiKey]
             }
             
             }?.asJsonAsync({ (response, error) in
@@ -68,7 +69,8 @@ class SpoonacularManager {
             guard let unwrappedRequest = request else { return }
             
             unwrappedRequest.url = requestString
-            unwrappedRequest.headers = ["X-RapidAPI-Host": rapidAPIHost, "X-RapidAPI-Key": apiKey]
+            unwrappedRequest.headers = ["X-RapidAPI-Host": rapidAPIHost,
+                                        "X-RapidAPI-Key": apiKey]
             
             }?.asJsonAsync({ (response, error) in
                 
@@ -96,6 +98,45 @@ class SpoonacularManager {
             })
     }
     
+    static func autocompleteRecipeSearch(input: String, numberOfResults: Int, completion: @escaping((_ jsonArray: [Any]?) -> Void)) {
+        
+        let inputAdjustedForSpecialCharacters = replaceSpecialCharacters(input: input)
+        
+        UNIRest.get { (request) in
+            
+            let requestString = "https://\(rapidAPIHost)/recipes/autocomplete?number=\(numberOfResults)&query=\(inputAdjustedForSpecialCharacters)"
+            
+            
+            if let unwrappedRequest = request {
+                unwrappedRequest.url = requestString
+                unwrappedRequest.headers = ["X-RapidAPI-Host": rapidAPIHost,
+                                            "X-RapidAPI-Key": apiKey]
+            }
+            
+            }?.asJsonAsync({ (response, error) in
+                if let errorThatHappened = error {
+                    print(errorThatHappened.localizedDescription)
+                    return
+                }
+                guard let response = response else {
+                    completion(nil)
+                    return
+                }
+                
+                guard let body: UNIJsonNode = response.body else {
+                    completion(nil)
+                    return
+                }
+                
+                guard let bodyJsonArray = body.jsonArray() else {
+                    completion(nil)
+                    return
+                }
+                
+                completion(bodyJsonArray)
+            })
+    }
+    
     static func getRecipeInformation(recipeId: Int, completion: @escaping((_ response: [String: Any]?, _ error: Error?) -> Void)) {
         
         UNIRest.get { (request) in
@@ -104,7 +145,8 @@ class SpoonacularManager {
             
             if let unwrappedRequest = request {
                 unwrappedRequest.url = requestString
-                unwrappedRequest.headers = ["X-RapidAPI-Host": rapidAPIHost, "X-RapidAPI-Key": apiKey]
+                unwrappedRequest.headers = ["X-RapidAPI-Host": rapidAPIHost,
+                                            "X-RapidAPI-Key": apiKey]
             }
             
             }?.asJsonAsync({ (response, error) in
