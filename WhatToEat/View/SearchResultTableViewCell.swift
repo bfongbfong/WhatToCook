@@ -84,14 +84,12 @@ class SearchResultTableViewCell: UITableViewCell {
             }
             ingredientsLabel.text = "Used Ingredients: \(usedIngredientsString)"
         }
-//        addImage(recipe: recipe)
         imageLabel.image = recipe.image
     }
     
     func updateCell(with recipe: Recipe) {
         handleBookmark(recipe: recipe)
         titleLabel.text = recipe.title
-//        addImage(recipe: recipe)
         self.imageLabel.image = recipe.image
 
         var ingredientsString = ""
@@ -106,19 +104,6 @@ class SearchResultTableViewCell: UITableViewCell {
         }
         ingredientsLabel.text = "Ingredients: \(ingredientsString)"
         ingredientsLabel.lineBreakMode = .byTruncatingTail
-    }
-    
-    
-    func addImage(recipe: Recipe) {
-        if let unwrappedRecipeImageName = recipe.imageName {
-            if let url = URL(string: unwrappedRecipeImageName) {
-                NetworkRequests.downloadImage(from: url) { (data) in
-                    DispatchQueue.main.async() {
-                        self.imageLabel.image = UIImage(data: data)
-                    }
-                }
-            }
-        }
     }
 }
 
