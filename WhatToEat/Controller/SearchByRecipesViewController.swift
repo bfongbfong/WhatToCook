@@ -188,8 +188,7 @@ class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UI
                 let body: UNIJsonNode = response!.body
                 
                 if let errorThatHappened = error {
-                    print("ERROR HAPPENED GOT DAMN IT")
-                    print("btw this is the error: \(errorThatHappened)")
+                    print("error: \(errorThatHappened)")
                 }
                 
                 if let bodyJsonArray = body.jsonArray() {

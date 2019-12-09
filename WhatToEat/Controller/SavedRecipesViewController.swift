@@ -289,6 +289,7 @@ extension SavedRecipesViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+
         var bannerAddition = 0
         if isShowingBannerAd {
             bannerAddition = 1
