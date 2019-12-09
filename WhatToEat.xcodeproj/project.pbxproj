@@ -38,6 +38,7 @@
 		55B15DA722FCFCC600B39B69 /* RecipeDetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55B15DA622FCFCC600B39B69 /* RecipeDetailView.xib */; };
 		55B293FC2394150300887BE8 /* .gitattributes in Resources */ = {isa = PBXBuildFile; fileRef = 55B293FB2394150300887BE8 /* .gitattributes */; };
 		55C75CFB239C341C00208520 /* BannerSpaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C75CFA239C341C00208520 /* BannerSpaceTableViewCell.swift */; };
+		55C75CFD239E04C900208520 /* JsonParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C75CFC239E04C900208520 /* JsonParser.swift */; };
 		55C9F48A22DEBE9E00CF3DD3 /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9F48922DEBE9E00CF3DD3 /* Recipe.swift */; };
 		55C9F48C22DEE3A300CF3DD3 /* SearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9F48B22DEE3A300CF3DD3 /* SearchResultsViewController.swift */; };
 		55C9F49622DF843100CF3DD3 /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9F49522DF843100CF3DD3 /* SearchResultTableViewCell.swift */; };
@@ -112,6 +113,7 @@
 		55B15DA622FCFCC600B39B69 /* RecipeDetailView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RecipeDetailView.xib; sourceTree = "<group>"; };
 		55B293FB2394150300887BE8 /* .gitattributes */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitattributes; sourceTree = "<group>"; };
 		55C75CFA239C341C00208520 /* BannerSpaceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerSpaceTableViewCell.swift; sourceTree = "<group>"; };
+		55C75CFC239E04C900208520 /* JsonParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonParser.swift; sourceTree = "<group>"; };
 		55C9F48922DEBE9E00CF3DD3 /* Recipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
 		55C9F48B22DEE3A300CF3DD3 /* SearchResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
 		55C9F49522DF843100CF3DD3 /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
@@ -338,6 +340,7 @@
 				55EFB5BF238F485600C6E010 /* SpoonacularManager.swift */,
 				5554D7572397728600EFB601 /* NetworkRequests.swift */,
 				55501A53239B667B0066910B /* CoreDataManager.swift */,
+				55C75CFC239E04C900208520 /* JsonParser.swift */,
 				55EFB5B6238F3EAC00C6E010 /* Helpers.swift */,
 				55EFB5AB238ED6A500C6E010 /* TabBar */,
 			);
@@ -653,6 +656,7 @@
 				551C3323230CAE4B00D0F9AF /* RecipeInstructionTableViewCell.swift in Sources */,
 				55EFB5B1238ED95C00C6E010 /* SearchedIngredient.swift in Sources */,
 				55501A58239B678A0066910B /* UINavigationItem+Extensions.swift in Sources */,
+				55C75CFD239E04C900208520 /* JsonParser.swift in Sources */,
 				55EFB5B7238F3EAC00C6E010 /* Helpers.swift in Sources */,
 				55EFB5C0238F485600C6E010 /* SpoonacularManager.swift in Sources */,
 				5533965423131879009CE91F /* SavedRecipesViewController.swift in Sources */,

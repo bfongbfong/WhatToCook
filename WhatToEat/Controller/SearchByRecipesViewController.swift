@@ -212,8 +212,70 @@ extension SearchByRecipesViewController: GADBannerViewDelegate, GADInterstitialD
     }
 }
 
-// MARK: - API Calls
+// MARK: - Logic Functions
 extension SearchByRecipesViewController {
+    
+    private func parseJsonForRecipes(jsonArray: [Any]?, completion: @escaping((_ recipes: [Recipe]?) -> Void)) {
+        guard let bodyJsonArray = jsonArray else {
+            return
+        }
+//        print("JSON ARRAY ==================================================")
+//        print(bodyJsonArray)
+        
+//        self.recipes.removeAll()
+        var returnArrayOfRecipes = [Recipe]()
+        for jsonObject in bodyJsonArray {
+            guard let dictionary = jsonObject as? [String: Any] else { continue }
+            
+            guard let id = dictionary["id"] as? Int else { continue }
+            guard let title = dictionary["title"] as? String else { continue }
+            let recipe = Recipe()
+            recipe.id = id
+            recipe.title = title
+//                self.getRecipeMoreData(recipe: recipe)
+            SpoonacularManager.getRecipeInformation(recipeId: id) { (json, error) in
+                // call method to get recipe info
+            }
+            
+            returnArrayOfRecipes.append(recipe)
+        }
+    }
+    
+    private func parseJsonForRecipeInfo(jsonObject: [String: Any]?) {
+        guard let jsonObject = jsonObject else {
+            return
+        }
+        
+//        recipe.imageName = bodyJsonObject["image"] as? String
+
+        
+        
+        // replace this with singleton method to parse ingredient json
+        
+//        if let ingredientsArray = bodyJsonObject["extendedIngredients"] as? [[String:Any]] {
+//            for ingredient in ingredientsArray {
+//                let ingredientName = ingredient["name"] as? String
+//                let ingredientAmount = ingredient["amount"] as? Int
+//                let ingredientAisle = ingredient["aisle"] as? String
+//                let ingredientUnit = ingredient["unit"] as? String
+//                let ingredientId = ingredient["id"] as? Int
+//                let ingredientImage = ingredient["image"] as? String
+//                var ingredientUnitShort: String?
+//
+//                if let measures = ingredient["measures"] as? [String: Any] {
+//                    if let us = measures["us"] as? [String: Any] {
+//                        ingredientUnitShort = us["unitShort"] as? String
+//                    }
+//                }
+//
+//                let newIngredient = Ingredient(aisle: ingredientAisle, amount: ingredientAmount as NSNumber?, id: ingredientId, imageName: ingredientImage, name: ingredientName, unit: ingredientUnit, unitShort: ingredientUnitShort)
+//                recipe.ingredients.append(newIngredient)
+//            }
+//        }
+
+        
+    }
+    
     
     func getRecipes(numberOfResults: Int, input: String) {
         

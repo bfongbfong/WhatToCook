@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Ingredient {
+class Ingredient {
     var aisle: String?
     var amount: NSNumber?
     var id: Int?
@@ -16,6 +16,10 @@ struct Ingredient {
     var name: String?
     var unit: String?
     var unitShort: String?
+    
+    init() {
+        
+    }
     
     init(aisle: String, amount: NSNumber, id: Int, imageName: String, name: String, unit: String, unitShort: String) {
         self.aisle = aisle
