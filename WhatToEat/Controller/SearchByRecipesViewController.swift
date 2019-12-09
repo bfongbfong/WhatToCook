@@ -84,6 +84,10 @@ class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UI
         searchTextField.rightViewMode = .always
     }
     
+}
+
+extension SearchByRecipesViewController {
+    
     func adViewDidReceiveAd(_ bannerView: GADBannerView) {
         // Add banner to view and add constraints as above.
         addBannerViewToView(bannerView)
@@ -121,6 +125,9 @@ class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UI
     func interstitialDidDismissScreen(_ ad: GADInterstitial) {
         interstitial = createAndLoadInterstitial()
     }
+}
+
+extension SearchByRecipesViewController {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return recipes.count
@@ -177,6 +184,9 @@ class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UI
             searchByRecipesTableView.reloadData()
         }
     }
+}
+
+extension SearchByRecipesViewController {
     
     func getRecipes(numberOfResults: Int, input: String) {
         
