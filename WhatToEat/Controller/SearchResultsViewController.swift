@@ -30,6 +30,9 @@ class SearchResultsViewController: UIViewController {
     var loadingView = UIView()
     let activityIndicatorView = UIActivityIndicatorView()
     
+    // Operation Queue for multi-threading
+    var queue = OperationQueue()
+    
     // MARK: - View Controller Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -141,7 +144,7 @@ extension SearchResultsViewController: UITableViewDataSource, UITableViewDelegat
             return cell
         }
         
-        
+        // index out of range here after i added the image downloading stuff...
         let cell = tableView.dequeueReusableCell(withIdentifier: "RecipeCell", for: indexPath) as! SearchResultTableViewCell
         cell.updateCellWithUsedIngredients(with: recipes[indexPath.row])
         cell.selectionStyle = .none
@@ -155,62 +158,98 @@ extension SearchResultsViewController: UITableViewDataSource, UITableViewDelegat
 extension SearchResultsViewController {
     
     func getRecipes() {
-        SpoonacularManager.searchRecipesByIngredients(ingredients: ingredientNames,
-                                                      numberOfResults: 30,
-                                                      ignorePantry: true) { (json, error) in
+        SpoonacularManager.searchRecipesByIngredients(ingredients: ingredientNames, numberOfResults: 30, ignorePantry: true) { (json, error) in
+            
             if let errorThatHappened = error {
                 print(errorThatHappened.localizedDescription)
                 return
             }
-            self.parseJson(jsonArray: json)
-            DispatchQueue.main.async {
-                self.view.stopLoadingAnimation(loadingView: &self.loadingView, activityIndicatorView: self.activityIndicatorView)
-                self.tableView.reloadData()
+            self.parseJson(jsonArray: json) { recipes in
+                self.recipes = recipes
+                
+                DispatchQueue.main.async {
+                    self.view.stopLoadingAnimation(loadingView: &self.loadingView, activityIndicatorView: self.activityIndicatorView)
+                    self.tableView.reloadData()
+                }
             }
-            
         }
     }
     
-    private func parseJson(jsonArray: [Any]?) {
+    private func parseJson(jsonArray: [Any]?, completion: @escaping((_ recipes: [Recipe]) -> Void)) {
+        let group = DispatchGroup()
+        var returnArrayOfRecipes = [Recipe]()
         
-        guard let bodyJsonArray = jsonArray else { return }
-        // to prevent duplicate recipes
-        var setOfIDs: Set<Int> = []
-        var setOfTitles: Set<String> = []
-        print("JSON ARRAY ==================================================")
-        print(bodyJsonArray)
-        for json in bodyJsonArray {
-           let recipe = Recipe()
-           guard let dictionary = json as? [String : Any] else { return }
-           let id = dictionary["id"] as? Int
-           if id != nil && !setOfIDs.contains(id!) {
-               setOfIDs.insert(id!)
-               recipe.id = id
-           } else { continue }
-           guard let title = dictionary["title"] as? String else { continue }
-           if !setOfTitles.contains(title) {
-               setOfTitles.insert(title)
-               recipe.title = dictionary["title"] as? String
-           } else { continue }
-           recipe.imageName = dictionary["image"] as? String
-           if let usedIngredientsArray = dictionary["usedIngredients"] as? [[String: Any]] {
-               for i in 0..<usedIngredientsArray.count {
-                   
-                   let ingredient = Ingredient(
-                       aisle: usedIngredientsArray[i]["aisle"] as! String,
-                       amount: usedIngredientsArray[i]["amount"] as! NSNumber,
-                       id: usedIngredientsArray[i]["id"] as! Int,
-                       imageName: usedIngredientsArray[i]["imageName"] as? String ?? "no image name",
-                       name: usedIngredientsArray[i]["name"] as! String,
-                       unit: usedIngredientsArray[i]["unit"] as! String,
-                       unitShort: usedIngredientsArray[i]["unitShort"] as! String)
-                   
-                   recipe.usedIngredients.append(ingredient)
-               }
-           }
-           
-           self.recipes.append(recipe)
-       }
+        let operation1 = BlockOperation {
+
+            guard let bodyJsonArray = jsonArray else { return }
+            // to prevent duplicate recipes
+            var setOfIDs: Set<Int> = []
+            var setOfTitles: Set<String> = []
+            print("JSON ARRAY ==================================================")
+            print(bodyJsonArray)
+                for json in bodyJsonArray {
+                    
+                    let recipe = Recipe()
+                    guard let dictionary = json as? [String : Any] else { return }
+                    
+                    if let urlString = dictionary["image"] as? String {
+                        recipe.imageName = urlString
+                        let url = URL(string: urlString)
+                        group.enter()
+                        NetworkRequests.downloadImage(from: url!) { (data) in
+                            recipe.imageData = data
+                            let image = UIImage(data: data)
+                            recipe.image = image
+                            print("image downloaded")
+                            group.leave()
+                        }
+                    } else {
+                        print("unable to download image: url string not given")
+                    }
+
+                    let id = dictionary["id"] as? Int
+                    if id != nil && !setOfIDs.contains(id!) {
+                        setOfIDs.insert(id!)
+                        recipe.id = id
+                    } else { continue }
+                    
+                    guard let title = dictionary["title"] as? String else { continue }
+                    
+                    if !setOfTitles.contains(title) {
+                        setOfTitles.insert(title)
+                        recipe.title = dictionary["title"] as? String
+                    } else { continue }
+                    
+                    if let usedIngredientsArray = dictionary["usedIngredients"] as? [[String: Any]] {
+                        for i in 0..<usedIngredientsArray.count {
+
+                            let ingredient = Ingredient(
+                                aisle: usedIngredientsArray[i]["aisle"] as! String,
+                                amount: usedIngredientsArray[i]["amount"] as! NSNumber,
+                                id: usedIngredientsArray[i]["id"] as! Int,
+                                imageName: usedIngredientsArray[i]["imageName"] as? String ?? "no image name",
+                                name: usedIngredientsArray[i]["name"] as! String,
+                                unit: usedIngredientsArray[i]["unit"] as! String,
+                                unitShort: usedIngredientsArray[i]["unitShort"] as! String)
+
+                            recipe.usedIngredients.append(ingredient)
+                        }
+                    }
+
+//                    self.recipes.append(recipe)
+                    returnArrayOfRecipes.append(recipe)
+                }
+                group.wait()
+            }
+        
+        let apiCallsComplete = BlockOperation {
+            print("API calls complete")
+            completion(returnArrayOfRecipes)
+        }
+        
+        apiCallsComplete.addDependency(operation1)
+        queue.addOperation(operation1)
+        queue.addOperation(apiCallsComplete)
     }
 }
 

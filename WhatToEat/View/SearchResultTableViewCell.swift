@@ -84,7 +84,8 @@ class SearchResultTableViewCell: UITableViewCell {
             }
             ingredientsLabel.text = "Used Ingredients: \(usedIngredientsString)"
         }
-        addImage(recipe: recipe)
+//        addImage(recipe: recipe)
+        imageLabel.image = recipe.image
     }
     
     func updateCell(with recipe: Recipe) {
