@@ -235,8 +235,6 @@ extension SearchResultsViewController {
                             recipe.usedIngredients.append(ingredient)
                         }
                     }
-
-//                    self.recipes.append(recipe)
                     returnArrayOfRecipes.append(recipe)
                 }
                 group.wait()
