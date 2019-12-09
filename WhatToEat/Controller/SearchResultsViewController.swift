@@ -179,7 +179,7 @@ extension SearchResultsViewController {
         let group = DispatchGroup()
         var returnArrayOfRecipes = [Recipe]()
         
-        let operation1 = BlockOperation {
+        let parseJsonBody = BlockOperation {
 
             guard let bodyJsonArray = jsonArray else { return }
             // to prevent duplicate recipes
@@ -240,14 +240,14 @@ extension SearchResultsViewController {
                 group.wait()
             }
         
-        let apiCallsComplete = BlockOperation {
+        let jsonDoneParsing = BlockOperation {
             print("API calls complete")
             completion(returnArrayOfRecipes)
         }
         
-        apiCallsComplete.addDependency(operation1)
-        queue.addOperation(operation1)
-        queue.addOperation(apiCallsComplete)
+        jsonDoneParsing.addDependency(parseJsonBody)
+        queue.addOperation(parseJsonBody)
+        queue.addOperation(jsonDoneParsing)
     }
 }
 
