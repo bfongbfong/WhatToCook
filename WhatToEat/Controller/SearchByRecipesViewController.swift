@@ -10,7 +10,7 @@ import UIKit
 import Unirest
 import GoogleMobileAds
 
-class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, GADBannerViewDelegate, GADInterstitialDelegate {
+class SearchByRecipesViewController: UIViewController, GADBannerViewDelegate, GADInterstitialDelegate {
 
     // MARK: - Outlets
     @IBOutlet weak var searchTextField: UITextField!
@@ -188,7 +188,7 @@ extension SearchByRecipesViewController {
     }
 }
 
-extension SearchByRecipesViewController {
+extension SearchByRecipesViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return recipes.count
