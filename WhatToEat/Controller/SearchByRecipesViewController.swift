@@ -55,6 +55,35 @@ class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UI
         interstitial = createAndLoadInterstitial()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        searchByRecipesTableView.reloadData()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        // to make "SEARCH INGREDIENTS" placeholder text fit and cetner vertically
+        for subview in searchTextField.subviews {
+            if let label = subview as? UILabel {
+                label.minimumScaleFactor = 0.3
+                label.adjustsFontSizeToFitWidth = true
+                label.baselineAdjustment = .alignCenters
+                label.textAlignment = .center
+            }
+        }
+    
+        
+        // add horizontal padding to "SEARCH INGREDIENTS" placeholder
+        let leftPaddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
+        let rightPaddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
+        searchTextField.leftView = leftPaddingView
+        searchTextField.leftViewMode = .always
+        searchTextField.rightView = rightPaddingView
+        searchTextField.rightViewMode = .always
+    }
+    
     func adViewDidReceiveAd(_ bannerView: GADBannerView) {
         // Add banner to view and add constraints as above.
         addBannerViewToView(bannerView)
@@ -91,35 +120,6 @@ class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UI
     
     func interstitialDidDismissScreen(_ ad: GADInterstitial) {
         interstitial = createAndLoadInterstitial()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        searchByRecipesTableView.reloadData()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        // to make "SEARCH INGREDIENTS" placeholder text fit and cetner vertically
-        for subview in searchTextField.subviews {
-            if let label = subview as? UILabel {
-                label.minimumScaleFactor = 0.3
-                label.adjustsFontSizeToFitWidth = true
-                label.baselineAdjustment = .alignCenters
-                label.textAlignment = .center
-            }
-        }
-    
-        
-        // add horizontal padding to "SEARCH INGREDIENTS" placeholder
-        let leftPaddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
-        let rightPaddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
-        searchTextField.leftView = leftPaddingView
-        searchTextField.leftViewMode = .always
-        searchTextField.rightView = rightPaddingView
-        searchTextField.rightViewMode = .always
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
