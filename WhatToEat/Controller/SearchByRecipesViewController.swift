@@ -10,7 +10,7 @@ import UIKit
 import Unirest
 import GoogleMobileAds
 
-class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, GADBannerViewDelegate, GADInterstitialDelegate {
+class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, GADBannerViewDelegate, GADInterstitialDelegate {
 
     // MARK: - Outlets
     @IBOutlet weak var searchTextField: UITextField!
@@ -86,6 +86,51 @@ class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UI
     
 }
 
+// MARK: - IBActions & Objc Functions
+extension SearchByRecipesViewController {
+    
+    @objc func getAutocomplete() {
+        guard let text = searchTextField.text else {
+            print("textfield.text was nil")
+            return
+        }
+        
+        guard let firstLetter = Array(text).first else {
+            return
+        }
+
+        guard text != "" && firstLetter != " " else {
+            return
+        }
+            
+        getRecipes(numberOfResults: 15, input: text)
+    }
+    
+    @IBAction func textFieldEditingChanged(_ sender: Any) {
+
+        if searchTextField.text == "" || searchTextField.text == " " {
+            recipes.removeAll()
+            searchByRecipesTableView.reloadData()
+        }
+    }
+}
+
+// MARK: - UITextFieldDelegate
+extension SearchByRecipesViewController: UITextFieldDelegate {
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if searchTextField.text == "" || searchTextField.text == " " {
+            recipes.removeAll()
+            searchByRecipesTableView.reloadData()
+        } else {
+            timer?.invalidate()
+            timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(getAutocomplete), userInfo: nil, repeats: false)
+        }
+        return true
+    }
+    
+}
+
 extension SearchByRecipesViewController {
     
     func adViewDidReceiveAd(_ bannerView: GADBannerView) {
@@ -146,43 +191,6 @@ extension SearchByRecipesViewController {
         }
         cell.updateCell(with: recipes[indexPath.row])
         return cell
-    }
-    
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if searchTextField.text == "" || searchTextField.text == " " {
-            recipes.removeAll()
-            searchByRecipesTableView.reloadData()
-        } else {
-            timer?.invalidate()
-            timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(getAutocomplete), userInfo: nil, repeats: false)
-        }
-        return true
-    }
-    
-    @objc func getAutocomplete() {
-        guard let text = searchTextField.text else {
-            print("textfield.text was nil")
-            return
-        }
-        
-        guard let firstLetter = Array(text).first else {
-            return
-        }
-
-        guard text != "" && firstLetter != " " else {
-            return
-        }
-            
-        getRecipes(numberOfResults: 15, input: text)
-    }
-    
-    @IBAction func textFieldEditingChanged(_ sender: Any) {
-
-        if searchTextField.text == "" || searchTextField.text == " " {
-            recipes.removeAll()
-            searchByRecipesTableView.reloadData()
-        }
     }
 }
 
