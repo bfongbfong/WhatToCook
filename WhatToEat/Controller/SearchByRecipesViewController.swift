@@ -36,17 +36,7 @@ class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UI
         setupTextFieldOnLoad()
         setupNavigationController()
         
-        // ads
-        bannerView = GADBannerView(adSize: kGADAdSizeBanner)
-        // real id
-        bannerView.adUnitID = adIDs.searchByRecipeNameVCBannerID
-        // test id
-//        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
-        bannerView.rootViewController = self
-        bannerView.load(GADRequest())
-        bannerView.delegate = self
-        
-        interstitial = createAndLoadInterstitial()
+        setupAds()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -57,25 +47,7 @@ class SearchByRecipesViewController: UIViewController, UITableViewDataSource, UI
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        // to make "SEARCH INGREDIENTS" placeholder text fit and cetner vertically
-        for subview in searchTextField.subviews {
-            if let label = subview as? UILabel {
-                label.minimumScaleFactor = 0.3
-                label.adjustsFontSizeToFitWidth = true
-                label.baselineAdjustment = .alignCenters
-                label.textAlignment = .center
-            }
-        }
-    
-        
-        // add horizontal padding to "SEARCH INGREDIENTS" placeholder
-        let leftPaddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
-        let rightPaddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
-        searchTextField.leftView = leftPaddingView
-        searchTextField.leftViewMode = .always
-        searchTextField.rightView = rightPaddingView
-        searchTextField.rightViewMode = .always
+        setupPlaceholderText()
     }
 }
 
@@ -93,6 +65,40 @@ extension SearchByRecipesViewController {
         navigationController?.navigationBar.titleTextAttributes =
             [NSAttributedString.Key.foregroundColor: UIColor.white,
              NSAttributedString.Key.font: UIFont(name: "PoetsenOne-Regular", size: 21)!]
+    }
+    
+    private func setupPlaceholderText() {
+        // to make "SEARCH INGREDIENTS" placeholder text fit and center vertically
+        for subview in searchTextField.subviews {
+            if let label = subview as? UILabel {
+                label.minimumScaleFactor = 0.3
+                label.adjustsFontSizeToFitWidth = true
+                label.baselineAdjustment = .alignCenters
+                label.textAlignment = .center
+            }
+        }
+        
+        // add horizontal padding to "SEARCH INGREDIENTS" placeholder
+        let leftPaddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
+        let rightPaddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
+        searchTextField.leftView = leftPaddingView
+        searchTextField.leftViewMode = .always
+        searchTextField.rightView = rightPaddingView
+        searchTextField.rightViewMode = .always
+    }
+    
+    private func setupAds() {
+        // ads
+        bannerView = GADBannerView(adSize: kGADAdSizeBanner)
+        // real id
+        bannerView.adUnitID = adIDs.searchByRecipeNameVCBannerID
+        // test id
+    //        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+        bannerView.rootViewController = self
+        bannerView.load(GADRequest())
+        bannerView.delegate = self
+        
+        interstitial = createAndLoadInterstitial()
     }
 }
 
