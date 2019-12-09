@@ -10,7 +10,7 @@ import UIKit
 import Unirest
 import GoogleMobileAds
 
-class SearchByRecipesViewController: UIViewController, GADBannerViewDelegate, GADInterstitialDelegate {
+class SearchByRecipesViewController: UIViewController {
 
     // MARK: - Outlets
     @IBOutlet weak var searchTextField: UITextField!
@@ -147,7 +147,31 @@ extension SearchByRecipesViewController: UITextFieldDelegate {
     
 }
 
-extension SearchByRecipesViewController {
+// MARK: - UITableView Data Source & Delegate
+extension SearchByRecipesViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return recipes.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = searchByRecipesTableView.dequeueReusableCell(withIdentifier: "RecipeCell") as! SearchResultTableViewCell
+//        cell.titleLabel.text = recipes[indexPath.row].title
+        cell.selectionStyle = .none
+        // this is because in the middle of the autocomplete API calls, sometimes when deleting there are small windows where the recipes array is being deleted but this method still runs erroneously.
+        if indexPath.row >= recipes.count {
+            cell.titleLabel.text = ""
+            cell.ingredientsLabel.text = ""
+            return cell
+        }
+        cell.updateCell(with: recipes[indexPath.row])
+        return cell
+    }
+}
+
+// MARK: - Admob
+extension SearchByRecipesViewController: GADBannerViewDelegate, GADInterstitialDelegate {
     
     func adViewDidReceiveAd(_ bannerView: GADBannerView) {
         // Add banner to view and add constraints as above.
@@ -188,28 +212,7 @@ extension SearchByRecipesViewController {
     }
 }
 
-extension SearchByRecipesViewController: UITableViewDataSource, UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return recipes.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = searchByRecipesTableView.dequeueReusableCell(withIdentifier: "RecipeCell") as! SearchResultTableViewCell
-//        cell.titleLabel.text = recipes[indexPath.row].title
-        cell.selectionStyle = .none
-        // this is because in the middle of the autocomplete API calls, sometimes when deleting there are small windows where the recipes array is being deleted but this method still runs erroneously.
-        if indexPath.row >= recipes.count {
-            cell.titleLabel.text = ""
-            cell.ingredientsLabel.text = ""
-            return cell
-        }
-        cell.updateCell(with: recipes[indexPath.row])
-        return cell
-    }
-}
-
+// MARK: - API Calls
 extension SearchByRecipesViewController {
     
     func getRecipes(numberOfResults: Int, input: String) {
@@ -311,10 +314,11 @@ extension SearchByRecipesViewController {
             })
                 
     }
+}
 
-    
-    // MARK: - Navigation
 
+// MARK: - Navigation
+extension SearchByRecipesViewController {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "FromSearchByRecipesToRecipeDetailViewController" {
@@ -328,7 +332,5 @@ extension SearchByRecipesViewController {
             }
         }
     }
-    
-
 }
 
