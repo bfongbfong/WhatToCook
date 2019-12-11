@@ -16,11 +16,11 @@ class NetworkRequests {
     }
 
     static func downloadImage(from url: URL, completion: @escaping((_ data: Data) -> Void)) {
-        print("Download Started")
+//        print("Download Started")
         getData(from: url) { data, response, error in
             guard let data = data, error == nil else { return }
-            print(response?.suggestedFilename ?? url.lastPathComponent)
-            print("Download Finished")
+//            print(response?.suggestedFilename ?? url.lastPathComponent)
+//            print("Download Finished")
             completion(data)
         }
     }

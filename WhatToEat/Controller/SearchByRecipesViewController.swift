@@ -22,11 +22,15 @@ class SearchByRecipesViewController: UIViewController {
     var recipes: [Recipe] = []
     var timer: Timer?
     var queue = OperationQueue()
+    var autocompleteQueue = OperationQueue()
     var currentApiCall = BlockOperation()
+    var finishApiRequests = BlockOperation()
     
     // MARK: - View Controller Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+//        autocompleteQueue.maxConcurrentOperationCount = 1
+
         
         hideKeyboardWhenTappedAround()
         searchByRecipesTableView.dataSource = self
@@ -59,6 +63,7 @@ extension SearchByRecipesViewController {
         searchTextField.contentVerticalAlignment = .center
         searchTextField.layer.cornerRadius = 15
         searchTextField.clipsToBounds = true
+        searchTextField.clearButtonMode = .whileEditing
     }
     
     private func setupNavigationController() {
@@ -110,60 +115,87 @@ extension SearchByRecipesViewController {
     @objc func getAutocomplete() {
         guard let text = searchTextField.text else {
             print("textfield.text was nil")
+            recipes.removeAll()
+            searchByRecipesTableView.reloadData()
             return
         }
         
         guard let firstLetter = Array(text).first else {
+            recipes.removeAll()
+            searchByRecipesTableView.reloadData()
             return
         }
 
         guard text != "" && firstLetter != " " else {
+            recipes.removeAll()
+            searchByRecipesTableView.reloadData()
             return
         }
         
         let group = DispatchGroup()
         
         if currentApiCall.isExecuting {
-            currentApiCall.cancel()
+//            print("queue operations: ", queue.operations)
+//            print("current api call was executing. it will be cancelled")
+//            currentApiCall.cancel()
+//            finishApiRequests.cancel()
+            
+//            for operation in queue.operations.reversed() {
+//              operation.cancel()
+//            }
+            autocompleteQueue.cancelAllOperations()
+        } else {
+//            print("current api call wasn't executing")
         }
         
         currentApiCall = BlockOperation {
             group.enter()
+//            print("populate recipe data started")
             self.populateRecipeData(wordToSearch: text) {
-                DispatchQueue.main.async {
-                    print("reload table view")
-                    self.searchByRecipesTableView.reloadData()
-                }
+//                print("populate recipe data ended")
                 group.leave()
             }
+            group.wait()
         }
-        queue.addOperation(currentApiCall)
-    }
-    
-    @IBAction func textFieldEditingChanged(_ sender: Any) {
-
-        if searchTextField.text == "" || searchTextField.text == " " {
-            recipes.removeAll()
-            searchByRecipesTableView.reloadData()
+        
+        finishApiRequests = BlockOperation {
+            OperationQueue.main.addOperation {
+//                print("reload table view")
+                self.searchByRecipesTableView.reloadData()
+            }
         }
+        finishApiRequests.addDependency(currentApiCall)
+        autocompleteQueue.addOperation(currentApiCall)
+        autocompleteQueue.addOperation(finishApiRequests)
+//        print("queue operations: ", queue.operations)
     }
 }
 
 // MARK: - UITextFieldDelegate
 extension SearchByRecipesViewController: UITextFieldDelegate {
     
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if searchTextField.text == "" || searchTextField.text == " " {
-            recipes.removeAll()
-            searchByRecipesTableView.reloadData()
-        } else {
-//            timer?.invalidate()
-//            timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(getAutocomplete), userInfo: nil, repeats: false)
-            getAutocomplete()
-        }
+//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//        print("should change characters in ")
+//        if searchTextField.text == "" || searchTextField.text == " " {
+//            recipes.removeAll()
+//            searchByRecipesTableView.reloadData()
+//        } else {
+////            timer?.invalidate()
+////            timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(getAutocomplete), userInfo: nil, repeats: false)
+//            getAutocomplete()
+//        }
+//        return true
+//    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        print("TEXT FIELD SHOULD RETURN")
+        getAutocomplete()
         return true
     }
     
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        return true
+    }
 }
 
 // MARK: - UITableView Data Source & Delegate
@@ -273,7 +305,7 @@ extension SearchByRecipesViewController {
                     }
                     self.parseJsonForRecipeInfo(jsonObject: json, recipe: &recipe)
                     recipe.detailsLoaded = true
-                    print("recipe: \(id) finished retrieving info")
+//                    print("recipe: \(id) finished retrieving info")
                     group.leave()
                     
                     guard let urlString = recipe.imageName else { return }
@@ -284,19 +316,19 @@ extension SearchByRecipesViewController {
                         recipe.imageData = data
                         let image = UIImage(data: data)
                         recipe.image = image
-                        print("image downloaded")
+//                        print("image downloaded")
                         group.leave()
                     }
                 }
                 
-                print("recipe: \(id) appended")
+//                print("recipe: \(id) appended")
                 returnArrayOfRecipes.append(recipe)
             }
             group.wait()
         }
         
         let apiCallsComplete = BlockOperation {
-            print("API calls complete")
+//            print("API calls complete")
             completion(returnArrayOfRecipes)
         }
         
