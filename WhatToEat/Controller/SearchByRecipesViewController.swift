@@ -22,6 +22,7 @@ class SearchByRecipesViewController: UIViewController {
     var recipes: [Recipe] = []
     var timer: Timer?
     var queue = OperationQueue()
+    var currentApiCall = BlockOperation()
     
     // MARK: - View Controller Life Cycle
     override func viewDidLoad() {
@@ -120,7 +121,23 @@ extension SearchByRecipesViewController {
             return
         }
         
-        populateRecipeData(wordToSearch: text)
+        let group = DispatchGroup()
+        
+        if currentApiCall.isExecuting {
+            currentApiCall.cancel()
+        }
+        
+        currentApiCall = BlockOperation {
+            group.enter()
+            self.populateRecipeData(wordToSearch: text) {
+                DispatchQueue.main.async {
+                    print("reload table view")
+                    self.searchByRecipesTableView.reloadData()
+                }
+                group.leave()
+            }
+        }
+        queue.addOperation(currentApiCall)
     }
     
     @IBAction func textFieldEditingChanged(_ sender: Any) {
@@ -140,8 +157,9 @@ extension SearchByRecipesViewController: UITextFieldDelegate {
             recipes.removeAll()
             searchByRecipesTableView.reloadData()
         } else {
-            timer?.invalidate()
-            timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(getAutocomplete), userInfo: nil, repeats: false)
+//            timer?.invalidate()
+//            timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(getAutocomplete), userInfo: nil, repeats: false)
+            getAutocomplete()
         }
         return true
     }
@@ -216,14 +234,12 @@ extension SearchByRecipesViewController: GADBannerViewDelegate, GADInterstitialD
 // MARK: - Logic Functions
 extension SearchByRecipesViewController {
     
-    func populateRecipeData(wordToSearch: String) {
+    func populateRecipeData(wordToSearch: String, completion: @escaping(() -> Void)) {
         SpoonacularManager.autocompleteRecipeSearch(input: wordToSearch, numberOfResults: 15) { (json) in
             self.parseJsonForRecipes(jsonArray: json) { (possibleRecipes) in
                 guard let recipes = possibleRecipes else { return }
                 self.recipes = recipes
-                DispatchQueue.main.async {
-                    self.searchByRecipesTableView.reloadData()
-                }
+                completion()
             }
         }
 
@@ -235,9 +251,7 @@ extension SearchByRecipesViewController {
         }
 //        print("JSON ARRAY ==================================================")
 //        print(bodyJsonArray)
-        
-//        self.recipes.removeAll()
-        
+            
         let group = DispatchGroup()
         var returnArrayOfRecipes = [Recipe]()
         
@@ -261,6 +275,18 @@ extension SearchByRecipesViewController {
                     recipe.detailsLoaded = true
                     print("recipe: \(id) finished retrieving info")
                     group.leave()
+                    
+                    guard let urlString = recipe.imageName else { return }
+                    let url = URL(string: urlString)
+                    
+                    group.enter()
+                    NetworkRequests.downloadImage(from: url!) { (data) in
+                        recipe.imageData = data
+                        let image = UIImage(data: data)
+                        recipe.image = image
+                        print("image downloaded")
+                        group.leave()
+                    }
                 }
                 
                 print("recipe: \(id) appended")
