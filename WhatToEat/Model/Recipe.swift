@@ -27,6 +27,9 @@ class Recipe: Equatable {
     var servings: Int?
     var diets: [String]?
     var creditsText: String?
+    
+    // Whether or not the Recipe's details have been leaded through an API call
+    var detailsLoaded = false
     var bookmarked: Bool = false {
         didSet {
             if bookmarked == true {

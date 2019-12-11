@@ -171,6 +171,54 @@ extension RecipeDetailViewController {
         }
         print(recipe.bookmarked)
     }
+    
+    func updateUI() {
+        DispatchQueue.main.async {
+            
+            self.loadingView.removeFromSuperview()
+            self.activityIndicatoryView.stopAnimating()
+            self.activityIndicatoryView.removeFromSuperview()
+            
+            self.setupUI()
+            self.recipeDetailView.dietsCollectionView.reloadData()
+            self.recipeDetailView.ingredientsTableView.reloadData()
+            self.recipeDetailView.ingredientsTableViewHeightConstraint.constant = CGFloat(self.recipe.ingredients.count * self.ingredientsCellHeight)
+
+            
+            self.recipeDetailView.instructionsTableView.reloadData()
+            // resize the instruction height to the right one
+            
+            // this is the method that multiples the cell height
+            var numberOfCells = 0
+            for i in 0..<self.recipe.instructions.count {
+                for _ in 1..<self.recipe.instructions[i].count {
+                    // it starts with 1 because the first element is the title
+                    numberOfCells += 1
+                }
+            }
+            numberOfCells += self.recipe.instructions.count - 1
+            // add the number of section headers
+            self.recipeDetailView.instructionsTableViewHeightConstraint.constant = CGFloat(numberOfCells * self.instructionsCellHeight)
+            // commented out this 8/31 to see if i could fix source button issue
+            //                        self.recipeDetailView.instructionsTableView.reloadData()
+            self.recipeDetailView.instructionsTableView.layoutIfNeeded()
+            
+            self.recipeDetailView.instructionsTableViewHeightConstraint.constant = self.recipeDetailView.instructionsTableView.contentSize.height
+            
+            self.recipeDetailView.layoutIfNeeded()
+            
+            self.scrollView.contentSize = CGSize(width: self.view.frame.width, height: self.recipeDetailView.contentView.frame.size.height)
+            
+            self.recipeDetailView.dietCollectionViewHeightConstraint.constant = 25
+            self.recipeDetailView.dietsCollectionView.reloadData()
+            self.recipeDetailView.dietsCollectionView.layoutIfNeeded()
+            self.recipeDetailView.dietCollectionViewHeightConstraint.constant = self.recipeDetailView.dietsCollectionView.contentSize.height
+            
+            self.recipeDetailView.layoutIfNeeded()
+            
+            self.scrollView.contentSize = CGSize(width: self.view.frame.width, height: self.recipeDetailView.contentView.frame.size.height)
+        }
+    }
 }
 
 // MARK: - Logic Functions
@@ -180,6 +228,11 @@ extension RecipeDetailViewController {
         
         guard let recipeId = self.recipe.id else { return }
         
+        if recipe.detailsLoaded {
+            self.updateUI()
+            return
+        }
+        
         SpoonacularManager.getRecipeInformation(recipeId: recipeId) { (data, error) in
             
             if let errorThatHappened = error {
@@ -188,52 +241,7 @@ extension RecipeDetailViewController {
             }
             
             self.parseJson(json: data)
-            
-            DispatchQueue.main.async {
-                
-                self.loadingView.removeFromSuperview()
-                self.activityIndicatoryView.stopAnimating()
-                self.activityIndicatoryView.removeFromSuperview()
-                
-                self.setupUI()
-                self.recipeDetailView.dietsCollectionView.reloadData()
-                self.recipeDetailView.ingredientsTableView.reloadData()
-                self.recipeDetailView.ingredientsTableViewHeightConstraint.constant = CGFloat(self.recipe.ingredients.count * self.ingredientsCellHeight)
-
-                
-                self.recipeDetailView.instructionsTableView.reloadData()
-                // resize the instruction height to the right one
-                
-                // this is the method that multiples the cell height
-                var numberOfCells = 0
-                for i in 0..<self.recipe.instructions.count {
-                    for _ in 1..<self.recipe.instructions[i].count {
-                        // it starts with 1 because the first element is the title
-                        numberOfCells += 1
-                    }
-                }
-                numberOfCells += self.recipe.instructions.count - 1
-                // add the number of section headers
-                self.recipeDetailView.instructionsTableViewHeightConstraint.constant = CGFloat(numberOfCells * self.instructionsCellHeight)
-                // commented out this 8/31 to see if i could fix source button issue
-                //                        self.recipeDetailView.instructionsTableView.reloadData()
-                self.recipeDetailView.instructionsTableView.layoutIfNeeded()
-                
-                self.recipeDetailView.instructionsTableViewHeightConstraint.constant = self.recipeDetailView.instructionsTableView.contentSize.height
-                
-                self.recipeDetailView.layoutIfNeeded()
-                
-                self.scrollView.contentSize = CGSize(width: self.view.frame.width, height: self.recipeDetailView.contentView.frame.size.height)
-                
-                self.recipeDetailView.dietCollectionViewHeightConstraint.constant = 25
-                self.recipeDetailView.dietsCollectionView.reloadData()
-                self.recipeDetailView.dietsCollectionView.layoutIfNeeded()
-                self.recipeDetailView.dietCollectionViewHeightConstraint.constant = self.recipeDetailView.dietsCollectionView.contentSize.height
-                
-                self.recipeDetailView.layoutIfNeeded()
-                
-                self.scrollView.contentSize = CGSize(width: self.view.frame.width, height: self.recipeDetailView.contentView.frame.size.height)
-            }
+            self.updateUI()
         }
     }
     

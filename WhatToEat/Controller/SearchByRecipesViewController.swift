@@ -21,6 +21,7 @@ class SearchByRecipesViewController: UIViewController {
     var interstitial: GADInterstitial!
     var recipes: [Recipe] = []
     var timer: Timer?
+    var queue = OperationQueue()
     
     // MARK: - View Controller Life Cycle
     override func viewDidLoad() {
@@ -118,8 +119,8 @@ extension SearchByRecipesViewController {
         guard text != "" && firstLetter != " " else {
             return
         }
-            
-        getRecipes(numberOfResults: 15, input: text)
+        
+        populateRecipeData(wordToSearch: text)
     }
     
     @IBAction func textFieldEditingChanged(_ sender: Any) {
@@ -215,6 +216,19 @@ extension SearchByRecipesViewController: GADBannerViewDelegate, GADInterstitialD
 // MARK: - Logic Functions
 extension SearchByRecipesViewController {
     
+    func populateRecipeData(wordToSearch: String) {
+        SpoonacularManager.autocompleteRecipeSearch(input: wordToSearch, numberOfResults: 15) { (json) in
+            self.parseJsonForRecipes(jsonArray: json) { (possibleRecipes) in
+                guard let recipes = possibleRecipes else { return }
+                self.recipes = recipes
+                DispatchQueue.main.async {
+                    self.searchByRecipesTableView.reloadData()
+                }
+            }
+        }
+
+    }
+    
     private func parseJsonForRecipes(jsonArray: [Any]?, completion: @escaping((_ recipes: [Recipe]?) -> Void)) {
         guard let bodyJsonArray = jsonArray else {
             return
@@ -223,158 +237,57 @@ extension SearchByRecipesViewController {
 //        print(bodyJsonArray)
         
 //        self.recipes.removeAll()
+        
+        let group = DispatchGroup()
         var returnArrayOfRecipes = [Recipe]()
-        for jsonObject in bodyJsonArray {
-            guard let dictionary = jsonObject as? [String: Any] else { continue }
-            
-            guard let id = dictionary["id"] as? Int else { continue }
-            guard let title = dictionary["title"] as? String else { continue }
-            let recipe = Recipe()
-            recipe.id = id
-            recipe.title = title
-//                self.getRecipeMoreData(recipe: recipe)
-            SpoonacularManager.getRecipeInformation(recipeId: id) { (json, error) in
-                // call method to get recipe info
+        
+        let operation1 = BlockOperation {
+            for jsonObject in bodyJsonArray {
+                guard let recipeObject = jsonObject as? [String: Any] else { continue }
+                
+                guard let id = recipeObject["id"] as? Int else { continue }
+                guard let title = recipeObject["title"] as? String else { continue }
+                
+                var recipe = Recipe()
+                recipe.id = id
+                recipe.title = title
+                group.enter()
+                SpoonacularManager.getRecipeInformation(recipeId: id) { (json, error) in
+                    if let errorThatHappened = error {
+                        print(errorThatHappened.localizedDescription)
+                        return
+                    }
+                    self.parseJsonForRecipeInfo(jsonObject: json, recipe: &recipe)
+                    recipe.detailsLoaded = true
+                    print("recipe: \(id) finished retrieving info")
+                    group.leave()
+                }
+                
+                print("recipe: \(id) appended")
+                returnArrayOfRecipes.append(recipe)
             }
-            
-            returnArrayOfRecipes.append(recipe)
+            group.wait()
         }
+        
+        let apiCallsComplete = BlockOperation {
+            print("API calls complete")
+            completion(returnArrayOfRecipes)
+        }
+        
+        apiCallsComplete.addDependency(operation1)
+        queue.addOperation(operation1)
+        queue.addOperation(apiCallsComplete)
     }
     
-    private func parseJsonForRecipeInfo(jsonObject: [String: Any]?) {
-        guard let jsonObject = jsonObject else {
+    private func parseJsonForRecipeInfo(jsonObject: [String: Any]?, recipe: inout Recipe) {
+        guard let recipeObject = jsonObject else {
             return
         }
+        recipe.imageName = recipeObject["image"] as? String
         
-//        recipe.imageName = bodyJsonObject["image"] as? String
-
-        
-        
-        // replace this with singleton method to parse ingredient json
-        
-//        if let ingredientsArray = bodyJsonObject["extendedIngredients"] as? [[String:Any]] {
-//            for ingredient in ingredientsArray {
-//                let ingredientName = ingredient["name"] as? String
-//                let ingredientAmount = ingredient["amount"] as? Int
-//                let ingredientAisle = ingredient["aisle"] as? String
-//                let ingredientUnit = ingredient["unit"] as? String
-//                let ingredientId = ingredient["id"] as? Int
-//                let ingredientImage = ingredient["image"] as? String
-//                var ingredientUnitShort: String?
-//
-//                if let measures = ingredient["measures"] as? [String: Any] {
-//                    if let us = measures["us"] as? [String: Any] {
-//                        ingredientUnitShort = us["unitShort"] as? String
-//                    }
-//                }
-//
-//                let newIngredient = Ingredient(aisle: ingredientAisle, amount: ingredientAmount as NSNumber?, id: ingredientId, imageName: ingredientImage, name: ingredientName, unit: ingredientUnit, unitShort: ingredientUnitShort)
-//                recipe.ingredients.append(newIngredient)
-//            }
-//        }
-
-        
-    }
-    
-    
-    func getRecipes(numberOfResults: Int, input: String) {
-        
-        if input == "" || input == " " {
-            return
-        }
-        
-        let inputAdjustedForSpecialCharacters = replaceSpecialCharacters(input: input)
-        
-        UNIRest.get { (request) in
-            
-            let requestString = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/autocomplete?number=\(numberOfResults)&query=\(inputAdjustedForSpecialCharacters)"
-            
-            
-            if let unwrappedRequest = request {
-                unwrappedRequest.url = requestString
-                unwrappedRequest.headers = ["X-RapidAPI-Host": "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com", "X-RapidAPI-Key": "ba59075c47msh50cd1afad35f3adp1d65cdjsn4b0f3c045f70"]
-            }
-            }?.asJsonAsync({ (response, error) in
-                
-                let body: UNIJsonNode = response!.body
-                
-                if let errorThatHappened = error {
-                    print("error: \(errorThatHappened)")
-                }
-                
-                if let bodyJsonArray = body.jsonArray() {
-                        print("JSON ARRAY ==================================================")
-                        print(bodyJsonArray)
-                    self.recipes.removeAll()
-                    for jsonObject in bodyJsonArray {
-                        if let dictionary = jsonObject as? [String: Any] {
-                            let id = dictionary["id"] as? Int
-                            let title = dictionary["title"] as? String
-                            let recipe = Recipe()
-                            recipe.id = id
-                            recipe.title = title
-                            self.getRecipeMoreData(recipe: recipe)
-                        }
-                    }
-                }
-            })
-    }
-    
-    func getRecipeMoreData(recipe: Recipe) {
-        
-        UNIRest.get { (request) in
-            
-            let requestString = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/\(recipe.id!)/information"
-            
-            if let unwrappedRequest = request {
-                unwrappedRequest.url = requestString
-                unwrappedRequest.headers = ["X-RapidAPI-Host": "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com", "X-RapidAPI-Key": "ba59075c47msh50cd1afad35f3adp1d65cdjsn4b0f3c045f70"]
-            }
-            
-            }?.asJsonAsync({ (response, error) in
-                let body: UNIJsonNode = response!.body
-                
-                if let bodyJsonObject = body.jsonObject() {
-                    print("JSON OBJECT ==================================================")
-                    print(bodyJsonObject)
-                    
-//                    recipe.source = bodyJsonObject["sourceUrl"] as? String
-                    recipe.imageName = bodyJsonObject["image"] as? String
-//                    recipe.servings = bodyJsonObject["servings"] as? Int
-//                    recipe.readyInMinutes = bodyJsonObject["readyInMinutes"] as? Int
-//                    recipe.diets = bodyJsonObject["diets"] as? [String]
-//                    recipe.title = bodyJsonObject["title"] as? String
-//                    recipe.creditsText = bodyJsonObject["creditsText"] as? String
-                    
-                    if let ingredientsArray = bodyJsonObject["extendedIngredients"] as? [[String:Any]] {
-                        for ingredient in ingredientsArray {
-                            let ingredientName = ingredient["name"] as? String
-                            let ingredientAmount = ingredient["amount"] as? Int
-                            let ingredientAisle = ingredient["aisle"] as? String
-                            let ingredientUnit = ingredient["unit"] as? String
-                            let ingredientId = ingredient["id"] as? Int
-                            let ingredientImage = ingredient["image"] as? String
-                            var ingredientUnitShort: String?
-                            
-                            if let measures = ingredient["measures"] as? [String: Any] {
-                                if let us = measures["us"] as? [String: Any] {
-                                    ingredientUnitShort = us["unitShort"] as? String
-                                }
-                            }
-                            
-                            let newIngredient = Ingredient(aisle: ingredientAisle, amount: ingredientAmount as NSNumber?, id: ingredientId, imageName: ingredientImage, name: ingredientName, unit: ingredientUnit, unitShort: ingredientUnitShort)
-                            recipe.ingredients.append(newIngredient)
-                        }
-                    }
-                }
-                
-                self.recipes.append(recipe)
-                
-                DispatchQueue.main.async {
-                    self.searchByRecipesTableView.reloadData()
-                }
-            })
-                
+        guard let ingredientsFound = recipeObject["extendedIngredients"] as? [[String:Any]] else { return }
+        guard let ingredients = JsonParser.parseJsonToIngredientsArray(jsonArray: ingredientsFound) else { return }
+        recipe.ingredients = ingredients
     }
 }
 
@@ -387,7 +300,9 @@ extension SearchByRecipesViewController {
             if let selectedIndexPath = searchByRecipesTableView.indexPathForSelectedRow {
                 let recipeDetailVC = segue.destination as! RecipeDetailViewController
                 guard recipes.count > 0 else { return }
+                
                 recipeDetailVC.recipe = recipes[selectedIndexPath.row]
+                
                 if interstitial.isReady && RecipesViewed.isMultipleOfThree {
                     interstitial.present(fromRootViewController: self)
                 }
