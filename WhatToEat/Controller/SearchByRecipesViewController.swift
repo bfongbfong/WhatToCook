@@ -31,13 +31,14 @@ class SearchByRecipesViewController: UIViewController {
     let activityIndicatorView = UIActivityIndicatorView()
     var temporaryView = UIView()
     var firstTimeLoading = true
+    var viewCenter = CGPoint()
     
     // MARK: - View Controller Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
 //        autocompleteQueue.maxConcurrentOperationCount = 1
+        print("center: \(self.viewCenter)")
 
-        
         hideKeyboardWhenTappedAround()
         searchByRecipesTableView.dataSource = self
         searchByRecipesTableView.delegate = self
@@ -53,6 +54,7 @@ class SearchByRecipesViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        viewCenter = view.center
 
         searchByRecipesTableView.reloadData()
     }
@@ -117,10 +119,20 @@ extension SearchByRecipesViewController {
     private func setupTemporaryView() {
         searchByRecipesTableView.layoutIfNeeded()
 
+//        let temporaryViewFrame = CGRect(x: searchByRecipesTableView.frame.minX,
+//                                        y: searchByRecipesTableView.frame.minY,
+//                                        width: searchByRecipesTableView.frame.width,
+//                                        height: searchByRecipesTableView.contentSize.height)
+        
+//        let temporaryViewFrame = CGRect(x: searchByRecipesTableView.frame.minX,
+//                                        y: searchByRecipesTableView.frame.minY,
+//                                        width: searchByRecipesTableView.frame.width,
+//                                        height: view.frame.height)
+        
         let temporaryViewFrame = CGRect(x: searchByRecipesTableView.frame.minX,
                                         y: searchByRecipesTableView.frame.minY,
                                         width: searchByRecipesTableView.frame.width,
-                                        height: searchByRecipesTableView.contentSize.height)
+                                        height: searchByRecipesTableView.frame.height)
         temporaryView = UIView(frame: temporaryViewFrame)
     }
 }
@@ -160,8 +172,8 @@ extension SearchByRecipesViewController {
         [NSLayoutConstraint(item: temporaryView,
                             attribute: .bottom,
                             relatedBy: .equal,
-                            toItem: bottomLayoutGuide,
-                            attribute: .top,
+                            toItem: view.safeAreaLayoutGuide,
+                            attribute: .bottom,
                             multiplier: 1,
                             constant: 0),
          NSLayoutConstraint(item: temporaryView,
@@ -174,21 +186,46 @@ extension SearchByRecipesViewController {
          NSLayoutConstraint(item: temporaryView,
                             attribute: .right,
                             relatedBy: .equal,
-                            toItem: searchByRecipesTableView,
+                            toItem: view.safeAreaLayoutGuide,
                             attribute: .right,
                             multiplier: 1.0,
                             constant: 0),
          NSLayoutConstraint(item: temporaryView,
                             attribute: .left,
                             relatedBy: .equal,
-                            toItem: searchByRecipesTableView,
+                            toItem: view.safeAreaLayoutGuide,
                             attribute: .left,
                             multiplier: 1.0,
                             constant: 0),
         ])
         
-        temporaryView.playLoadingAnimation(loadingView: &loadingView, activityIndicatorView: activityIndicatorView)
+//        temporaryView.playLoadingAnimation(loadingView: &loadingView, activityIndicatorView: activityIndicatorView)
+        
+        activityIndicatorView.style = .gray
+        
+//        print("center: \(self.viewCenter)")
+//        activityIndicatorView.center = self.viewCenter
+        temporaryView.addSubview(activityIndicatorView)
 
+        //Don't forget this line
+         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        view.addConstraint(NSLayoutConstraint(item: activityIndicatorView,
+                                              attribute: NSLayoutConstraint.Attribute.centerX,
+                                              relatedBy: NSLayoutConstraint.Relation.equal,
+                                              toItem: view,
+                                              attribute: NSLayoutConstraint.Attribute.centerX,
+                                              multiplier: 1,
+                                              constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: activityIndicatorView,
+                                              attribute: NSLayoutConstraint.Attribute.centerY,
+                                              relatedBy: NSLayoutConstraint.Relation.equal,
+                                              toItem: view,
+                                              attribute: NSLayoutConstraint.Attribute.centerY,
+                                              multiplier: 1,
+                                              constant: 0))
+
+        
+        activityIndicatorView.startAnimating()
         
         let group = DispatchGroup()
         
@@ -208,7 +245,8 @@ extension SearchByRecipesViewController {
             OperationQueue.main.addOperation {
                 self.searchByRecipesTableView.reloadData()
                 self.temporaryView.removeFromSuperview()
-                self.searchByRecipesTableView.stopLoadingAnimation(loadingView: &self.loadingView, activityIndicatorView: self.activityIndicatorView)
+                // this line below might be unneccessary
+//                self.temporaryView.stopLoadingAnimation(loadingView: &self.loadingView, activityIndicatorView: self.activityIndicatorView)
             }
         }
         finishApiRequests.addDependency(currentApiCall)
