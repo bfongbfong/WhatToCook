@@ -20,6 +20,7 @@ class SearchResultsViewController: UIViewController {
     // MARK: Data
     var ingredientNames: String = ""
     var recipes: [Recipe] = []
+    let numberOfResults = 30
     
     // MARK: Admob
     var bannerView: GADBannerView!
@@ -48,7 +49,10 @@ class SearchResultsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        tableView.reloadData()
+        // maybe the index out of range error is caused by tableView reloading here when i've displaced the reload usually
+        if !activityIndicatorView.isAnimating {
+            tableView.reloadData()
+        }
     }
 }
 
@@ -129,7 +133,7 @@ extension SearchResultsViewController: UITableViewDataSource, UITableViewDelegat
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         print("num of rows called")
         var bannerAddition = 0
-        if isShowingBannerAd {
+        if isShowingBannerAd && recipes.count > 0 {
             bannerAddition = 1
         }
         
@@ -147,6 +151,10 @@ extension SearchResultsViewController: UITableViewDataSource, UITableViewDelegat
         // index out of range here after i added the image downloading stuff...
         let cell = tableView.dequeueReusableCell(withIdentifier: "RecipeCell", for: indexPath) as! SearchResultTableViewCell
         cell.updateCellWithUsedIngredients(with: recipes[indexPath.row])
+        // got index out of bounds here after changing the spoonacular api call to be with proper parameters.
+        // is this because of that? or because of the banner ad? which was an issue previously?
+        // ok i just re-ran it and there was no issue. this index of out range issue happens really randomly. no idea when?
+        
         cell.selectionStyle = .none
         return cell
     }
@@ -158,7 +166,7 @@ extension SearchResultsViewController: UITableViewDataSource, UITableViewDelegat
 extension SearchResultsViewController {
     
     func getRecipes() {
-        SpoonacularManager.searchRecipesByIngredients(ingredients: ingredientNames, numberOfResults: 30, ignorePantry: true) { (json, error) in
+        SpoonacularManager.searchRecipesByIngredients(ingredients: ingredientNames, numberOfResults: numberOfResults, ignorePantry: true) { (json, error) in
             
             if let errorThatHappened = error {
                 print(errorThatHappened.localizedDescription)

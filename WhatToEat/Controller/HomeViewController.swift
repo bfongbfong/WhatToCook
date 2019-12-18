@@ -61,10 +61,14 @@ extension HomeViewController: UITextFieldDelegate {
         
         guard let text = textField.text else {
             print("textfield.text was nil")
+            searchResults.removeAll()
+            tableView.reloadData()
             return
         }
         
         guard let firstLetter = Array(text).first else {
+            searchResults.removeAll()
+            tableView.reloadData()
             return
         }
 

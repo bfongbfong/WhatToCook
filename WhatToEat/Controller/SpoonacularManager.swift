@@ -20,12 +20,13 @@ class SpoonacularManager {
         
         UNIRest.get { (request) in
             
-            let requestString = "https://\(rapidAPIHost)/food/ingredients/autocomplete?number=7&query=\(inputAdjustedForSpecialCharacters)"
+            let requestString = "https://\(rapidAPIHost)/food/ingredients/autocomplete/"
             
             if let unwrappedRequest = request {
                 unwrappedRequest.url = requestString
                 unwrappedRequest.headers = ["X-RapidAPI-Host": rapidAPIHost,
                                             "X-RapidAPI-Key": apiKey]
+                unwrappedRequest.parameters = ["number": "7", "query": inputAdjustedForSpecialCharacters]
             }
             
             }?.asJsonAsync({ (response, error) in
@@ -61,7 +62,9 @@ class SpoonacularManager {
         
         UNIRest.get { (request) in
             
-            let requestString = "https://\(rapidAPIHost)/recipes/findByIngredients?number=\(numberOfResults)&ranking=1&ignorePantry=\(String(ignorePantry))&ingredients=\(ingredients)"
+//            let requestString = "https://\(rapidAPIHost)/recipes/findByIngredients/"
+            let requestString = "https://\(rapidAPIHost)/recipes/findByIngredients?number=\(numberOfResults)&ranking=2&ignorePantry=\(String(ignorePantry))&ingredients=\(ingredients)"
+
             
             print("==============================================================")
             print("RECIPES")
@@ -71,6 +74,11 @@ class SpoonacularManager {
             unwrappedRequest.url = requestString
             unwrappedRequest.headers = ["X-RapidAPI-Host": rapidAPIHost,
                                         "X-RapidAPI-Key": apiKey]
+            // Ranking: Whether to maximize used ingredients (1) or minimize missing ingredients (2) first.
+//            unwrappedRequest.parameters = ["number": "\(numberOfResults)",
+//                                           "ranking": "2",
+//                                           "ignorePantry": String(ignorePantry),
+//                                           "ingredients": ingredients]
             
             }?.asJsonAsync({ (response, error) in
                 
@@ -169,5 +177,21 @@ class SpoonacularManager {
                 }
                 completion(bodyJsonObject, error)
             })
+    }
+    
+    static func searchRecipes() {
+        UNIRest.get { (request) in
+            let requestString = ""
+            
+            if let unwrappedRequest = request {
+                unwrappedRequest.url = requestString
+                unwrappedRequest.headers = ["X-RapidAPI-Host": rapidAPIHost,
+                                            "X-RapidAPI-Key": apiKey]
+//                unwrappedRequest.parameters = []
+                
+            }
+            
+            }?.asJsonAsync({ (response, error) in
+        })
     }
 }

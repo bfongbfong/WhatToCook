@@ -26,6 +26,12 @@ class SearchByRecipesViewController: UIViewController {
     var currentApiCall = BlockOperation()
     var finishApiRequests = BlockOperation()
     
+    // MARK: Activity Indicator
+    var loadingView = UIView()
+    let activityIndicatorView = UIActivityIndicatorView()
+    var temporaryView = UIView()
+    var firstTimeLoading = true
+    
     // MARK: - View Controller Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -107,6 +113,16 @@ extension SearchByRecipesViewController {
         
         interstitial = createAndLoadInterstitial()
     }
+    
+    private func setupTemporaryView() {
+        searchByRecipesTableView.layoutIfNeeded()
+
+        let temporaryViewFrame = CGRect(x: searchByRecipesTableView.frame.minX,
+                                        y: searchByRecipesTableView.frame.minY,
+                                        width: searchByRecipesTableView.frame.width,
+                                        height: searchByRecipesTableView.contentSize.height)
+        temporaryView = UIView(frame: temporaryViewFrame)
+    }
 }
 
 // MARK: - IBActions & Objc Functions
@@ -132,27 +148,57 @@ extension SearchByRecipesViewController {
             return
         }
         
+        if firstTimeLoading {
+            setupTemporaryView()
+            firstTimeLoading = false
+        }
+        
+        self.view.addSubview(temporaryView)
+        temporaryView.backgroundColor = .white
+        temporaryView.translatesAutoresizingMaskIntoConstraints = false
+        view.addConstraints(
+        [NSLayoutConstraint(item: temporaryView,
+                            attribute: .bottom,
+                            relatedBy: .equal,
+                            toItem: bottomLayoutGuide,
+                            attribute: .top,
+                            multiplier: 1,
+                            constant: 0),
+         NSLayoutConstraint(item: temporaryView,
+                            attribute: .top,
+                            relatedBy: .equal,
+                            toItem: searchByRecipesTableView,
+                            attribute: .top,
+                            multiplier: 1,
+                            constant: 0),
+         NSLayoutConstraint(item: temporaryView,
+                            attribute: .right,
+                            relatedBy: .equal,
+                            toItem: searchByRecipesTableView,
+                            attribute: .right,
+                            multiplier: 1.0,
+                            constant: 0),
+         NSLayoutConstraint(item: temporaryView,
+                            attribute: .left,
+                            relatedBy: .equal,
+                            toItem: searchByRecipesTableView,
+                            attribute: .left,
+                            multiplier: 1.0,
+                            constant: 0),
+        ])
+        
+        temporaryView.playLoadingAnimation(loadingView: &loadingView, activityIndicatorView: activityIndicatorView)
+
+        
         let group = DispatchGroup()
         
         if currentApiCall.isExecuting {
-//            print("queue operations: ", queue.operations)
-//            print("current api call was executing. it will be cancelled")
-//            currentApiCall.cancel()
-//            finishApiRequests.cancel()
-            
-//            for operation in queue.operations.reversed() {
-//              operation.cancel()
-//            }
             autocompleteQueue.cancelAllOperations()
-        } else {
-//            print("current api call wasn't executing")
         }
         
         currentApiCall = BlockOperation {
             group.enter()
-//            print("populate recipe data started")
             self.populateRecipeData(wordToSearch: text) {
-//                print("populate recipe data ended")
                 group.leave()
             }
             group.wait()
@@ -160,36 +206,24 @@ extension SearchByRecipesViewController {
         
         finishApiRequests = BlockOperation {
             OperationQueue.main.addOperation {
-//                print("reload table view")
                 self.searchByRecipesTableView.reloadData()
+                self.temporaryView.removeFromSuperview()
+                self.searchByRecipesTableView.stopLoadingAnimation(loadingView: &self.loadingView, activityIndicatorView: self.activityIndicatorView)
             }
         }
         finishApiRequests.addDependency(currentApiCall)
         autocompleteQueue.addOperation(currentApiCall)
         autocompleteQueue.addOperation(finishApiRequests)
-//        print("queue operations: ", queue.operations)
     }
 }
 
 // MARK: - UITextFieldDelegate
 extension SearchByRecipesViewController: UITextFieldDelegate {
     
-//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-//        print("should change characters in ")
-//        if searchTextField.text == "" || searchTextField.text == " " {
-//            recipes.removeAll()
-//            searchByRecipesTableView.reloadData()
-//        } else {
-////            timer?.invalidate()
-////            timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(getAutocomplete), userInfo: nil, repeats: false)
-//            getAutocomplete()
-//        }
-//        return true
-//    }
-    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         print("TEXT FIELD SHOULD RETURN")
         getAutocomplete()
+        textField.resignFirstResponder()
         return true
     }
     
