@@ -67,7 +67,7 @@ class SavedRecipesViewController: UIViewController {
         recipeRecentlyDeleted = false
         
         // if the API request isn't here, the tableView reload should be
-        view.playLoadingAnimation(loadingView: &loadingView, activityIndicatorView: activityIndicatorView)
+        view.playLoadingAnimation(loadingView: &loadingView, activityIndicatorView: activityIndicatorView, onView: view)
         loadRecipes() {
             DispatchQueue.main.async {
                 self.savedRecipesTableView.reloadData()

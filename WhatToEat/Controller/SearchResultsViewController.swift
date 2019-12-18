@@ -43,7 +43,7 @@ class SearchResultsViewController: UIViewController {
 //        getRecipes(ingredients: ingredientNames, numberOfResults: 30, ignorePantry: true)
         getRecipes()
         
-        view.playLoadingAnimation(loadingView: &loadingView, activityIndicatorView: activityIndicatorView)
+        view.playLoadingAnimation(loadingView: &loadingView, activityIndicatorView: activityIndicatorView, onView: view)
         setupInterstitalAdFirstTime()
     }
     
