@@ -271,7 +271,7 @@ extension HomeViewController {
             if index != 0 {
                 resultString += "%2C+"
             }
-            let nameOfIngredientWithoutSpaces = replaceSpecialCharacters(input: ingredient.name)
+            let nameOfIngredientWithoutSpaces = Helpers.replaceSpecialCharacters(input: ingredient.name)
             resultString += nameOfIngredientWithoutSpaces
         }
         return resultString
@@ -344,26 +344,6 @@ extension HomeViewController {
             }
         }
     }
-}
-
-// global function
-func replaceSpecialCharacters(input: String) -> String {
-    var returnString = input.replacingOccurrences(of: " ", with: "+")
-    returnString = returnString.replacingOccurrences(of: "‘", with: "\'")
-    returnString = returnString.replacingOccurrences(of: "’", with: "\'")
-    // this stuff isn't working below... above is working though
-    returnString = returnString.replacingOccurrences(of: "“", with: "\"")
-    returnString = returnString.replacingOccurrences(of: "”", with: "\"")
-    returnString = returnString.replacingOccurrences(of: "\"", with: "")
-    returnString = returnString.replacingOccurrences(of: "\\", with: "")
-
-// *********** STUCK ON WHY THE API REQUEST FAILS IF YOU TYPE A DOUBLE QUOTE
-
-//    returnString = returnString.replacingOccurrences(of: "'", with: "")
-
-    returnString = returnString.replacingOccurrences(of: "\"", with: "\"")
-//    returnString = returnString.typographized(language: "en")
-    return returnString
 }
 
 

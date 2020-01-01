@@ -16,7 +16,7 @@ class SpoonacularManager {
     
     static func autocompleteIngredientSearch(input: String, completion: @escaping(_ responseJSON: [Any]?, _ error: Error?) -> Void) {
         
-        let inputAdjustedForSpecialCharacters = replaceSpecialCharacters(input: input)
+        let inputAdjustedForSpecialCharacters = Helpers.replaceSpecialCharacters(input: input)
         
         UNIRest.get { (request) in
             
@@ -74,11 +74,6 @@ class SpoonacularManager {
             unwrappedRequest.url = requestString
             unwrappedRequest.headers = ["X-RapidAPI-Host": rapidAPIHost,
                                         "X-RapidAPI-Key": apiKey]
-            // Ranking: Whether to maximize used ingredients (1) or minimize missing ingredients (2) first.
-//            unwrappedRequest.parameters = ["number": "\(numberOfResults)",
-//                                           "ranking": "2",
-//                                           "ignorePantry": String(ignorePantry),
-//                                           "ingredients": ingredients]
             
             }?.asJsonAsync({ (response, error) in
                 
@@ -108,7 +103,7 @@ class SpoonacularManager {
     
     static func autocompleteRecipeSearch(input: String, numberOfResults: Int, completion: @escaping((_ jsonArray: [Any]?) -> Void)) {
         
-        let inputAdjustedForSpecialCharacters = replaceSpecialCharacters(input: input)
+        let inputAdjustedForSpecialCharacters = Helpers.replaceSpecialCharacters(input: input)
         
         UNIRest.get { (request) in
             
@@ -179,19 +174,38 @@ class SpoonacularManager {
             })
     }
     
-    static func searchRecipes() {
+    static func searchRecipes(input: String, numberOfResults: Int, completion: @escaping((_ bodyJsonObject: [String: Any]?, _ error: Error?) -> Void)) {
+        
+        let inputAdjustedForSpecialCharacters = Helpers.replaceSpecialCharacters(input: input)
+
         UNIRest.get { (request) in
-            let requestString = ""
+            let requestString = "https://\(rapidAPIHost)/recipes/search?number=15&query=\(inputAdjustedForSpecialCharacters)"
             
             if let unwrappedRequest = request {
                 unwrappedRequest.url = requestString
                 unwrappedRequest.headers = ["X-RapidAPI-Host": rapidAPIHost,
                                             "X-RapidAPI-Key": apiKey]
-//                unwrappedRequest.parameters = []
-                
             }
             
             }?.asJsonAsync({ (response, error) in
+                
+                if let errorThatHappened = error {
+                    completion(nil, errorThatHappened)
+                    return
+                }
+                guard let responseReceived = response else {
+                    completion(nil, error)
+                    return
+                }
+                guard let body: UNIJsonNode = responseReceived.body else {
+                    completion(nil, error)
+                    return
+                }
+                
+                if let bodyJsonObject = body.jsonObject() as? [String: Any]  {
+                    completion(bodyJsonObject, error)
+                    return
+                }
         })
     }
 }

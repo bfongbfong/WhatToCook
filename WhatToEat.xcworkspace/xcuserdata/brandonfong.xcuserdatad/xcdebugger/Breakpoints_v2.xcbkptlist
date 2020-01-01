@@ -676,7 +676,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "104"
             endingLineNumber = "104"
-            landmarkName = "searchRecipesByIngredients(ingredients:numberOfResults:ignorePantry:completion:)"
+            landmarkName = "autocompleteRecipeSearch(input:numberOfResults:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -795,16 +795,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "5CA46533-EBDB-4A3B-8848-3693DAC3588A"
-            shouldBeEnabled = "No"
+            uuid = "DEF7D409-5180-42CC-A6AD-3E5C69154C1B"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "WhatToEat/Controller/SearchByRecipesViewController.swift"
+            filePath = "WhatToEat/Controller/SpoonacularManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "158"
-            endingLineNumber = "158"
-            landmarkName = "getAutocomplete()"
+            startingLineNumber = "177"
+            endingLineNumber = "177"
+            landmarkName = "searchRecipes(input:numberOfResults:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

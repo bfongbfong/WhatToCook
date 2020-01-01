@@ -139,29 +139,12 @@ extension SearchByRecipesViewController {
         
         view.playLoadingAnimation(loadingView: &loadingView, activityIndicatorView: activityIndicatorView, onView: searchByRecipesTableView)
         
-        let group = DispatchGroup()
-        
-        if currentApiCall.isExecuting {
-            autocompleteQueue.cancelAllOperations()
-        }
-        
-        currentApiCall = BlockOperation {
-            group.enter()
-            self.populateRecipeData(wordToSearch: text) {
-                group.leave()
-            }
-            group.wait()
-        }
-        
-        finishApiRequests = BlockOperation {
-            OperationQueue.main.addOperation {
+        populateRecipeData(wordToSearch: text) {
+            DispatchQueue.main.async {
                 self.searchByRecipesTableView.reloadData()
                 self.view.stopLoadingAnimation(loadingView: &self.loadingView, activityIndicatorView: self.activityIndicatorView)
             }
         }
-        finishApiRequests.addDependency(currentApiCall)
-        autocompleteQueue.addOperation(currentApiCall)
-        autocompleteQueue.addOperation(finishApiRequests)
     }
 }
 
@@ -249,85 +232,67 @@ extension SearchByRecipesViewController: GADBannerViewDelegate, GADInterstitialD
 extension SearchByRecipesViewController {
     
     func populateRecipeData(wordToSearch: String, completion: @escaping(() -> Void)) {
-        SpoonacularManager.autocompleteRecipeSearch(input: wordToSearch, numberOfResults: 15) { (json) in
-            self.parseJsonForRecipes(jsonArray: json) { (possibleRecipes) in
-                guard let recipes = possibleRecipes else { return }
-                self.recipes = recipes
+        
+        let serialQueue = DispatchQueue(label: "myqueue")
+        
+        SpoonacularManager.searchRecipes(input: wordToSearch, numberOfResults: 15) { bodyJsonObject, error in
+            guard let bodyJsonObject = bodyJsonObject else { return }
+            guard let arrayOfRecipes = bodyJsonObject["results"] as? [[String: Any]] else { return }
+            
+            self.recipes.removeAll()
+            
+            for recipeJson in arrayOfRecipes {
+                self.queue.addOperation {
+                    self.parseJsonForARecipe(jsonBody: recipeJson) { (recipe) in
+                        print("FINISHED with \(recipe!.id!)")
+                        // add recipe to something
+                        if let recipe = recipe {
+                            serialQueue.sync {
+                                self.recipes.append(recipe)
+                            }
+                        }
+                    }
+                }
+            }
+            self.queue.addOperation {
                 completion()
             }
         }
+        
 
     }
     
-    private func parseJsonForRecipes(jsonArray: [Any]?, completion: @escaping((_ recipes: [Recipe]?) -> Void)) {
-        guard let bodyJsonArray = jsonArray else {
-            return
-        }
-//        print("JSON ARRAY ==================================================")
-//        print(bodyJsonArray)
-            
-        let group = DispatchGroup()
-        var returnArrayOfRecipes = [Recipe]()
+    private func parseJsonForARecipe(jsonBody: [String: Any], completion: @escaping((_ recipes: Recipe?) -> Void)) {
+//        guard let jsonBody = jsonBody else {
+//            completion(nil)
+//            return
+//        }
+        let recipe = Recipe()
         
-        let operation1 = BlockOperation {
-            for jsonObject in bodyJsonArray {
-                guard let recipeObject = jsonObject as? [String: Any] else { continue }
-                
-                guard let id = recipeObject["id"] as? Int else { continue }
-                guard let title = recipeObject["title"] as? String else { continue }
-                
-                var recipe = Recipe()
-                recipe.id = id
-                recipe.title = title
-                group.enter()
-                SpoonacularManager.getRecipeInformation(recipeId: id) { (json, error) in
-                    if let errorThatHappened = error {
-                        print(errorThatHappened.localizedDescription)
-                        return
-                    }
-                    self.parseJsonForRecipeInfo(jsonObject: json, recipe: &recipe)
-                    recipe.detailsLoaded = true
-//                    print("recipe: \(id) finished retrieving info")
-                    group.leave()
-                    
-                    guard let urlString = recipe.imageName else { return }
-                    let url = URL(string: urlString)
-                    
-                    group.enter()
-                    NetworkRequests.downloadImage(from: url!) { (data) in
-                        recipe.imageData = data
-                        let image = UIImage(data: data)
-                        recipe.image = image
-//                        print("image downloaded")
-                        group.leave()
-                    }
-                }
-                
-//                print("recipe: \(id) appended")
-                returnArrayOfRecipes.append(recipe)
-            }
-            group.wait()
+        // things that are required to exist
+        guard let id = jsonBody["id"] as? Int else { return }
+        print("parsejson for a recipe started with \(id)")
+        guard let title = jsonBody["title"] as? String else { return }
+        guard let imageName = jsonBody["image"] as? String else { return }
+        
+        recipe.id = id
+        recipe.title = title
+        recipe.imageName = imageName
+        
+        // things that are less neccessary
+        if let readyInMinutes = jsonBody["readyInMinutes"] as? Int {
+            recipe.readyInMinutes = readyInMinutes
+        } else {
+            // no ready in minutes
+            // maybe i'll just leave these two blank so they'll be nil and handle that later in view
+        }
+        if let servings = jsonBody["servings"] as? Int {
+            recipe.servings = servings
+        } else {
+            // no servings
         }
         
-        let apiCallsComplete = BlockOperation {
-//            print("API calls complete")
-            completion(returnArrayOfRecipes)
-        }
-        
-        apiCallsComplete.addDependency(operation1)
-        queue.addOperation(operation1)
-        queue.addOperation(apiCallsComplete)
-    }
-    
-    private func parseJsonForRecipeInfo(jsonObject: [String: Any]?, recipe: inout Recipe) {
-        guard let recipeObject = jsonObject else {
-            return
-        }
-        recipe.imageName = recipeObject["image"] as? String
-        
-        guard let ingredientsFound = recipeObject["extendedIngredients"] as? [[String:Any]] else { return }
-        guard let ingredients = JsonParser.parseJsonToIngredientsArray(jsonArray: ingredientsFound) else { return }
-        recipe.ingredients = ingredients
+        completion(recipe)
     }
 }
 
